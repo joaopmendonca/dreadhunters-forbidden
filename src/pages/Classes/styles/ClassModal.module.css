@@ -1,0 +1,471 @@
+/* ================================
+   CLASS MODAL - RPG LUDIC DESIGN
+   ================================ */
+@import '../../../shared/styles/theme.css';
+
+/* === FORM LAYOUT === */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* === TWO COLUMNS LAYOUT === */
+.column {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.row {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+/* === SECTIONS === */
+.section {
+  background: linear-gradient(135deg, var(--dark-3) 0%, var(--dark-4) 100%);
+  border: 1px solid var(--maroon);
+  border-radius: 8px;
+  padding: 1.25rem;
+  position: relative;
+}
+
+.section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+}
+
+.sectionTitle {
+  position: absolute;
+  top: -10px;
+  left: 16px;
+  background: var(--dark-3);
+  padding: 2px 12px;
+  border: 1px solid var(--maroon);
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--gold);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* === FIELD STYLES === */
+.field {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.field label {
+  font-weight: 600;
+  color: var(--light-2);
+  margin-bottom: 0.5rem;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.field input,
+.field textarea,
+.field select,
+.dropdown {
+  padding: 0.6rem 0.875rem;
+  background: var(--dark-5);
+  border: 1px solid var(--dark-4);
+  border-radius: 6px;
+  color: var(--light);
+  transition: all 0.2s;
+  box-sizing: border-box;
+}
+
+.field input:focus,
+.field textarea:focus,
+.field select:focus,
+.dropdown:focus {
+  background: var(--dark-4);
+  border-color: var(--gold);
+  outline: none;
+  box-shadow: 0 0 8px rgba(197, 137, 58, 0.2);
+}
+
+.dropdown {
+  width: 100%;
+  appearance: none;
+  cursor: pointer;
+}
+
+/* === POINTS INFO === */
+.pointsInfo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(135deg, rgba(128, 0, 32, 0.15), rgba(128, 0, 32, 0.05));
+  border: 1px solid rgba(128, 0, 32, 0.3);
+  border-radius: 10px;
+  font-weight: 600;
+  color: var(--gold);
+  margin-bottom: 1rem;
+}
+
+/* === FIELDSET === */
+.fieldset {
+  border: 1px solid var(--maroon);
+  border-radius: 8px;
+  padding: 1.25rem;
+  margin: 0;
+  background: linear-gradient(135deg, var(--dark-3) 0%, var(--dark-4) 100%);
+  position: relative;
+}
+
+.fieldset::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+}
+
+.fieldset legend {
+  position: absolute;
+  top: -10px;
+  left: 16px;
+  background: var(--dark-3);
+  padding: 2px 12px;
+  border: 1px solid var(--maroon);
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--gold);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* === STATS GRID === */
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.statControl {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.6rem 0.875rem;
+  background: var(--dark-5);
+  border: 1px solid var(--dark-4);
+  border-radius: 6px;
+  transition: all 0.2s;
+}
+
+.statControl:hover {
+  border-color: var(--maroon);
+  background: var(--dark-4);
+}
+
+.statHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex: 1;
+}
+
+.statLabel {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  color: var(--light);
+  flex: 1;
+}
+
+.statLabel img {
+  width: 20px;
+  height: 20px;
+}
+
+.statIcon {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+}
+
+.statValue {
+  font-weight: 700;
+  color: var(--gold);
+  font-size: 1rem;
+  min-width: 24px;
+  text-align: center;
+}
+
+.statValueInput {
+  width: 50px !important;
+  text-align: center;
+  font-weight: 600;
+}
+
+/* === STAT BUTTONS === */
+.statButtons {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.statButtons button {
+  background: var(--dark-4);
+  border: 1px solid var(--maroon);
+  color: var(--light);
+  width: 26px;
+  height: 26px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+}
+
+.statButtons button:hover:not(:disabled) {
+  background: var(--maroon);
+}
+
+.statButtons button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* === ADD BUTTON === */
+.addButton {
+  background: var(--dark-4);
+  color: var(--gold);
+  border: 1px solid var(--maroon);
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.addButton svg {
+  font-size: 0.8rem;
+}
+
+.addButton:hover:not(:disabled) {
+  background: var(--maroon);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(128, 0, 32, 0.3);
+}
+
+.addButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* === SKILL CARD === */
+.skillCard {
+  background: var(--dark-5);
+  border: 1px solid var(--dark-4);
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 0.75rem;
+  transition: all 0.2s;
+}
+
+.skillCard:hover {
+  border-color: var(--maroon);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--dark-4);
+}
+
+.cardHeader span {
+  flex: 1;
+  font-weight: 600;
+  color: var(--gold);
+}
+
+.skillIcon {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  border-radius: 6px;
+  background: var(--dark-4);
+  padding: 4px;
+  border: 1px solid var(--maroon);
+}
+
+/* === REMOVE BUTTON === */
+.removeButton {
+  background: transparent !important;
+  border: none !important;
+  padding: 0.4rem !important;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.2s;
+}
+
+.removeButton:hover {
+  background: rgba(217, 40, 40, 0.2) !important;
+}
+
+.removeButton svg {
+  color: var(--light-2);
+  transition: color 0.2s;
+}
+
+.removeButton:hover svg {
+  color: #e63946;
+}
+
+/* === SKILL FIELDS GRID === */
+.skillFields {
+  display: grid;
+  grid-template-columns: 2fr 1fr 2fr;
+  gap: 0.75rem;
+}
+
+/* === SMALL INPUT === */
+.smallInput {
+  max-width: 80px;
+}
+
+/* === COLOR INPUT === */
+.colorInput {
+  width: 50px;
+  height: 36px;
+  padding: 2px;
+  border: 1px solid var(--dark-4);
+  border-radius: 6px;
+  cursor: pointer;
+  background: var(--dark-5);
+}
+
+
+/* === PHOTOS ROW === */
+.photosRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+/* === SKILLS SECTION (FULL WIDTH) === */
+.skillsSection {
+  margin-top: 0.5rem;
+  padding: 0 2rem 1.5rem 2rem;
+}
+
+/* === GROWTH GRID === */
+.growthGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.growthItem {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--dark-5);
+  padding: 0.4rem 0.6rem;
+  border-radius: 6px;
+  border: 1px solid var(--dark-4);
+}
+
+.growthItem label {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex: 1;
+  font-size: 0.8rem;
+  color: var(--light);
+}
+
+.growthItem input {
+  width: 50px;
+  text-align: center;
+  padding: 0.35rem;
+  font-size: 0.8rem;
+}
+
+/* === ANIMATIONS === */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes slideDown {
+  from { transform: translateY(-20px); opacity: 0; }
+  to   { transform: translateY(0); opacity: 1; }
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 900px) {
+  .twoColumns {
+    grid-template-columns: 1fr;
+  }
+  
+  .statsGrid {
+    grid-template-columns: 1fr;
+  }
+  
+  .growthGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .skillFields {
+    grid-template-columns: 1fr;
+  }
+  
+  .photosRow {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .modal {
+    width: 100%;
+    max-height: 100vh;
+    border-radius: 0;
+  }
+  
+  .twoColumns {
+    padding: 1rem;
+  }
+  
+  .growthGrid {
+    grid-template-columns: 1fr;
+  }
+  
+  .skillsSection {
+    padding: 0 1rem 1rem 1rem;
+  }
+}

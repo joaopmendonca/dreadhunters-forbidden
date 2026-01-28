@@ -1,0 +1,453 @@
+/* ============================================
+   Card Component - Design Lúdico para RPG
+   ============================================ */
+
+/* === MAIN CARD === */
+.card {
+  position: relative;
+  background: var(--dark-2);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  border: 1px solid var(--dark-4);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+}
+
+/* Card Variants */
+.cardMental {
+  border-left: 4px solid #8b5cf6;
+}
+
+.cardMental:hover {
+  border-color: #a78bfa;
+  box-shadow: 0 12px 32px rgba(139, 92, 246, 0.2);
+}
+
+.cardMental .headerTitle {
+  color: #c4b5fd;
+}
+
+.cardFisica {
+  border-left: 4px solid #ef4444;
+}
+
+.cardFisica:hover {
+  border-color: #f87171;
+  box-shadow: 0 12px 32px rgba(239, 68, 68, 0.2);
+}
+
+.cardFisica .headerTitle {
+  color: #fca5a5;
+}
+
+.cardGold {
+  border-left: 4px solid var(--gold);
+}
+
+.cardGold:hover {
+  border-color: #f5d86e;
+  box-shadow: 0 12px 32px rgba(212, 175, 55, 0.2);
+}
+
+.cardGold .headerTitle {
+  color: var(--gold);
+}
+
+.cardBlue {
+  border-left: 4px solid #3b82f6;
+}
+
+.cardBlue:hover {
+  border-color: #60a5fa;
+  box-shadow: 0 12px 32px rgba(59, 130, 246, 0.2);
+}
+
+.cardBlue .headerTitle {
+  color: #93c5fd;
+}
+
+.cardGreen {
+  border-left: 4px solid #10b981;
+}
+
+.cardGreen:hover {
+  border-color: #34d399;
+  box-shadow: 0 12px 32px rgba(16, 185, 129, 0.2);
+}
+
+.cardGreen .headerTitle {
+  color: #6ee7b7;
+}
+
+.cardOrange {
+  border-left: 4px solid #f97316;
+}
+
+.cardOrange:hover {
+  border-color: #fb923c;
+  box-shadow: 0 12px 32px rgba(249, 115, 22, 0.2);
+}
+
+.cardOrange .headerTitle {
+  color: #fdba74;
+}
+
+.cardMaroon {
+  border-left: 4px solid var(--maroon);
+}
+
+.cardMaroon:hover {
+  border-color: #a0153e;
+  box-shadow: 0 12px 32px rgba(128, 0, 32, 0.2);
+}
+
+.cardMaroon .headerTitle {
+  color: #f87171;
+}
+
+/* === TOP BAR === */
+.topBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0.75rem;
+  background: rgba(0, 0, 0, 0.2);
+  border-bottom: 1px solid var(--dark-4);
+}
+
+.topBarBadge {
+  display: flex;
+  align-items: center;
+}
+
+.topBarActions {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+/* === BADGE === */
+.badge {
+  padding: 0.25rem 0.6rem;
+  border-radius: 6px;
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--light);
+}
+
+.badgeMental {
+  background: linear-gradient(135deg, #7c3aed, #a855f7);
+  color: white;
+}
+
+.badgeFisica {
+  background: linear-gradient(135deg, #dc2626, #ef4444);
+  color: white;
+}
+
+.badgeGold {
+  background: linear-gradient(135deg, #b8860b, var(--gold));
+  color: var(--dark-1);
+}
+
+.badgeBlue {
+  background: linear-gradient(135deg, #2563eb, #3b82f6);
+  color: white;
+}
+
+.badgeGreen {
+  background: linear-gradient(135deg, #059669, #10b981);
+  color: white;
+}
+
+.badgeOrange {
+  background: linear-gradient(135deg, #ea580c, #f97316);
+  color: white;
+}
+
+.badgeMaroon {
+  background: linear-gradient(135deg, var(--maroon), #a0153e);
+  color: white;
+}
+
+.badgeGray {
+  background: linear-gradient(135deg, #4b5563, #6b7280);
+  color: white;
+}
+
+/* === ACTIONS === */
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.actionButton {
+  width: 26px;
+  height: 26px;
+  border: none;
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--light-1);
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  transition: all 0.2s;
+}
+
+.actionButton:hover {
+  background: rgba(212, 175, 55, 0.3);
+  color: var(--gold);
+}
+
+.actionButtonDelete:hover {
+  background: rgba(239, 68, 68, 0.3);
+  color: #f87171;
+}
+
+/* === HEADER === */
+.header {
+  display: flex;
+  align-items: flex-start;
+  padding: 1rem;
+  gap: 1rem;
+}
+
+.headerImage {
+  width: 80px;
+  height: 80px;
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--dark-4);
+  flex-shrink: 0;
+  border: 2px solid var(--dark-5);
+}
+
+.headerImage img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.headerInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.headerType {
+  font-size: 0.65rem;
+  color: var(--light-1);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  opacity: 0.7;
+}
+
+.headerTitle {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin: 0.25rem 0 0 0;
+  color: var(--light);
+}
+
+.headerSubtitle {
+  font-size: 0.85rem;
+  color: var(--light-1);
+  margin: 0.25rem 0 0 0;
+}
+
+/* === BODY === */
+.body {
+  padding: 0 1rem 1rem;
+  flex: 1;
+}
+
+/* === SECTION === */
+.section {
+  margin-bottom: 1rem;
+}
+
+.section:last-child {
+  margin-bottom: 0;
+}
+
+.sectionTitle {
+  display: block;
+  font-size: 0.85rem;
+  color: var(--light);
+  margin-bottom: 0.35rem;
+}
+
+.sectionContent {
+  font-size: 0.85rem;
+  color: var(--light-1);
+  line-height: 1.5;
+}
+
+.sectionContent p {
+  margin: 0;
+}
+
+/* === SECTION LABEL === */
+.sectionLabel {
+  display: block;
+  font-size: 0.7rem;
+  color: var(--light-1);
+  text-transform: lowercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 0.5rem;
+  opacity: 0.6;
+}
+
+/* === SEVERITY BADGE === */
+.severityBadge {
+  display: inline-block;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  border: 1px solid;
+}
+
+/* === LEVEL CARD === */
+.levelCard {
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 8px;
+  padding: 0.75rem;
+  border: 1px solid transparent;
+  margin-bottom: 0.75rem;
+}
+
+.levelCard:last-child {
+  margin-bottom: 0;
+}
+
+.levelLeve {
+  border-color: rgba(16, 185, 129, 0.3);
+  background: rgba(16, 185, 129, 0.05);
+}
+
+.levelMedia {
+  border-color: rgba(245, 158, 11, 0.3);
+  background: rgba(245, 158, 11, 0.05);
+}
+
+.levelGrave {
+  border-color: rgba(239, 68, 68, 0.3);
+  background: rgba(239, 68, 68, 0.05);
+}
+
+/* === STAT LIST === */
+.statList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.statItem {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  line-height: 1.4;
+}
+
+.statValue {
+  font-weight: 600;
+  font-family: 'Courier New', monospace;
+  min-width: 45px;
+}
+
+.statNegative {
+  color: #f87171;
+}
+
+.statPositive {
+  color: #34d399;
+}
+
+.statLabel {
+  color: var(--light-1);
+}
+
+.emptyStats {
+  font-size: 0.75rem;
+  color: var(--light-1);
+  opacity: 0.5;
+  margin: 0;
+}
+
+/* === OVERLAY === */
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  color: var(--light-1);
+  font-size: 0.9rem;
+  z-index: 10;
+}
+
+.overlayIcon {
+  font-size: 2rem;
+}
+
+.overlayMessage {
+  font-weight: 500;
+}
+
+/* === FOOTER === */
+.footer {
+  padding: 0.75rem 1rem;
+  background: rgba(0, 0, 0, 0.2);
+  border-top: 1px solid var(--dark-4);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+/* === GRID === */
+.grid {
+  display: grid;
+  margin-bottom: 2rem;
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .headerImage {
+    width: 100px;
+    height: 100px;
+  }
+
+  .grid {
+    grid-template-columns: 1fr !important;
+  }
+}

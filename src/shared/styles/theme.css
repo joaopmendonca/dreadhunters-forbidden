@@ -1,0 +1,97 @@
+/* src/styles/theme.css */
+
+/* 1) Declaração das variáveis de cor e tipografia */
+:root {
+  /* tons escuros */
+  --dark-1: #1D2121;
+  --dark-2: #0D1210;
+  --dark-3: #131513;
+  --dark-4: #2C3232;
+  --dark-5: #383D3D;
+  --dark-6: #141414;
+  /* tom claro */
+  --light: #FAF5E5;
+
+  /* azuis */
+  --blue-1: #206F94;
+  --blue-2: #1998D3;
+  --blue-3: #6BB4D7;
+  --blue-4: #155A7B;
+  --blue-5: #0A98D5;
+
+  /* acentos existentes */
+  --purple: #6C269B;
+  --gold:   #D4A745;
+
+  /* novos acentos vermelhos */
+  --maroon:      #800020;  /* para fundos escuros avermelhados */
+  --accent-red:  #e63946;  /* para textos ou destaques em vermelho */
+
+  /* tipografia */
+  --font-sans:  'Inter', sans-serif;
+  --font-serif: 'IBM Plex Serif', serif;
+}
+
+/* 2) Helper-classes para background */
+.bg-dark-1 { background-color: var(--dark-1); }
+.bg-dark-2 { background-color: var(--dark-2); }
+.bg-dark-3 { background-color: var(--dark-3); }
+.bg-dark-4 { background-color: var(--dark-4); }
+.bg-dark-5 { background-color: var(--dark-5); }
+.bg-dark-6 { background-color: var(--dark-6); }
+.bg-light  { background-color: var(--light); }
+.bg-blue-1 { background-color: var(--blue-1); }
+.bg-blue-2 { background-color: var(--blue-2); }
+.bg-blue-3 { background-color: var(--blue-3); }
+.bg-blue-4 { background-color: var(--blue-4); }
+.bg-blue-5 { background-color: var(--blue-5); }
+.bg-purple { background-color: var(--purple); }
+.bg-gold   { background-color: var(--gold); }
+
+/* helper-classes para os novos acentos vermelhos */
+.bg-maroon     { background-color: var(--maroon); }
+.bg-accent-red { background-color: var(--accent-red); }
+
+/* 3) Helper-classes para tipografia */
+.font-sans  { font-family: var(--font-sans); }
+.font-serif { font-family: var(--font-serif); }
+
+/* helper-classes de cor de texto */
+.text-maroon     { color: var(--maroon); }
+.text-accent-red { color: var(--accent-red); }
+
+/* 4) Override para o DNA spinner (react-loader-spinner) */
+/* círculos ímpares em purple, pares em blue-2 */
+svg.dna-loader circle:nth-child(odd)  { fill: var(--purple) !important; }
+svg.dna-loader circle:nth-child(even) { fill: var(--blue-2)   !important; }
+
+/* ============================= */
+/* 5) Estilização global da scrollbar */
+/* ============================= */
+
+/* Para navegadores baseados em WebKit (Chrome, Edge, Safari) */
+*::-webkit-scrollbar {
+  width: 8px;               /* largura da barra */
+  height: 8px;              /* altura (caso haja scroll horizontal) */
+}
+
+*::-webkit-scrollbar-track {
+  background: var(--dark-3); /* cor de fundo da “faixa” */
+  border-radius: 4px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: var(--blue-4); /* cor do “polegar” */
+  border-radius: 4px;
+  border: 2px solid var(--dark-3); /* cria margem ao redor */
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background-color: var(--blue-2);
+}
+
+/* Para Firefox */
+* {
+  scrollbar-width: thin;                    /* deixa mais estreita */
+  scrollbar-color: var(--blue-4) var(--dark-3); /* thumb | track */
+}

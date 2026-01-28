@@ -1,0 +1,46 @@
+@import '../../styles/theme.css';
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem; /* espaçamento menor entre itens */
+}
+
+.previewWrapper {
+  position: relative;
+  width: 80px;   /* de 100px para 80px */
+  height: 80px;  /* de 100px para 80px */
+}
+
+.preview {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 3px;               /* levemente arredondado */
+  border: 1px solid var(--dark-4);
+}
+
+.removeBtn {
+  position: absolute;
+  top: -4px;                        /* ajustado para caber no preview menor */
+  right: -4px;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  border-radius: 50%;
+  width: 1.2rem;                    /* de 1.5rem para 1.2rem */
+  height: 1.2rem;                   /* de 1.5rem para 1.2rem */
+  font-size: 0.85rem;               /* de 1rem para 0.85rem */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  cursor: pointer;
+}
+
+.brokenPlaceholder {
+  width: 100%;
+  height: 100%;
+  background: repeating-linear-gradient(45deg, #2b2b2b 0 6px, #242424 6px 12px);
+  border-radius: 3px;
+  border: 1px dashed var(--dark-4);
+}

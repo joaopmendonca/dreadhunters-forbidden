@@ -1,0 +1,45 @@
+@import '../../styles/theme.css';
+
+/* Container ─────────────────────────────────────────────── */
+.card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  background: var(--dark-2);
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,.35);
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0,0,0,.4);
+}
+
+/* Ícone circular ────────────────────────────────────────── */
+.iconWrapper {
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-size: 1.4rem;
+}
+
+/* Texto ─────────────────────────────────────────────────── */
+.texts {
+  display: flex;
+  flex-direction: column;
+  line-height: 1;
+}
+.value {
+  font-size: 1.8rem;
+  font-weight: 700;
+}
+.label {
+  font-size: .85rem;
+  color: var(--light-3);
+  margin-top: .2rem;
+}

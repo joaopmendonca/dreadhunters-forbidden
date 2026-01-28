@@ -1,0 +1,499 @@
+/* ============================================
+   Users Page - Design Lúdico para RPG
+   Padronizado com Afflictions
+   ============================================ */
+@import '../../../shared/styles/theme.css';
+
+/* === PAGE HEADER === */
+.pageHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.headerTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+/* === STATS COUNTER === */
+.statsCounter {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.counterItem {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: var(--dark-2);
+  border-radius: 8px;
+  border: 1px solid var(--dark-4);
+}
+
+.counterItem span:first-child {
+  font-size: 1.5rem;
+  color: var(--gold);
+}
+
+.counterItem strong {
+  font-size: 1.25rem;
+  color: var(--gold);
+}
+
+.counterItem small {
+  color: var(--light-1);
+  font-size: 0.75rem;
+}
+
+.counterActive {
+  border-color: rgba(16, 185, 129, 0.3);
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), transparent);
+}
+.counterActive span:first-child,
+.counterActive strong {
+  color: #34d399;
+}
+
+.counterBanned {
+  border-color: rgba(239, 68, 68, 0.3);
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), transparent);
+}
+.counterBanned span:first-child,
+.counterBanned strong {
+  color: #f87171;
+}
+
+/* === CONTROLS === */
+.controls {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.searchInput {
+  flex: 1;
+  min-width: 200px;
+  max-width: 300px;
+}
+
+/* === FILTER TABS === */
+.filterTabs {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  background: var(--dark-2);
+  border-radius: 12px;
+  border: 1px solid var(--dark-4);
+}
+
+.filterTab {
+  padding: 0.6rem 1.25rem;
+  border-radius: 8px;
+  border: none;
+  background: transparent;
+  color: var(--light-1);
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.filterTab:hover {
+  background: var(--dark-3);
+  color: var(--light);
+}
+
+.filterTabActive {
+  background: linear-gradient(135deg, var(--maroon), #a0153e);
+  color: white;
+  box-shadow: 0 2px 8px rgba(128, 0, 32, 0.4);
+}
+
+.filterTabActive2:not(.filterTabActive):hover {
+  background: rgba(16, 185, 129, 0.2);
+}
+
+.filterTabBanned:not(.filterTabActive):hover {
+  background: rgba(239, 68, 68, 0.2);
+}
+
+.filterTabPending:not(.filterTabActive):hover {
+  background: rgba(245, 158, 11, 0.2);
+}
+
+.filterTabCount {
+  background: rgba(255, 255, 255, 0.2);
+  padding: 0.15rem 0.5rem;
+  border-radius: 10px;
+  font-size: 0.75rem;
+}
+
+/* === LOADING STATE === */
+.loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem;
+  color: var(--light-1);
+}
+
+.loadingSpinner {
+  width: 48px;
+  height: 48px;
+  border: 4px solid var(--dark-4);
+  border-top-color: var(--maroon);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 1rem;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* === CARDS GRID === */
+.cardsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+/* === USER CARD === */
+.card {
+  position: relative;
+  background: var(--dark-2);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  border: 1px solid var(--dark-4);
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+  border-color: var(--dark-5);
+}
+
+.cardLink {
+  text-decoration: none;
+  color: inherit;
+}
+
+.cardActive {
+  border-left: 4px solid #10b981;
+}
+
+.cardActive:hover {
+  box-shadow: 0 12px 32px rgba(16, 185, 129, 0.2);
+}
+
+.cardBanned {
+  border-left: 4px solid #ef4444;
+}
+
+.cardBanned:hover {
+  box-shadow: 0 12px 32px rgba(239, 68, 68, 0.2);
+}
+
+.cardPending {
+  border-left: 4px solid #f59e0b;
+}
+
+.cardPending:hover {
+  box-shadow: 0 12px 32px rgba(245, 158, 11, 0.2);
+}
+
+/* Card Top Actions Bar */
+.cardTopBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0.75rem;
+  background: rgba(0, 0, 0, 0.2);
+  border-bottom: 1px solid var(--dark-4);
+}
+
+/* Status Badge */
+.statusBadge {
+  padding: 0.25rem 0.6rem;
+  border-radius: 6px;
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.statusActive {
+  background: linear-gradient(135deg, #059669, #10b981);
+  color: white;
+}
+
+.statusBanned {
+  background: linear-gradient(135deg, #dc2626, #ef4444);
+  color: white;
+}
+
+.statusPending {
+  background: linear-gradient(135deg, #d97706, #f59e0b);
+  color: white;
+}
+
+/* Top Actions */
+.topActions {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.actionButton {
+  width: 26px;
+  height: 26px;
+  border: none;
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--light-1);
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  transition: all 0.2s;
+}
+
+.actionButton:hover {
+  background: rgba(239, 68, 68, 0.3);
+  color: #f87171;
+}
+
+/* Card Header */
+.cardHeader {
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  gap: 1rem;
+  background: var(--dark-3);
+  border-bottom: 1px solid var(--dark-4);
+}
+
+.cardAvatar {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: var(--dark-4);
+  flex-shrink: 0;
+  border: 2px solid var(--dark-5);
+}
+
+.avatarImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.noAvatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--dark-4);
+  color: var(--light-1);
+  width: 100%;
+  height: 100%;
+  font-size: 1.5rem;
+}
+
+.cardInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.cardTitle {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin: 0 0 0.25rem 0;
+  color: var(--light);
+}
+
+.cardEmail {
+  font-size: 0.8rem;
+  color: var(--light-1);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cardActions {
+  display: flex;
+  gap: 0.25rem;
+}
+
+/* Card Body */
+.cardBody {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+  padding: 1rem;
+}
+
+.cardField {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.cardField strong {
+  font-size: 0.7rem;
+  color: var(--light-1);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.cardField span {
+  font-size: 0.85rem;
+  color: var(--light);
+}
+
+/* Roles badges */
+.rolesList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.roleBadge {
+  padding: 0.15rem 0.5rem;
+  background: var(--dark-4);
+  border-radius: 4px;
+  font-size: 0.7rem;
+  color: var(--light-1);
+}
+
+.roleBadgeAdmin {
+  background: linear-gradient(135deg, var(--maroon), #a0153e);
+  color: white;
+}
+
+/* === EMPTY STATE === */
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  text-align: center;
+  color: var(--light-1);
+}
+
+.emptyIcon {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+  opacity: 0.5;
+}
+
+.emptyText {
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+}
+
+.mobileEmpty {
+  text-align: center;
+  color: var(--light-1);
+  padding: 2rem;
+  font-style: italic;
+}
+
+/* === PAGINATION === */
+.pagination {
+  display: flex;
+  list-style: none;
+  gap: 0.5rem;
+  justify-content: center;
+  padding: 0;
+  margin: 2rem 0 1rem;
+}
+
+.pageLink {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 36px;
+  height: 36px;
+  padding: 0 0.75rem;
+  background: var(--dark-2);
+  color: var(--light);
+  border-radius: 8px;
+  border: 1px solid var(--dark-4);
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 0.9rem;
+}
+
+.pageLink:hover:not(.activePage .pageLink) {
+  background: var(--dark-3);
+  border-color: var(--dark-5);
+}
+
+.activePage .pageLink {
+  background: linear-gradient(135deg, var(--maroon), #a0153e);
+  border-color: transparent;
+  color: white;
+  box-shadow: 0 2px 8px rgba(128, 0, 32, 0.4);
+}
+
+.disabledPage .pageLink {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 768px) {
+  .headerTop {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .statsCounter {
+    width: 100%;
+  }
+  
+  .cardsGrid {
+    grid-template-columns: 1fr;
+  }
+  
+  .cardBody {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 500px) {
+  .controls {
+    width: 100%;
+  }
+  
+  .searchInput {
+    max-width: none;
+  }
+  
+  .filterTabs {
+    width: 100%;
+    overflow-x: auto;
+  }
+}

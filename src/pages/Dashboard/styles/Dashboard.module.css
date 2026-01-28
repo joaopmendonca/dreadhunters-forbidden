@@ -1,0 +1,427 @@
+/* ============================================
+   Dashboard Page - Design Lúdico para RPG
+   Padronizado com Afflictions
+   ============================================ */
+@import '../../../shared/styles/theme.css';
+
+/* === PAGE HEADER === */
+.pageHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.headerTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.pageTitle {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-family: var(--font-serif);
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--gold);
+  margin: 0;
+}
+
+.pageTitle::before {
+  content: '📊';
+  font-size: 1.5rem;
+}
+
+/* === STATS COUNTER === */
+.statsCounter {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.counterItem {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.25rem;
+  background: var(--dark-2);
+  border-radius: 10px;
+  border: 1px solid var(--dark-4);
+  transition: all 0.2s;
+}
+
+.counterItem:hover {
+  border-color: var(--dark-5);
+  transform: translateY(-2px);
+}
+
+.counterItem span:first-child {
+  font-size: 1.5rem;
+}
+
+.counterItem strong {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--gold);
+}
+
+.counterItem small {
+  color: var(--light-1);
+  font-size: 0.75rem;
+}
+
+/* Counter variants */
+.counterUsers {
+  border-color: rgba(59, 130, 246, 0.3);
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), transparent);
+}
+.counterUsers strong { color: #60a5fa; }
+
+.counterCharacters {
+  border-color: rgba(16, 185, 129, 0.3);
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), transparent);
+}
+.counterCharacters strong { color: #34d399; }
+
+.counterClasses {
+  border-color: rgba(139, 92, 246, 0.3);
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), transparent);
+}
+.counterClasses strong { color: #a78bfa; }
+
+.counterItems {
+  border-color: rgba(245, 158, 11, 0.3);
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), transparent);
+}
+.counterItems strong { color: #fbbf24; }
+
+.counterEnemies {
+  border-color: rgba(239, 68, 68, 0.3);
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), transparent);
+}
+.counterEnemies strong { color: #f87171; }
+
+.counterServers {
+  border-color: rgba(99, 102, 241, 0.3);
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), transparent);
+}
+.counterServers strong { color: #818cf8; }
+
+.counterPlayers {
+  border-color: rgba(6, 182, 212, 0.3);
+  background: linear-gradient(135deg, rgba(6, 182, 212, 0.1), transparent);
+}
+.counterPlayers strong { color: #22d3ee; }
+
+/* === SECTIONS === */
+.section {
+  margin-bottom: 2.5rem;
+}
+
+.sectionTitle {
+  font-family: var(--font-serif);
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--gold);
+  margin: 0 0 1.25rem 0;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--dark-4);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* === LOADING STATE === */
+.loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem;
+  color: var(--light-1);
+}
+
+.loadingSpinner {
+  width: 48px;
+  height: 48px;
+  border: 4px solid var(--dark-4);
+  border-top-color: var(--maroon);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 1rem;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* === METRICS GRID === */
+.metricsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 1.25rem;
+  margin-bottom: 2rem;
+}
+
+/* === METRIC CARD === */
+.metricCard {
+  position: relative;
+  background: var(--dark-2);
+  border-radius: 12px;
+  padding: 1.25rem;
+  border: 1px solid var(--dark-4);
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+.metricCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: var(--maroon);
+  border-radius: 12px 0 0 12px;
+}
+
+.metricCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  border-color: var(--dark-5);
+}
+
+.metricIcon {
+  font-size: 2rem;
+  margin-bottom: 0.75rem;
+}
+
+.metricValue {
+  font-family: var(--font-serif);
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--light);
+  margin-bottom: 0.25rem;
+}
+
+.metricLabel {
+  font-size: 0.85rem;
+  color: var(--light-1);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Metric variants */
+.metricUsers::before { background: #3b82f6; }
+.metricCharacters::before { background: #10b981; }
+.metricClasses::before { background: #8b5cf6; }
+.metricItems::before { background: #f59e0b; }
+.metricEnemies::before { background: #ef4444; }
+
+/* === CHARTS GRID === */
+.chartsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  gap: 1.5rem;
+}
+
+/* === CHART CARD === */
+.chartCard {
+  position: relative;
+  background: var(--dark-2);
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--dark-4);
+  transition: all 0.3s ease;
+}
+
+.chartCard:hover {
+  border-color: var(--dark-5);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+.chartHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.25rem;
+  background: rgba(0, 0, 0, 0.2);
+  border-bottom: 1px solid var(--dark-4);
+}
+
+.chartTitle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--light);
+}
+
+.chartTitle span {
+  font-size: 1.25rem;
+}
+
+.chartBody {
+  padding: 1.5rem;
+}
+
+/* === EMPTY STATE === */
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  text-align: center;
+  color: var(--light-1);
+}
+
+.emptyIcon {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+  opacity: 0.5;
+}
+
+.emptyText {
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+}
+
+/* === RECENT USERS LIST === */
+.recentList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.recentCard {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  background: var(--dark-2);
+  border-radius: 12px;
+  border: 1px solid var(--dark-4);
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.recentCard:hover {
+  background: var(--dark-3);
+  border-color: var(--maroon);
+  transform: translateX(4px);
+}
+
+.recentAvatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: var(--dark-4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.recentAvatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.recentAvatar span {
+  font-size: 1.5rem;
+}
+
+.recentInfo {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.recentInfo strong {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--light);
+}
+
+.recentInfo span {
+  font-size: 0.85rem;
+  color: var(--light-1);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.recentStatus {
+  padding: 0.35rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.statusActive {
+  background: rgba(16, 185, 129, 0.15);
+  color: #34d399;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.statusBanned {
+  background: rgba(239, 68, 68, 0.15);
+  color: #f87171;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.statusPending {
+  background: rgba(245, 158, 11, 0.15);
+  color: #fbbf24;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 768px) {
+  .headerTop {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .statsCounter {
+    width: 100%;
+    justify-content: flex-start;
+  }
+  
+  .metricsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .chartsGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 500px) {
+  .pageTitle {
+    font-size: 1.5rem;
+  }
+  
+  .metricsGrid {
+    grid-template-columns: 1fr;
+  }
+  
+  .counterItem {
+    padding: 0.5rem 0.75rem;
+  }
+  
+  .counterItem strong {
+    font-size: 1rem;
+  }
+}

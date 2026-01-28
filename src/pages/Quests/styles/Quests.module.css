@@ -1,0 +1,95 @@
+.searchInput {
+  width: 100%;
+  padding: 0.75rem;
+  border: 2px solid var(--dark-3);
+  background: var(--dark-2);
+  color: var(--light);
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+.searchInput::placeholder {
+  color: var(--dark-5);
+}
+
+.searchInput:focus {
+  outline: none;
+  border-color: var(--maroon);
+}
+
+.loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 60vh;
+  gap: 1rem;
+  color: var(--light);
+}
+
+.loadingSpinner {
+  animation: spin 1s linear infinite;
+  font-size: 3rem;
+  color: var(--maroon);
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Quest Card Styles */
+.objectivesList {
+  margin: 0;
+  padding-left: 0.5rem;
+  list-style: none;
+}
+
+.objectiveItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+  color: var(--light);
+}
+
+.objectiveIcon {
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+.objectiveText {
+  flex: 1;
+}
+
+.rewardsContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.rewardEntry {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.6rem;
+  background: rgba(0,0,0,0.3);
+  border-radius: 6px;
+  font-size: 0.9rem;
+}
+
+.rewardIcon {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+}
+
+.rewardLabel {
+  font-weight: 600;
+  color: var(--gold);
+}
+
+.rewardValue,
+.rewardText {
+  color: var(--light);
+}

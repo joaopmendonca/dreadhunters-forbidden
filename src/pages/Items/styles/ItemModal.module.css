@@ -1,0 +1,140 @@
+.column {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.sectionTitle {
+  color: var(--gold);
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--dark-3);
+}
+
+.subsection {
+  margin-top: 1rem;
+}
+
+.subsectionTitle {
+  color: var(--light);
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin: 0 0 0.75rem 0;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.field label {
+  color: var(--light);
+  font-weight: 600;
+  font-size: 0.875rem;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1rem;
+}
+
+.classesCheckboxes {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-height: 200px;
+  overflow-y: auto;
+  padding: 0.5rem;
+  background: var(--dark-4);
+  border-radius: 4px;
+}
+
+.checkboxLabel {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--light);
+  font-size: 0.875rem;
+  cursor: pointer;
+  padding: 0.25rem;
+  transition: background 0.2s;
+}
+
+.checkboxLabel:hover {
+  background: var(--dark-3);
+}
+
+.checkboxLabel input[type="checkbox"] {
+  cursor: pointer;
+}
+
+.selectWithButton {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.selectAllBtn {
+  padding: 0.5rem 0.75rem;
+  background: var(--dark-3);
+  color: var(--light);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.75rem;
+  white-space: nowrap;
+  transition: background 0.2s;
+  width: 100%;
+  margin-top: 0.5rem;
+}
+
+.selectAllBtn:hover:not(:disabled) {
+  background: var(--dark-2);
+}
+
+.selectAllBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Stats Grid */
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 1rem;
+}
+
+.statControl {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.statControl label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--light);
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.statIcon {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+}
+
+.smallInput {
+  max-width: 100px;
+}

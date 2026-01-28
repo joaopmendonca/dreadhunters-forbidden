@@ -1,0 +1,17 @@
+.column {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.field label {
+  color: var(--light);
+  font-weight: 600;
+  font-size: 0.875rem;
+}

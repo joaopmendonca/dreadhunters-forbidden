@@ -1,0 +1,58 @@
+/* ============================================
+   EmptyState Component - Design Ludico para RPG
+   Componente reutilizavel para estado vazio
+   ============================================ */
+@import '../../styles/theme.css';
+
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 2rem;
+  text-align: center;
+  min-height: 200px;
+  width: 100%;
+  background: var(--dark-2);
+  border-radius: 12px;
+  border: 1px dashed var(--dark-4);
+}
+
+.emptyIcon {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.8;
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.emptyTitle {
+  font-family: var(--font-serif);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--light);
+  margin: 0 0 0.5rem 0;
+}
+
+.emptyMessage {
+  font-size: 1rem;
+  color: var(--light-1);
+  margin: 0;
+  max-width: 400px;
+}
+
+.emptyAction {
+  margin-top: 1.5rem;
+}
+
+/* Variante para quando está dentro de um grid */
+.emptyState:only-child {
+  grid-column: 1 / -1;
+}

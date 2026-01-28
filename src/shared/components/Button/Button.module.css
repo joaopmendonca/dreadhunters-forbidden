@@ -1,0 +1,27 @@
+.button {
+  display: inline-flex;
+  align-items: center;
+  border: none;
+  border-radius: 3px;          /* de 4px para 3px */
+  padding: 0.25rem 0.75rem;    /* de 0.5rem 1rem para 0.25rem 0.75rem */
+  font-family: var(--font-sans);
+  font-size: 0.9rem;           /* de 1rem para 0.9rem */
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease, filter 0.2s ease;
+  --hover-bg: rgba(0, 0, 0, 0.1);
+}
+
+.button:hover {
+  background-color: var(--hover-bg);
+  filter: brightness(1.05);
+}
+
+.icon {
+  display: inline-flex;
+  margin-right: 0.4rem;        /* de 0.5rem para 0.4rem */
+}
+
+.text {
+  display: inline;
+}

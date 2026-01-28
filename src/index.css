@@ -1,0 +1,109 @@
+/* src/index.css */
+
+/* 0) Import das fontes do Google, antes de tudo */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@500&display=swap');
+
+/* 1) Reset básico */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  height: 100%;
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100%;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+input,
+button,
+textarea,
+select {
+  font: inherit;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+/* 2) Variáveis de tema */
+:root {
+  /* tons escuros */
+  --dark-1: #1D2121;
+  --dark-2: #0D1210;
+  --dark-3: #131513;
+  --dark-4: #2C3232;
+  --dark-5: #383D3D;
+  --dark-6: #141414;
+  /* tom claro */
+  --light: #FAF5E5;
+
+  /* azuis */
+  --blue-1: #206F94;
+  --blue-2: #1998D3;
+  --blue-3: #6BB4D7;
+  --blue-4: #155A7B;
+  --blue-5: #0A98D5;
+
+  /* acentos */
+  --purple: #6C269B;
+  --gold: #D4A745;
+
+  /* tipografia */
+  --font-sans: 'Inter', sans-serif;
+  --font-serif: 'IBM Plex Serif', serif;
+}
+
+/* 3) Helper-classes de background */
+.bg-dark-1 { background-color: var(--dark-1); }
+.bg-dark-2 { background-color: var(--dark-2); }
+.bg-dark-3 { background-color: var(--dark-3); }
+.bg-dark-4 { background-color: var(--dark-4); }
+.bg-dark-5 { background-color: var(--dark-5); }
+.bg-dark-6 { background-color: var(--dark-6); }
+.bg-light  { background-color: var(--light); }
+.bg-blue-1 { background-color: var(--blue-1); }
+.bg-blue-2 { background-color: var(--blue-2); }
+.bg-blue-3 { background-color: var(--blue-3); }
+.bg-blue-4 { background-color: var(--blue-4); }
+.bg-blue-5 { background-color: var(--blue-5); }
+.bg-purple { background-color: var(--purple); }
+.bg-gold   { background-color: var(--gold); }
+
+/* 4) Helper-classes de tipografia */
+.font-sans  { font-family: var(--font-sans); }
+.font-serif { font-family: var(--font-serif); }
+
+/* 5) Override para o DNA spinner */
+svg.dna-loader circle:nth-child(odd)  { fill: var(--purple) !important; }
+svg.dna-loader circle:nth-child(even) { fill: var(--blue-2)   !important; }
+
+/* garante que o container das snackbars fique acima de tudo */
+.snackbar-container {
+  z-index: 3000 !important;
+}

@@ -1,0 +1,66 @@
+/* src/AppRoutes.module.css */
+@import './shared/styles/theme.css';
+
+/* Container principal: sidebar + conteúdo lado a lado (desktop) */
+.container {
+  display: flex;
+  height: 100vh;
+  position: relative;
+  background: var(--dark-0); /* garante que não apareça fundo branco */
+}
+
+/* Botão de abrir/fechar menu (hambúrguer) – só aparece em ≤ 640px */
+.menuButton {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  background: var(--dark-1);
+  border: none;
+  color: var(--light);
+  border-radius: 4px;
+  z-index: 1100;
+  display: none; /* inicialmente escondido no desktop */
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    transform 0.1s ease;
+}
+
+.menuButton:active {
+  transform: scale(0.9);
+  background-color: var(--dark-4);
+}
+
+/* Mostrar o botão hamburger somente em telas ≤ 640px */
+@media (max-width: 640px) {
+  .menuButton {
+    display: block;
+  }
+}
+
+/* 
+  Conteúdo principal ("main") ocupa todo o espaço restante,
+  sem precisar de margin-left. 
+  Já recebeu o fundo escuro para não "vazar" branco. 
+*/
+.main {
+  flex: 1;
+  overflow-y: auto;
+  background: var(--dark-0);
+}
+
+/* Se você quiser um efeito de transição ao abrir/fechar a sidebar, 
+   poderia descomentar este trecho: */
+/*
+.main {
+  transition: margin-left 0.3s ease;
+}
+*/
+
+/* Em telas ≤ 640px, o main continua ocupando 100% da largura,
+   já que a sidebar estará escondida (ou flutuando por cima). */
+@media (max-width: 640px) {
+  .main {
+    margin-left: 0;
+  }
+}

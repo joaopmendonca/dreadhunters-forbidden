@@ -1,0 +1,115 @@
+.column {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.sectionTitle {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--maroon);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.subSection {
+  margin-top: 1rem;
+}
+
+.subSectionTitle {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--gold);
+  margin: 0 0 0.5rem 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.field label {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--light);
+}
+
+.row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 1rem;
+}
+
+/* Checkbox group for prerequisites */
+.checkboxGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-height: 200px;
+  overflow-y: auto;
+  padding: 0.5rem;
+  background: var(--dark-2);
+  border-radius: 6px;
+}
+
+.checkboxLabel {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  padding: 0.25rem;
+  border-radius: 4px;
+  transition: background 0.2s;
+}
+
+.checkboxLabel:hover {
+  background: rgba(255,255,255,0.05);
+}
+
+.checkboxLabel input[type="checkbox"] {
+  cursor: pointer;
+}
+
+.checkboxLabel span {
+  color: var(--light);
+  font-size: 0.9rem;
+}
+
+/* Objectives */
+.objectiveRow {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  background: var(--dark-2);
+  border: 1px solid var(--dark-3);
+  border-radius: 8px;
+  position: relative;
+}
+
+.objectiveRow button[type="button"] {
+  align-self: flex-end;
+}
+
+/* Rewards */
+.rewardRow {
+  display: grid;
+  grid-template-columns: 2fr 1fr auto;
+  gap: 0.75rem;
+  align-items: center;
+  padding: 0.5rem;
+  background: var(--dark-2);
+  border-radius: 6px;
+}

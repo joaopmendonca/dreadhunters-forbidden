@@ -1,0 +1,68 @@
+@import '../../styles/theme.css';
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  width: 100%;
+}
+
+/* título simples, sem background ou sombra */
+.pageTitle {
+  font-family: var(--font-serif);
+  font-size: 1.5rem;
+  color: var(--light);
+  padding: 1rem 2rem 0; /* padding top e lateral */
+  margin: 0;
+}
+
+/* conteúdo principal */
+.content {
+  flex: 1;
+  padding: 2rem;
+  background-color: var(--dark-6);
+  color: var(--light);
+  font-family: var(--font-sans);
+  overflow-y: auto;
+  position: relative;  /* adicionado */
+  z-index: 1;          /* adicionado */
+}
+
+/* RESPONSIVIDADE */
+@media (max-width: 768px) {
+  /* título menor e padding reduzido */
+  .pageTitle {
+    font-size: 1.25rem;
+    padding: 1rem 1.5rem 0;
+  }
+  /* conteúdo com padding compacto */
+  .content {
+    padding: 1rem;
+  }
+}
+
+/* mobile pequeno (teléfono) */
+@media (max-width: 640px) {
+  .pageTitle {
+    position: relative;    /* volta ao fluxo normal */
+    left: 0;               /* zera qualquer deslocamento */
+    width: 100%;           /* ocupa toda a largura */
+    text-align: center;    /* centraliza o texto */
+    padding: 0.75rem 0 0;  /* padding-top, sem padding lateral */
+    font-size: 1.1rem;     /* mantém título compacto */
+  }
+  .content {
+    padding: 0.75rem;
+  }
+}
+
+/* extra pequeno (se quiser ainda mais enxuto) */
+@media (max-width: 480px) {
+  .pageTitle {
+    font-size: 1rem;
+    padding: 0.5rem 0 0;
+  }
+  .content {
+    padding: 0.5rem;
+  }
+}

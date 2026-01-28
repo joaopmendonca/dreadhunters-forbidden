@@ -1,0 +1,63 @@
+/* src/pages/Characters/CharacterModal.module.css */
+@import '../../../shared/styles/theme.css';
+
+/* ===========================
+   LAYOUT DE COLUNAS
+=========================== */
+.column {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* ===========================
+   CAMPOS DE FORMULÁRIO
+=========================== */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.field label {
+  font-family: var(--font-serif);
+  font-size: 0.95rem;
+  color: var(--gold);
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
+
+.field input,
+.field select,
+.field textarea {
+  background: var(--dark-3);
+  border: 1px solid var(--dark-4);
+  color: var(--light);
+  padding: 0.75rem;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+  border-color: var(--maroon);
+  box-shadow: 0 0 0 3px rgba(128, 0, 32, 0.1);
+  outline: none;
+}
+
+/* Descrição */
+.field textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+/* ===========================
+   RESPONSIVE
+=========================== */
+@media (max-width: 768px) {
+  .column {
+    gap: 1rem;
+  }
+}

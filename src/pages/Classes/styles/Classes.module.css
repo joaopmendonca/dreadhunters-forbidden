@@ -1,0 +1,494 @@
+/* ================================
+   CLASSES PAGE - RPG LUDIC DESIGN
+   ================================ */
+@import '../../../shared/styles/theme.css';
+
+/* === PAGE HEADER === */
+.pageHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+/* === STATS COUNTER === */
+.statsCounter {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.counterItem {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.25rem;
+  background: linear-gradient(135deg, rgba(128, 0, 32, 0.15), rgba(128, 0, 32, 0.05));
+  border-radius: 10px;
+  border: 1px solid rgba(128, 0, 32, 0.3);
+  transition: all 0.2s ease;
+}
+
+.counterItem:hover {
+  background: linear-gradient(135deg, rgba(128, 0, 32, 0.25), rgba(128, 0, 32, 0.1));
+  transform: translateY(-2px);
+}
+
+.counterItem span {
+  font-size: 1.5rem;
+}
+
+.counterItem div {
+  display: flex;
+  flex-direction: column;
+}
+
+.counterItem strong {
+  font-size: 1.35rem;
+  color: var(--gold);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.counterItem small {
+  font-size: 0.8rem;
+  color: var(--light-1);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* === CONTROLS === */
+.controls {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.searchInput {
+  flex: 1;
+  min-width: 200px;
+  max-width: 300px;
+}
+
+/* === LOADING === */
+.loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 4rem 2rem;
+  color: var(--light-1);
+}
+
+.loadingSpinner {
+  width: 48px;
+  height: 48px;
+  border: 4px solid var(--dark-4);
+  border-top-color: var(--maroon);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* === CARDS GRID === */
+.cardsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.emptyState {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 4rem 2rem;
+  color: var(--light-2);
+}
+
+.emptyIcon {
+  font-size: 4rem;
+  filter: drop-shadow(0 0 8px var(--gold));
+}
+
+.emptyState h3 {
+  color: var(--gold);
+  font-size: 1.5rem;
+  margin: 0;
+}
+
+.emptyState p {
+  margin: 0;
+  color: var(--light-2);
+}
+
+/* === CLASS CARD === */
+.classCard {
+  background: linear-gradient(135deg, var(--dark-2) 0%, var(--dark-3) 100%);
+  border: 2px solid var(--maroon);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.classCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+}
+
+.classCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.7);
+  border-color: var(--gold);
+}
+
+.classCard:hover::before {
+  background: linear-gradient(90deg, var(--gold), var(--maroon), var(--gold));
+}
+
+/* === CARD TOP BAR === */
+.cardTopBar {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  background: linear-gradient(135deg, var(--dark-3) 0%, var(--dark-4) 100%);
+  border-bottom: 1px solid var(--maroon);
+}
+
+.classIcon {
+  width: 48px;
+  height: 48px;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 2px solid var(--maroon);
+  background: var(--dark-5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.classIcon img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.noIcon {
+  font-size: 1.5rem;
+  color: var(--gold);
+  filter: drop-shadow(0 0 4px var(--maroon));
+}
+
+.classTitle {
+  flex: 1;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--gold);
+  text-shadow: 0 0 8px rgba(197, 137, 58, 0.5);
+}
+
+.topActions {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.editButton,
+.skillTreeButton,
+.deleteButton {
+  transition: all 0.3s ease;
+}
+
+.editButton:hover {
+  transform: rotate(15deg) scale(1.1);
+}
+
+.skillTreeButton:hover {
+  transform: scale(1.1);
+}
+
+.deleteButton:hover {
+  transform: scale(1.1);
+}
+
+/* === CARD BODY === */
+.cardBody {
+  display: flex;
+  gap: 1rem;
+  padding: 1.25rem;
+  background: var(--dark-2);
+}
+
+.cardContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* === STAT ICONS === */
+.statIcons {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.75rem;
+  padding: 1rem;
+  background: linear-gradient(135deg, var(--dark-3) 0%, var(--dark-4) 100%);
+  border: 1px solid var(--maroon);
+  border-radius: 8px;
+}
+
+.statIcon {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  background: var(--dark-5);
+  border: 1px solid var(--dark-4);
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--light-1);
+  transition: all 0.2s ease;
+}
+
+.statIcon:hover {
+  background: var(--dark-4);
+  border-color: var(--gold);
+  transform: translateY(-2px);
+}
+
+.statImg {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 2px var(--gold));
+}
+
+/* === DESC AND SKILLS === */
+.descAndSkills {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.cardDescInBody {
+  margin: 0;
+  padding: 1rem;
+  background: linear-gradient(135deg, var(--dark-3) 0%, var(--dark-4) 100%);
+  border-left: 3px solid var(--gold);
+  border-radius: 6px;
+  color: var(--light-2);
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  font-style: italic;
+}
+
+/* === SPECIAL BOX === */
+.specialBox {
+  padding: 1rem;
+  background: linear-gradient(135deg, var(--dark-3) 0%, var(--dark-4) 100%);
+  border: 1px solid var(--maroon);
+  border-radius: 8px;
+  position: relative;
+}
+
+.specialBox::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+}
+
+.specialBox h4 {
+  margin: 0 0 0.75rem 0;
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--gold);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  text-align: center;
+}
+
+.specialItem {
+  padding: 0.75rem;
+  background: var(--dark-5);
+  border: 1px solid var(--dark-4);
+  border-radius: 6px;
+  margin-bottom: 0.5rem;
+}
+
+.specialItem:last-child {
+  margin-bottom: 0;
+}
+
+.specialItem strong {
+  display: block;
+  color: var(--light);
+  font-size: 0.9375rem;
+  margin-bottom: 0.25rem;
+}
+
+.specialDesc {
+  color: var(--light-2);
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.specialEmpty {
+  text-align: center;
+  color: var(--light-3);
+  font-style: italic;
+  padding: 0.5rem;
+}
+
+/* === ARTWORK RIGHT === */
+.artworkContainerRight {
+  width: 180px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: flex-start;
+}
+
+.artworkThumbRight {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  border: 2px solid var(--maroon);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  object-fit: cover;
+  transition: all 0.3s ease;
+}
+
+.artworkThumbRight:hover {
+  transform: scale(1.05);
+  border-color: var(--gold);
+  box-shadow: 0 6px 20px rgba(197, 137, 58, 0.3);
+}
+
+/* === PAGINATION === */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  list-style: none;
+  padding: 0;
+  margin: 2rem 0;
+}
+
+.paginationPage a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 40px;
+  height: 40px;
+  padding: 0.5rem 1rem;
+  background: linear-gradient(135deg, var(--dark-3) 0%, var(--dark-4) 100%);
+  border: 1px solid var(--maroon);
+  border-radius: 6px;
+  color: var(--light-1);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+.paginationPage a:hover {
+  background: linear-gradient(135deg, var(--maroon) 0%, var(--dark-3) 100%);
+  border-color: var(--gold);
+  color: var(--gold);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(197, 137, 58, 0.3);
+}
+
+.paginationActive a {
+  background: linear-gradient(135deg, var(--maroon) 0%, var(--dark-4) 100%);
+  border-color: var(--gold);
+  color: var(--gold);
+  box-shadow: 0 0 12px rgba(197, 137, 58, 0.5);
+}
+
+.paginationActive a:hover {
+  transform: none;
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 1024px) {
+  .cardsGrid {
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  }
+
+  .artworkContainerRight {
+    width: 140px;
+  }
+
+  .statIcons {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .pageHeader {
+    padding: 1rem;
+  }
+
+  .headerTop {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .statsCounter {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .controls {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .searchInput {
+    max-width: 100%;
+  }
+
+  .cardsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .cardBody {
+    flex-direction: column;
+  }
+
+  .artworkContainerRight {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .artworkThumbRight {
+    max-width: 240px;
+  }
+
+  .statIcons {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

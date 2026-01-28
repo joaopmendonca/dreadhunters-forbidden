@@ -1,0 +1,74 @@
+/* === PAGINATION COMPONENT === */
+.pagination {
+  display: flex;
+  list-style: none;
+  gap: 0.5rem;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+  margin: 2rem 0 1rem;
+  flex-wrap: wrap;
+}
+
+.page {
+  display: flex;
+}
+
+.pageLink {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 36px;
+  height: 36px;
+  padding: 0 0.75rem;
+  background: var(--dark-2);
+  color: var(--light);
+  border-radius: 8px;
+  border: 1px solid var(--dark-4);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.pageLink:hover {
+  background: var(--dark-3);
+  border-color: var(--dark-5);
+  color: var(--gold);
+}
+
+/* Página ativa */
+.active .pageLink {
+  background: linear-gradient(135deg, var(--maroon), #a0153e);
+  border-color: transparent;
+  color: white;
+  box-shadow: 0 2px 8px rgba(128, 0, 32, 0.4);
+  cursor: default;
+}
+
+.active .pageLink:hover {
+  background: linear-gradient(135deg, var(--maroon), #a0153e);
+  color: white;
+}
+
+/* Páginas desabilitadas (anterior/próximo quando no limite) */
+.disabled .pageLink {
+  opacity: 0.4;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* === RESPONSIVIDADE === */
+@media (max-width: 600px) {
+  .pagination {
+    gap: 0.35rem;
+  }
+
+  .pageLink {
+    min-width: 32px;
+    height: 32px;
+    padding: 0 0.5rem;
+    font-size: 0.85rem;
+  }
+}

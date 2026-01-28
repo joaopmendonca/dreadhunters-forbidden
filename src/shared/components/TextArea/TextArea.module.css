@@ -1,0 +1,20 @@
+@import '../../styles/theme.css';
+
+.textarea {
+  width: 100%;
+  padding: 0.25rem;
+  background: var(--dark-3);
+  color: var(--light);
+  border: 1px solid var(--dark-4);
+  border-radius: 3px;
+  resize: vertical;
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.textarea:focus {
+  outline: none;
+  border-color: #800020;
+  background: var(--dark-2);
+}

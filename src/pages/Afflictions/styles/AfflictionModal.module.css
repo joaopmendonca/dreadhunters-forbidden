@@ -1,0 +1,209 @@
+@import '../../../shared/styles/theme.css';
+
+/* ============================================
+   Affliction Modal - Padrão Modular
+   ============================================ */
+
+/* Colunas */
+.column {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Seções */
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.sectionTitle {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--gold);
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--dark-4);
+}
+
+/* Campos */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.field label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--light);
+}
+
+.row {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-end;
+}
+
+.row .field {
+  flex: 1;
+}
+
+.fieldHint {
+  font-size: 0.75rem;
+  color: var(--light-1);
+  font-style: italic;
+  margin-top: -0.25rem;
+}
+
+/* Checkbox Field */
+.checkField {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  background: rgba(128, 0, 32, 0.1);
+  border: 1px solid rgba(128, 0, 32, 0.3);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--light);
+}
+
+.checkField:hover {
+  background: rgba(128, 0, 32, 0.2);
+  border-color: var(--maroon);
+}
+
+.checkField input[type="checkbox"] {
+  cursor: pointer;
+  width: 18px;
+  height: 18px;
+  accent-color: var(--maroon);
+}
+
+/* ============================================
+   Níveis de Severidade
+   ============================================ */
+
+.nivelContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.nivelCard {
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+  padding: 1rem;
+  border: 2px solid;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.nivelLeve {
+  border-color: #10b981;
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(16, 185, 129, 0.05));
+}
+
+.nivelMedia {
+  border-color: #f59e0b;
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(245, 158, 11, 0.05));
+}
+
+.nivelGrave {
+  border-color: #ef4444;
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(239, 68, 68, 0.05));
+}
+
+.nivelHeader {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--light);
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.nivelBody {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.emptyMessage {
+  color: var(--light-1);
+  font-size: 0.8rem;
+  text-align: center;
+  padding: 0.75rem;
+  opacity: 0.6;
+  font-style: italic;
+}
+
+/* Penalty Row */
+.penaltyRow {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr auto;
+  gap: 0.5rem;
+  align-items: center;
+  padding: 0.5rem;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.penaltyRow:hover {
+  background: rgba(0, 0, 0, 0.3);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.penaltySelect {
+  min-width: 0;
+}
+
+.penaltyInput {
+  min-width: 0;
+}
+
+/* Botão Adicionar */
+.addPenaltyBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  font-size: 0.8rem;
+  border: 1px dashed rgba(255, 255, 255, 0.3);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--light-1);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.addPenaltyBtn:hover:not(:disabled) {
+  border-color: var(--gold);
+  background: rgba(212, 175, 55, 0.1);
+  color: var(--gold);
+}
+
+/* ============================================
+   Responsive
+   ============================================ */
+
+@media (max-width: 768px) {
+  .row {
+    flex-direction: column;
+  }
+
+  .penaltyRow {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+}
