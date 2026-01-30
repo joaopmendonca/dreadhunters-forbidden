@@ -9,8 +9,10 @@
   --dark-4: #2C3232;
   --dark-5: #383D3D;
   --dark-6: #141414;
-  /* tom claro */
+  /* tons claros */
   --light: #FAF5E5;
+  --light-1: rgba(250, 245, 229, 0.7);
+  --light-2: rgba(250, 245, 229, 0.5);
 
   /* azuis */
   --blue-1: #206F94;

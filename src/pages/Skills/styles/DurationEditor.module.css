@@ -1,0 +1,31 @@
+/* DurationEditor.module.css */
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.field label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--light-2);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.info {
+  padding: 0.75rem;
+  background: rgba(212, 175, 55, 0.1);
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  border-radius: 6px;
+  font-size: 0.8rem;
+  color: var(--gold);
+  line-height: 1.4;
+}

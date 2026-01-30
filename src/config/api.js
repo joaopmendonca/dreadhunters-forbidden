@@ -98,6 +98,8 @@ api.interceptors.response.use(
     isRefreshing = true;
 
     try {
+      console.log('[API Interceptor] Tentando renovar token...');
+      
       // Faz requisição de refresh usando axios puro (não o interceptor)
       const response = await axios.post(
         `${baseURL}/auth/refresh`,
@@ -109,6 +111,8 @@ api.interceptors.response.use(
       );
 
       const { token: newToken, refreshToken: newRefreshToken } = response.data;
+
+      console.log('[API Interceptor] Token renovado com sucesso');
 
       // Atualiza tokens no localStorage
       localStorage.setItem('token', newToken);
@@ -125,9 +129,11 @@ api.interceptors.response.use(
       // Processa fila de requisições pendentes
       processQueue(null, newToken);
 
+      console.log('[API Interceptor] Retentando requisição original');
       // Retenta a requisição original
       return api(originalRequest);
     } catch (refreshError) {
+      console.error('[API Interceptor] Erro ao renovar token:', refreshError.response?.data || refreshError.message);
       // Se falhou o refresh, faz logout
       processQueue(refreshError, null);
       logout();

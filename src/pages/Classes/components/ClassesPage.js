@@ -86,7 +86,7 @@ export default function ClassesPage() {
               }
             />
           ) : (
-            <Card.Grid minWidth="320px">
+            <Card.Grid columns="3" minWidth="320px">
               {pageItems.map(cls => (
                 <ClassCard
                   key={cls._id}

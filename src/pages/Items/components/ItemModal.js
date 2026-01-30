@@ -9,6 +9,8 @@ import PhotoInput from '../../../shared/components/PhotoInput';
 import Button from '../../../shared/components/Button';
 import IconButton from '../../../shared/components/IconButton';
 import ConfirmationModal from '../../../shared/components/ConfirmationModal';
+import ConsumableStatsEditor from './ConsumableStatsEditor';
+import ConsumableAfflictionsEditor from './ConsumableAfflictionsEditor';
 import useStatus from '../../../shared/hooks/useStatus';
 import api from '../../../config/api';
 import { TYPE_OPTIONS, RARITY_OPTIONS, SLOT_OPTIONS, MESSAGES } from '../constants';
@@ -16,7 +18,7 @@ import styles from '../styles/ItemModal.module.css';
 
 export default function ItemModal({ isOpen, onClose, onSave, onIconDeleted, initialData = {} }) {
   const { enqueueSnackbar } = useSnackbar();
-  const { baseStatus } = useStatus();
+  const { baseStatus, derivedStatus } = useStatus();
 
   const [form, setForm] = useState({
     _id: '',
@@ -45,21 +47,33 @@ export default function ItemModal({ isOpen, onClose, onSave, onIconDeleted, init
   });
 
   const [allClasses, setAllClasses] = useState([]);
+  const [statusList, setStatusList] = useState([]);
   const [iconFile, setIconFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState('');
   const [saving, setSaving] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [deleting, setDeleting] = useState(false);
+  
+  // Estados para consumível dinâmico
+  const [consumableStats, setConsumableStats] = useState(new Map());
+  const [consumableAfflictions, setConsumableAfflictions] = useState([]);
 
   useEffect(() => {
     if (!isOpen) return;
 
-    // Inicializar combatStats baseado nos Status dinâmicos
+    // Inicializar combatStats baseado nos Status dinâmicos (base + derivados)
     const initCombatStats = () => {
       const stats = {};
+      // Apenas stats base são inicializados
       baseStatus.forEach(status => {
         stats[status.nome] = initialData.equipment?.combatStats?.[status.nome] ?? 0;
       });
+      // Stats derivados são calculados apenas se houver dados iniciais
+      if (initialData.equipment?.combatStats) {
+        derivedStatus.forEach(status => {
+          stats[status.nome] = initialData.equipment?.combatStats?.[status.nome] ?? 0;
+        });
+      }
       return stats;
     };
 
@@ -103,17 +117,74 @@ export default function ItemModal({ isOpen, onClose, onSave, onIconDeleted, init
     setIconFile(null);
     setPreviewUrl(initialData.iconUrl || '');
 
+    // Inicializar estados de consumível
+    if (initialData.type === 'consumable') {
+      setConsumableStats(initialData.consumable?.statsModifiers || new Map());
+      setConsumableAfflictions(initialData.consumable?.afflictionEffects || []);
+    } else {
+      setConsumableStats(new Map());
+      setConsumableAfflictions([]);
+    }
+
     api.get('/classes')
       .then(r => setAllClasses(r.data))
       .catch(() => setAllClasses([]));
-  }, [initialData, isOpen, baseStatus]);
+    
+    api.get('/status')
+      .then(r => setStatusList(r.data))
+      .catch(() => setStatusList([]));
+  }, [initialData, isOpen, baseStatus, derivedStatus]);
 
   const changeField = (field, value) => setForm(f => ({ ...f, [field]: value }));
   const changeReqField = (key, value) => setForm(f => ({ ...f, requirements: { ...f.requirements, [key]: value } }));
   const changeConField = (key, value) => setForm(f => ({ ...f, consumable: { ...f.consumable, [key]: value } }));
   const changeEquipField = (key, value) => setForm(f => ({ ...f, equipment: { ...f.equipment, [key]: value } }));
   const changeDurability = (sub, value) => setForm(f => ({ ...f, equipment: { ...f.equipment, durability: { ...f.equipment.durability, [sub]: value } } }));
-  const changeCombatStat = (stat, value) => setForm(f => ({ ...f, equipment: { ...f.equipment, combatStats: { ...f.equipment.combatStats, [stat]: value } } }));
+  
+  const changeCombatStat = (stat, value) => {
+    setForm(f => {
+      const newStats = { ...f.equipment.combatStats, [stat]: value };
+      
+      // Verifica se há algum stat base diferente de 0
+      const hasAnyBaseStat = baseStatus.some(baseStat => {
+        return newStats[baseStat.nome] && newStats[baseStat.nome] !== 0;
+      });
+      
+      // Recalcula stats derivados quando um stat base muda
+      derivedStatus.forEach(derivedStat => {
+        if (derivedStat.formula) {
+          // Se não há nenhum stat base, zera os derivados
+          if (!hasAnyBaseStat) {
+            newStats[derivedStat.nome] = 0;
+            return;
+          }
+          
+          try {
+            let formula = derivedStat.formula;
+            
+            // Substitui variáveis na fórmula pelos valores atuais
+            baseStatus.forEach(baseStat => {
+              const regex = new RegExp(`\\b${baseStat.nome}\\b`, 'g');
+              const val = newStats[baseStat.nome] || 0;
+              formula = formula.replace(regex, val);
+            });
+            
+            // Para itens, level não se aplica (usa 0)
+            formula = formula.replace(/\blevel\b/g, '0');
+            
+            // Calcula o valor (usando Function ao invés de eval para segurança)
+            const calcValue = new Function('return ' + formula)();
+            newStats[derivedStat.nome] = Number(calcValue.toFixed(2));
+          } catch (err) {
+            console.error(`Erro ao calcular ${derivedStat.nome}:`, err);
+            newStats[derivedStat.nome] = 0;
+          }
+        }
+      });
+      
+      return { ...f, equipment: { ...f.equipment, combatStats: newStats } };
+    });
+  };
 
   const handleStackableToggle = () => setForm(f => ({ ...f, stackable: !f.stackable, maxStack: f.stackable ? 1 : f.maxStack }));
 
@@ -171,7 +242,12 @@ export default function ItemModal({ isOpen, onClose, onSave, onIconDeleted, init
 
       fd.append('requirements', JSON.stringify(form.requirements));
       if (form.type === 'consumable') {
-        fd.append('consumable', JSON.stringify(form.consumable));
+        const consumableData = {
+          ...form.consumable,
+          statsModifiers: consumableStats,
+          afflictionEffects: consumableAfflictions
+        };
+        fd.append('consumable', JSON.stringify(consumableData));
       }
       if (form.type === 'equipment') {
         fd.append('equipment', JSON.stringify({
@@ -231,7 +307,7 @@ export default function ItemModal({ isOpen, onClose, onSave, onIconDeleted, init
             <div className={styles.column}>
               {/* Identidade */}
               <div className={styles.section}>
-                <h3 className={styles.sectionTitle}>Identidade</h3>
+                <span className={styles.sectionTitle}>Identidade</span>
                 <div className={styles.field}>
                   <label>Nome</label>
                   <TextInput value={form.name} onChange={e => changeField('name', e.target.value)} placeholder="Nome do item" required disabled={saving} />
@@ -254,7 +330,7 @@ export default function ItemModal({ isOpen, onClose, onSave, onIconDeleted, init
 
               {/* Visuais */}
               <div className={styles.section}>
-                <h3 className={styles.sectionTitle}>Visuais</h3>
+                <span className={styles.sectionTitle}>Visuais</span>
                 <div className={styles.field}>
                   <label>Ícone do Item</label>
                   <PhotoInput file={iconFile} previewUrl={previewUrl} onFileChange={handleFileChange} onRemove={() => setConfirmOpen(true)} placeholderLabel="Escolher ícone" disabled={saving} />
@@ -263,7 +339,7 @@ export default function ItemModal({ isOpen, onClose, onSave, onIconDeleted, init
 
               {/* Propriedades */}
               <div className={styles.section}>
-                <h3 className={styles.sectionTitle}>Propriedades</h3>
+                <span className={styles.sectionTitle}>Propriedades</span>
                 <div className={styles.field}>
                   <label>
                     <input type="checkbox" checked={form.stackable} onChange={handleStackableToggle} disabled={saving} />{' '}
@@ -296,7 +372,7 @@ export default function ItemModal({ isOpen, onClose, onSave, onIconDeleted, init
 
               {/* Requisitos */}
               <div className={styles.section}>
-                <h3 className={styles.sectionTitle}>Requisitos</h3>
+                <span className={styles.sectionTitle}>Requisitos</span>
                 <div className={styles.field}>
                   <label>Nível mínimo</label>
                   <TextInput type="number" min={1} value={form.requirements.level} onChange={e => changeReqField('level', +e.target.value)} disabled={saving} />
@@ -347,35 +423,62 @@ export default function ItemModal({ isOpen, onClose, onSave, onIconDeleted, init
             <div className={styles.column}>
               {/* Consumível */}
               {form.type === 'consumable' && (
-                <div className={styles.section}>
-                  <h3 className={styles.sectionTitle}>Consumível</h3>
-                  <div className={styles.row}>
-                    <div className={styles.field}>
-                      <label>HP restaurado</label>
-                      <TextInput type="number" min={0} value={form.consumable.hpRestore} onChange={e => changeConField('hpRestore', +e.target.value)} disabled={saving} />
-                    </div>
-                    <div className={styles.field}>
-                      <label>MP restaurado</label>
-                      <TextInput type="number" min={0} value={form.consumable.mpRestore} onChange={e => changeConField('mpRestore', +e.target.value)} disabled={saving} />
-                    </div>
+                <>
+                  <div className={styles.section}>
+                    <ConsumableStatsEditor
+                      statsModifiers={consumableStats}
+                      onChange={setConsumableStats}
+                      disabled={saving}
+                      statusList={statusList}
+                    />
                   </div>
-                  <div className={styles.row}>
-                    <div className={styles.field}>
-                      <label>Buff</label>
-                      <TextInput value={form.consumable.buff} onChange={e => changeConField('buff', e.target.value)} disabled={saving} />
-                    </div>
-                    <div className={styles.field}>
-                      <label>Duração (s)</label>
-                      <TextInput type="number" min={0} value={form.consumable.buffDuration} onChange={e => changeConField('buffDuration', +e.target.value)} disabled={saving} />
-                    </div>
+
+                  <div className={styles.section}>
+                    <ConsumableAfflictionsEditor
+                      afflictionEffects={consumableAfflictions}
+                      onChange={setConsumableAfflictions}
+                      disabled={saving}
+                    />
                   </div>
-                </div>
+
+                  {/* Campos legados (apenas leitura para migração) */}
+                  {(form.consumable.hpRestore > 0 || form.consumable.mpRestore > 0 || form.consumable.buff) && (
+                    <div className={styles.section}>
+                      <span className={styles.sectionTitle}>Dados Legados (Migrar)</span>
+                      <div className={styles.row}>
+                        <div className={styles.field}>
+                          <label>HP restaurado (antigo)</label>
+                          <TextInput type="number" value={form.consumable.hpRestore} disabled />
+                        </div>
+                        <div className={styles.field}>
+                          <label>MP restaurado (antigo)</label>
+                          <TextInput type="number" value={form.consumable.mpRestore} disabled />
+                        </div>
+                      </div>
+                      {form.consumable.buff && (
+                        <div className={styles.row}>
+                          <div className={styles.field}>
+                            <label>Buff (antigo)</label>
+                            <TextInput value={form.consumable.buff} disabled />
+                          </div>
+                          <div className={styles.field}>
+                            <label>Duração (s) (antigo)</label>
+                            <TextInput type="number" value={form.consumable.buffDuration} disabled />
+                          </div>
+                        </div>
+                      )}
+                      <div className={styles.migrationHint}>
+                        ℹ️ Use os editores dinâmicos acima para configurar. Os campos antigos serão removidos.
+                      </div>
+                    </div>
+                  )}
+                </>
               )}
 
               {/* Equipamento */}
               {form.type === 'equipment' && (
                 <div className={styles.section}>
-                  <h3 className={styles.sectionTitle}>Equipamento</h3>
+                  <span className={styles.sectionTitle}>Equipamento</span>
                   <div className={styles.row}>
                     <div className={styles.field}>
                       <label>Slot</label>
@@ -432,7 +535,6 @@ export default function ItemModal({ isOpen, onClose, onSave, onIconDeleted, init
                             </label>
                             <TextInput
                               type="number"
-                              min={0}
                               value={value}
                               onChange={e => changeCombatStat(status.nome, +e.target.value)}
                               disabled={saving}
@@ -443,6 +545,42 @@ export default function ItemModal({ isOpen, onClose, onSave, onIconDeleted, init
                       })}
                     </div>
                   </div>
+
+                  {/* Stats Derivados (calculados, apenas visualização) */}
+                  {derivedStatus.length > 0 && (
+                    <div className={styles.subsection}>
+                      <h4 className={styles.subsectionTitle}>Atributos Derivados (Calculados)</h4>
+                      <div className={styles.statsGrid}>
+                        {derivedStatus.map(status => {
+                          const value = Number(form.equipment.combatStats[status.nome]) || 0;
+                          return (
+                            <div key={status.nome} className={styles.statControl}>
+                              <label>
+                                {status.iconeUrl && (
+                                  <img src={status.iconeUrl} alt={status.label} className={styles.statIcon} />
+                                )}
+                                {status.label}
+                              </label>
+                              <input
+                                type="number"
+                                value={value}
+                                disabled
+                                readOnly
+                                className={styles.smallInput}
+                                style={{
+                                  color: value > 0 ? '#ff9800' : value < 0 ? '#f44336' : 'inherit',
+                                  fontWeight: value !== 0 ? 600 : 'normal'
+                                }}
+                              />
+                            </div>
+                          );
+                        })}
+                      </div>
+                      <p className={styles.derivedNote}>
+                        💡 Stats derivados são calculados automaticamente pelo sistema
+                      </p>
+                    </div>
+                  )}
                 </div>
               )}
 

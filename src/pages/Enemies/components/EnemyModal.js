@@ -25,7 +25,7 @@ export default function EnemyModal({
   currencies = []
 }) {
   const { enqueueSnackbar } = useSnackbar();
-  const { baseStatus, normalizeStats } = useStatus();
+  const { baseStatus, derivedStatus, normalizeStats } = useStatus();
   const { config: serverConfig } = useServerConfig();
 
   const [form, setForm] = useState({
@@ -59,6 +59,59 @@ export default function EnemyModal({
 
   const remainingPoints = maxPoints - usedPoints;
 
+  // Calcula os stats derivados baseado nos stats base e level
+  const calculateDerivedStats = () => {
+    const stats = form.stats;
+    const level = form.level || 1;
+    
+    const str = Number(stats.str) || 0;
+    const dex = Number(stats.dex) || 0;
+    const con = Number(stats.con) || 0;
+    const int = Number(stats.int) || 0;
+    const wit = Number(stats.wit) || 0;
+    const men = Number(stats.men) || 0;
+
+    return {
+      // Pontos de Vida e Energia
+      max_hp: Math.floor((con * 8) + (level * 4.5)),
+      max_sp: Math.floor((men * 5) + (level * 2)),
+      max_cp: Math.floor((con * 6) + (level * 3.5)),
+      hp_regen: ((con * 0.1) + (level * 0.05)).toFixed(2),
+      sp_regen: ((men * 0.15) + (level * 0.03)).toFixed(2),
+      cp_regen: (con * 0.08).toFixed(2),
+      // Poder Ofensivo
+      p_atk: Math.floor((str * 1.2) + (level * 0.8)),
+      m_atk: Math.floor((int * 1.5) + (wit * 0.5) + (level * 0.7)),
+      crit_rate: ((dex * 0.3) + 10).toFixed(1),
+      crit_dmg: Math.floor((str * 0.2) + 100),
+      m_crit_rate: ((wit * 0.4) + 5).toFixed(1),
+      // Poder Defensivo
+      p_def: Math.floor((con * 1.5) + (dex * 0.3) + (level * 0.5)),
+      m_def: Math.floor((men * 1.3) + (int * 0.4) + (level * 0.4)),
+      evasion: ((dex * 0.5) + (level * 0.3)).toFixed(1)
+    };
+  };
+
+  const derivedStats = calculateDerivedStats();
+
+  // Labels para os stats derivados
+  const derivedLabels = {
+    max_hp: 'HP Máximo',
+    max_sp: 'SP Máximo', 
+    max_cp: 'CP Máximo',
+    hp_regen: 'Regen HP',
+    sp_regen: 'Regen SP',
+    cp_regen: 'Regen CP',
+    p_atk: 'Ataque Físico',
+    m_atk: 'Ataque Mágico',
+    crit_rate: 'Taxa Crítico',
+    crit_dmg: 'Dano Crítico',
+    m_crit_rate: 'Crit. Mágico',
+    p_def: 'Defesa Física',
+    m_def: 'Defesa Mágica',
+    evasion: 'Evasão'
+  };
+
   useEffect(() => {
     if (!isOpen) return;
 
@@ -78,23 +131,23 @@ export default function EnemyModal({
       type: initialData.type || 'normal',
       level: initialData.level || 1,
       stats: initStats(),
-      loot: Array.isArray(initialData.loot) 
-        ? initialData.loot.map(l => ({
-            item: l.item?._id || l.item,
-            dropChance: l.dropChance || 0,
-            minQuantity: l.minQuantity || 1,
-            maxQuantity: l.maxQuantity || 1
+      loot: Array.isArray(initialData.lootTable) 
+        ? initialData.lootTable.map(l => ({
+            item: l.itemId?._id || l.itemId,
+            dropChance: l.dropRate || 0,
+            minQuantity: l.minQty || 1,
+            maxQuantity: l.maxQty || 1
           }))
         : [],
       currencyLoot: Array.isArray(initialData.currencyLoot)
         ? initialData.currencyLoot.map(c => ({
-            currency: c.currency?._id || c.currency,
-            minAmount: c.minAmount || 0,
-            maxAmount: c.maxAmount || 0
+            currency: c.currencyId?._id || c.currencyId,
+            minAmount: c.minQty || 0,
+            maxAmount: c.maxQty || 0
           }))
         : [],
       iconUrl: initialData.iconUrl || '',
-      experienceReward: initialData.experienceReward || 0
+      experienceReward: initialData.xpReward || 0
     });
     setIconFile(null);
     setPreviewUrl(initialData.iconUrl || '');
@@ -172,13 +225,26 @@ export default function EnemyModal({
       fd.append('type', form.type);
       fd.append('level', form.level);
       fd.append('stats', JSON.stringify(normalizeStats(form.stats)));
-      fd.append('experienceReward', form.experienceReward);
+      fd.append('xpReward', form.experienceReward);
 
       if (form.loot.length > 0) {
-        fd.append('loot', JSON.stringify(form.loot));
+        // Mapear para os campos esperados pelo backend
+        const lootData = form.loot.map(l => ({
+          itemId: l.item,
+          dropRate: l.dropChance,
+          minQty: l.minQuantity,
+          maxQty: l.maxQuantity
+        }));
+        fd.append('lootTable', JSON.stringify(lootData));
       }
       if (form.currencyLoot.length > 0) {
-        fd.append('currencyLoot', JSON.stringify(form.currencyLoot));
+        // Mapear para os campos esperados pelo backend
+        const currencyData = form.currencyLoot.map(c => ({
+          currencyId: c.currency,
+          minQty: c.minAmount,
+          maxQty: c.maxAmount
+        }));
+        fd.append('currencyLoot', JSON.stringify(currencyData));
       }
 
       if (iconFile) fd.append('icon', iconFile);
@@ -305,12 +371,14 @@ export default function EnemyModal({
 
             {/* Coluna Direita */}
             <div className={styles.column}>
-              {/* Atributos */}
-              <div className={styles.section}>
-                <h3 className={styles.sectionTitle}>Atributos</h3>
-                <div className={styles.pointsInfo}>
-                  ⚔ Pontos Restantes: <strong>{remainingPoints}</strong> / {maxPoints}
-                </div>
+              {/* Pontos Restantes */}
+              <div className={styles.pointsInfo}>
+                ⚔ Pontos Restantes: <strong>{remainingPoints}</strong> / {maxPoints}
+              </div>
+
+              {/* Atributos Base */}
+              <fieldset className={styles.fieldset}>
+                <legend>Atributos Base</legend>
                 <div className={styles.statsGrid}>
                   {baseStatus.map(status => {
                     const value = Number(form.stats[status.nome]) || 0;
@@ -333,51 +401,89 @@ export default function EnemyModal({
                     );
                   })}
                 </div>
-              </div>
+              </fieldset>
+
+              {/* Atributos Derivados (Calculados) */}
+              <fieldset className={styles.fieldset}>
+                <legend>Atributos Derivados</legend>
+                <div className={styles.derivedGrid}>
+                  {Object.entries(derivedStats).map(([key, value]) => (
+                    <div key={key} className={styles.derivedStat}>
+                      <span className={styles.derivedLabel}>{derivedLabels[key]}</span>
+                      <span className={styles.derivedValue}>{value}</span>
+                    </div>
+                  ))}
+                </div>
+              </fieldset>
             </div>
           </Modal.Body>
 
           {/* Seção Loot (Full Width) */}
-          <div className={styles.lootSection}>
-            <div className={styles.section}>
-              <h3 className={styles.sectionTitle}>
-                Loot de Itens
-                <IconButton icon={<FaPlus />} onClick={addLootItem} disabled={saving} hoverColor="var(--gold)" />
-              </h3>
-              {form.loot.length === 0 ? (
-                <p style={{ opacity: 0.5 }}>Nenhum item configurado</p>
-              ) : (
-                form.loot.map((loot, idx) => (
-                  <div key={idx} className={styles.lootRow}>
-                    <Select options={itemOptions} value={loot.item} onChange={val => changeLootItem(idx, 'item', val)} disabled={saving} />
-                    <TextInput type="number" min={0} max={1} step={0.01} value={loot.dropChance} onChange={e => changeLootItem(idx, 'dropChance', +e.target.value)} placeholder="% Drop" disabled={saving} />
-                    <TextInput type="number" min={1} value={loot.minQuantity} onChange={e => changeLootItem(idx, 'minQuantity', +e.target.value)} placeholder="Qtd Min" disabled={saving} />
-                    <TextInput type="number" min={1} value={loot.maxQuantity} onChange={e => changeLootItem(idx, 'maxQuantity', +e.target.value)} placeholder="Qtd Max" disabled={saving} />
-                    <IconButton icon={<FaTrash />} onClick={() => removeLootItem(idx)} disabled={saving} hoverColor="#d92828" />
-                  </div>
-                ))
-              )}
-            </div>
+          <Modal.Body columns={COLUMN_LAYOUTS.SINGLE}>
+            <div className={styles.lootContainer}>
+              <fieldset className={styles.fieldset}>
+                <legend>Loot de Itens</legend>
+                <div className={styles.lootHeader}>
+                  <span className={styles.lootTitle}>Itens que podem ser dropados</span>
+                  <button type="button" className={styles.addButton} onClick={addLootItem} disabled={saving}>
+                    <FaPlus /> Adicionar
+                  </button>
+                </div>
+                {form.loot.length === 0 ? (
+                  <p className={styles.emptyText}>Nenhum item configurado</p>
+                ) : (
+                  <>
+                    <div className={styles.lootLabels}>
+                      <span>Item</span>
+                      <span>% Drop</span>
+                      <span>Qtd Min</span>
+                      <span>Qtd Max</span>
+                      <span></span>
+                    </div>
+                    {form.loot.map((loot, idx) => (
+                      <div key={idx} className={styles.lootRow}>
+                        <Select options={itemOptions} value={loot.item} onChange={val => changeLootItem(idx, 'item', val)} disabled={saving} />
+                        <TextInput type="number" min={0} max={1} step={0.01} value={loot.dropChance} onChange={e => changeLootItem(idx, 'dropChance', +e.target.value)} disabled={saving} />
+                        <TextInput type="number" min={1} value={loot.minQuantity} onChange={e => changeLootItem(idx, 'minQuantity', +e.target.value)} disabled={saving} />
+                        <TextInput type="number" min={1} value={loot.maxQuantity} onChange={e => changeLootItem(idx, 'maxQuantity', +e.target.value)} disabled={saving} />
+                        <IconButton icon={<FaTrash />} onClick={() => removeLootItem(idx)} disabled={saving} hoverColor="#d92828" />
+                      </div>
+                    ))}
+                  </>
+                )}
+              </fieldset>
 
-            <div className={styles.section}>
-              <h3 className={styles.sectionTitle}>
-                Loot de Moedas
-                <IconButton icon={<FaPlus />} onClick={addCurrencyLoot} disabled={saving} hoverColor="var(--gold)" />
-              </h3>
-              {form.currencyLoot.length === 0 ? (
-                <p style={{ opacity: 0.5 }}>Nenhuma moeda configurada</p>
-              ) : (
-                form.currencyLoot.map((curr, idx) => (
-                  <div key={idx} className={styles.lootRow}>
-                    <Select options={currencyOptions} value={curr.currency} onChange={val => changeCurrencyLoot(idx, 'currency', val)} disabled={saving} />
-                    <TextInput type="number" min={0} value={curr.minAmount} onChange={e => changeCurrencyLoot(idx, 'minAmount', +e.target.value)} placeholder="Qtd Min" disabled={saving} />
-                    <TextInput type="number" min={0} value={curr.maxAmount} onChange={e => changeCurrencyLoot(idx, 'maxAmount', +e.target.value)} placeholder="Qtd Max" disabled={saving} />
-                    <IconButton icon={<FaTrash />} onClick={() => removeCurrencyLoot(idx)} disabled={saving} hoverColor="#d92828" />
-                  </div>
-                ))
-              )}
+              <fieldset className={styles.fieldset}>
+                <legend>Loot de Moedas</legend>
+                <div className={styles.lootHeader}>
+                  <span className={styles.lootTitle}>Moedas que podem ser dropadas</span>
+                  <button type="button" className={styles.addButton} onClick={addCurrencyLoot} disabled={saving}>
+                    <FaPlus /> Adicionar
+                  </button>
+                </div>
+                {form.currencyLoot.length === 0 ? (
+                  <p className={styles.emptyText}>Nenhuma moeda configurada</p>
+                ) : (
+                  <>
+                    <div className={styles.lootLabels} style={{ gridTemplateColumns: '2fr 1fr 1fr auto' }}>
+                      <span>Moeda</span>
+                      <span>Qtd Min</span>
+                      <span>Qtd Max</span>
+                      <span></span>
+                    </div>
+                    {form.currencyLoot.map((curr, idx) => (
+                      <div key={idx} className={styles.lootRow} style={{ gridTemplateColumns: '2fr 1fr 1fr auto' }}>
+                        <Select options={currencyOptions} value={curr.currency} onChange={val => changeCurrencyLoot(idx, 'currency', val)} disabled={saving} />
+                        <TextInput type="number" min={0} value={curr.minAmount} onChange={e => changeCurrencyLoot(idx, 'minAmount', +e.target.value)} disabled={saving} />
+                        <TextInput type="number" min={0} value={curr.maxAmount} onChange={e => changeCurrencyLoot(idx, 'maxAmount', +e.target.value)} disabled={saving} />
+                        <IconButton icon={<FaTrash />} onClick={() => removeCurrencyLoot(idx)} disabled={saving} hoverColor="#d92828" />
+                      </div>
+                    ))}
+                  </>
+                )}
+              </fieldset>
             </div>
-          </div>
+          </Modal.Body>
 
           <Modal.Footer alignment="between">
             <Button backgroundColor="var(--dark-3)" textColor="var(--light)" hoverColor="var(--gold)" onClick={onClose} disabled={saving}>

@@ -1,0 +1,148 @@
+/* SkillTreeModal.module.css */
+
+.skillTreeContainer {
+  width: 100%;
+  height: 70vh;
+  position: relative;
+  background: linear-gradient(135deg, var(--dark-1) 0%, var(--dark-2) 100%);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.reactFlow {
+  background: var(--dark-2);
+}
+
+/* Empty State */
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: var(--light-2);
+  gap: 1rem;
+}
+
+.emptyIcon {
+  font-size: 4rem;
+  filter: drop-shadow(0 0 8px var(--gold));
+}
+
+.emptyState h3 {
+  color: var(--gold);
+  font-size: 1.5rem;
+  margin: 0;
+}
+
+.emptyState p {
+  margin: 0;
+  color: var(--light-2);
+}
+
+/* Skill Node */
+.skillNode {
+  background: linear-gradient(135deg, var(--dark-3) 0%, var(--dark-4) 100%);
+  border: 2px solid var(--maroon);
+  border-radius: 12px;
+  overflow: hidden;
+  width: 240px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  transition: all 0.3s ease;
+}
+
+.skillNode:hover {
+  border-color: var(--gold);
+  transform: scale(1.05);
+  box-shadow: 0 8px 24px rgba(212, 175, 55, 0.4);
+}
+
+.skillNodeHeader {
+  background: linear-gradient(135deg, var(--maroon) 0%, #a0153e 100%);
+  padding: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid var(--gold);
+}
+
+.skillNodeIcon {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 4px var(--gold));
+}
+
+.skillNodeIconPlaceholder {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  filter: drop-shadow(0 0 4px var(--gold));
+}
+
+.skillNodeBody {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.skillNodeName {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--gold);
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.skillNodeLevel {
+  font-size: 0.75rem;
+  color: var(--light-2);
+  text-align: center;
+  padding: 0.25rem 0.5rem;
+  background: rgba(212, 175, 55, 0.1);
+  border-radius: 4px;
+  border: 1px solid rgba(212, 175, 55, 0.3);
+}
+
+.skillNodeDesc {
+  font-size: 0.7rem;
+  color: var(--light-1);
+  text-align: center;
+  line-height: 1.4;
+  margin-top: 0.25rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+
+/* React Flow Controls */
+.controls {
+  background: var(--dark-3);
+  border: 1px solid var(--maroon);
+  border-radius: 8px;
+}
+
+.controls button {
+  background: var(--dark-4);
+  border-bottom: 1px solid var(--dark-5);
+  color: var(--gold);
+}
+
+.controls button:hover {
+  background: var(--maroon);
+  color: var(--light);
+}
+
+/* MiniMap */
+.minimap {
+  background: var(--dark-3);
+  border: 1px solid var(--maroon);
+  border-radius: 8px;
+}

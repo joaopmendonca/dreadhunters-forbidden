@@ -18,6 +18,7 @@ export const SettingsPage = ({
   onServerChange,
   onConfigChange,
   onSave,
+  onResetToDefaults,
 }) => {
   const isLoading = loadingServers || loading || saving;
   const loadingMessage = loadingServers
@@ -55,6 +56,7 @@ export const SettingsPage = ({
 
             <SettingsActions
               onSave={onSave}
+              onResetToDefaults={onResetToDefaults}
               disabled={loading || saving}
             />
           </>

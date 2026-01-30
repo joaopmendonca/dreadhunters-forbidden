@@ -5,7 +5,9 @@ import Card from '../../../shared/components/Card';
 import EmptyState from '../../../shared/components/EmptyState';
 import Pagination from '../../../shared/components/Pagination';
 import Button from '../../../shared/components/Button';
+import GenericCSVImport from '../../../shared/components/GenericCSVImport';
 import useCurrency from '../hooks/useCurrency';
+import { useCurrencyImport } from '../hooks/useCurrencyImport';
 import CurrencyCard from './CurrencyCard';
 import CurrencyModal from './CurrencyModal';
 import CurrencyHeader from './CurrencyHeader';
@@ -20,12 +22,24 @@ export default function CurrencyPage() {
     fetchCurrencies,
     handleDelete,
     handleSave,
-    handleDeleteIcon
+    handleDeleteIcon,
+    handleImportCurrencies,
+    handleExportCSV,
+    handleDownloadTemplate
   } = useCurrency();
+
+  const {
+    fields,
+    autoMapping,
+    transformDataForAPI,
+    isDuplicate,
+    entityNamePlural
+  } = useCurrencyImport();
 
   const [searchName, setSearchName] = useState('');
   const [page, setPage] = useState(0);
   const [modalOpen, setModalOpen] = useState(false);
+  const [importModalOpen, setImportModalOpen] = useState(false);
   const [editing, setEditing] = useState(null);
 
   useEffect(() => {
@@ -61,6 +75,9 @@ export default function CurrencyPage() {
           setPage(0);
         }}
         onNew={handleNew}
+        onImport={() => setImportModalOpen(true)}
+        onExport={handleExportCSV}
+        onDownloadTemplate={handleDownloadTemplate}
       />
 
       {loading ? (
@@ -116,6 +133,22 @@ export default function CurrencyPage() {
             onIconDeleted={handleDeleteIcon}
             initialData={editing || {}}
           />
+
+          {importModalOpen && (
+            <GenericCSVImport
+              fieldDefinitions={fields}
+              autoMapping={autoMapping}
+              onImport={async (currencies) => {
+                await handleImportCurrencies(currencies.map(transformDataForAPI));
+                setImportModalOpen(false);
+                fetchCurrencies();
+              }}
+              onClose={() => setImportModalOpen(false)}
+              existingData={currencyList}
+              isDuplicate={isDuplicate}
+              entityNamePlural={entityNamePlural}
+            />
+          )}
         </>
       )}
     </BaseLayout>

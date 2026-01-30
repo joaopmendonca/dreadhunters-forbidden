@@ -25,7 +25,7 @@ export default function useClasses() {
   const fetchClasses = useCallback(async () => {
     setLoading(true);
     try {
-      const res = await api.get('/classes');
+      const res = await api.get('/classes?populateSkills=true');
       setClassesList(res.data);
     } catch (err) {
       console.error('Error fetching classes:', err);

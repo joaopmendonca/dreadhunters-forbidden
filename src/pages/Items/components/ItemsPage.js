@@ -5,7 +5,9 @@ import Card from '../../../shared/components/Card';
 import EmptyState from '../../../shared/components/EmptyState';
 import Pagination from '../../../shared/components/Pagination';
 import Button from '../../../shared/components/Button';
+import GenericCSVImport from '../../../shared/components/GenericCSVImport';
 import useItems from '../hooks/useItems';
+import { useItemsImport } from '../hooks/useItemsImport';
 import ItemCard from './ItemCard';
 import ItemModal from './ItemModal';
 import ItemsHeader from './ItemsHeader';
@@ -20,13 +22,25 @@ export default function ItemsPage() {
     fetchItems,
     handleDelete,
     handleSave,
-    handleDeleteIcon
+    handleDeleteIcon,
+    handleImportItems,
+    handleExportCSV,
+    handleDownloadTemplate
   } = useItems();
+
+  const {
+    fields,
+    autoMapping,
+    transformDataForAPI,
+    isDuplicate,
+    entityNamePlural
+  } = useItemsImport();
 
   const [searchName, setSearchName] = useState('');
   const [filterType, setFilterType] = useState('all');
   const [page, setPage] = useState(0);
   const [modalOpen, setModalOpen] = useState(false);
+  const [importModalOpen, setImportModalOpen] = useState(false);
   const [editing, setEditing] = useState(null);
 
   useEffect(() => {
@@ -81,6 +95,9 @@ export default function ItemsPage() {
           setPage(0);
         }}
         onNew={handleNew}
+        onImport={() => setImportModalOpen(true)}
+        onExport={handleExportCSV}
+        onDownloadTemplate={handleDownloadTemplate}
       />
 
       {loading ? (
@@ -136,6 +153,22 @@ export default function ItemsPage() {
             onIconDeleted={handleDeleteIcon}
             initialData={editing || {}}
           />
+
+          {importModalOpen && (
+            <GenericCSVImport
+              fieldDefinitions={fields}
+              autoMapping={autoMapping}
+              onImport={async (items) => {
+                await handleImportItems(items.map(transformDataForAPI));
+                setImportModalOpen(false);
+                fetchItems();
+              }}
+              onClose={() => setImportModalOpen(false)}
+              existingData={itemsList}
+              isDuplicate={isDuplicate}
+              entityNamePlural={entityNamePlural}
+            />
+          )}
         </>
       )}
     </BaseLayout>

@@ -2,12 +2,11 @@
 
 import { useSnackbar } from 'notistack';
 import { useEffect, useState } from 'react';
-import { FaMagic, FaMinus, FaPlus, FaTrash } from 'react-icons/fa';
+import { FaMinus, FaPlus, FaTrash } from 'react-icons/fa';
 
 import Modal, { MODAL_SIZES, COLUMN_LAYOUTS } from '../../../shared/components/Modal';
 import Button from '../../../shared/components/Button';
 import ConfirmationModal from '../../../shared/components/ConfirmationModal';
-import IconButton from '../../../shared/components/IconButton';
 import PhotoInput from '../../../shared/components/PhotoInput';
 import Select from '../../../shared/components/Select';
 import TextArea from '../../../shared/components/TextArea';
@@ -38,7 +37,7 @@ export default function ClassModal({
     role: '',
     baseStats: {},
     statGrowth: {},
-    skills: [],
+    skillTreeRoots: [],
     iconUrl: '',
     resourceType: 'none',
     resourceBase: 0,
@@ -56,6 +55,8 @@ export default function ClassModal({
   const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
+    if (!isOpen) return;
+    
     const normalizePreviewUrl = (u) => {
       if (!u) return '';
       try {
@@ -90,6 +91,17 @@ export default function ClassModal({
       return stats;
     };
 
+    // Normalizar stats localmente
+    const normalizeStatsLocal = (stats) => {
+      if (!stats) return {};
+      if (stats instanceof Map) {
+        return Object.fromEntries(stats);
+      }
+      return { ...stats };
+    };
+
+    console.log('ClassModal - initialData:', initialData);
+
     // initialize form from initialData
     setForm({
       _id: initialData._id || '',
@@ -97,16 +109,16 @@ export default function ClassModal({
       description: initialData.description || '',
       role: initialData.role?._id || '',
       baseStats: initialData.baseStats 
-        ? normalizeStats(initialData.baseStats)
+        ? normalizeStatsLocal(initialData.baseStats)
         : initStats(),
       statGrowth: initialData.statGrowth
-        ? normalizeStats(initialData.statGrowth)
+        ? normalizeStatsLocal(initialData.statGrowth)
         : initStats(),
       artworkUrl: initialData.artworkUrl || '',
-      skills: (initialData.skillProgression || []).map(s => ({
-        skillId: s.skillId,
-        requiredLevel: s.level,
-        prerequisites: s.prerequisites || []
+      skillTreeRoots: (initialData.skillTree?.roots || []).map(root => ({
+        skill: root.skill?._id || root.skill,
+        requiredLevel: root.requiredLevel || 1,
+        unlocked: root.unlocked || false
       })),
       iconUrl: initialData.iconUrl || '',
       resourceType: initialData.resourceType || 'none',
@@ -119,7 +131,7 @@ export default function ClassModal({
     setPreviewUrl(normalizePreviewUrl(initialData.iconUrl || ''));
     setArtworkFile(null);
     setPreviewArtworkUrl(normalizePreviewUrl(initialData.artworkUrl || ''));
-  }, [initialData, baseStatus, normalizeStats]);
+  }, [initialData._id, isOpen, baseStatus]);
 
   if (!isOpen) return null;
 
@@ -161,24 +173,6 @@ export default function ClassModal({
 
   const usedPoints = Object.values(form.baseStats).reduce((sum, val) => sum + (Number(val) || 0), 0);
   const remaining = serverConfig.maxStatPointsPerClass - usedPoints;
-
-  const addSkillRow = e => {
-    e.preventDefault();
-    setForm(f => ({
-      ...f,
-      skills: [...f.skills, { skillId: '', requiredLevel: 1, prerequisites: [] }]
-    }));
-  };
-
-  const removeSkillRow = idx =>
-    setForm(f => ({ ...f, skills: f.skills.filter((_, i) => i !== idx) }));
-
-  const updateSkillRow = (idx, field, value) =>
-    setForm(f => {
-      const copy = [...f.skills];
-      copy[idx] = { ...copy[idx], [field]: value };
-      return { ...f, skills: copy };
-    });
 
   const handleFileChange = e => {
     const file = e.target.files[0];
@@ -234,15 +228,6 @@ export default function ClassModal({
       fd.append('description', form.description);
       fd.append('role', form.role);
 
-      // prepara skillProgression
-      const validProgression = form.skills
-        .filter(s => s.skillId)
-        .map(s => ({
-          level: s.requiredLevel,
-          skillId: s.skillId,
-          prerequisites: s.prerequisites
-        }));
-      
       fd.append('baseStats', JSON.stringify(form.baseStats));
       fd.append('statGrowth', JSON.stringify(form.statGrowth || {}));
       
@@ -252,7 +237,18 @@ export default function ClassModal({
       fd.append('resourceRegen', String(form.resourceRegen || 0));
       fd.append('skillSlots', String(form.skillSlots || 0));
       fd.append('colorTheme', form.colorTheme || '#ffffff');
-      fd.append('skillProgression', JSON.stringify(validProgression));
+      
+      // Skill Tree roots
+      const skillTreeRoots = form.skillTreeRoots
+        .filter(r => r.skill)
+        .map(r => ({
+          skill: r.skill,
+          requiredLevel: r.requiredLevel || 1,
+          unlocked: r.unlocked || false,
+          prerequisites: [],
+          children: []
+        }));
+      fd.append('skillTree', JSON.stringify({ roots: skillTreeRoots }));
 
       // arquivo de ícone, se houver
       if (iconFile) {
@@ -468,17 +464,17 @@ export default function ClassModal({
                           <span className={styles.statValue}>{value}</span>
                         </div>
                         <div className={styles.statButtons}>
-                          <IconButton
+                          <Button
                             icon={<FaMinus />}
                             onClick={() => handleStatDelta(status.nome, -1)}
                             disabled={saving || value <= serverConfig.minStatValue}
-                            hoverColor="var(--dark-2)"
+                            style={{ minWidth: '32px', padding: '0.25rem' }}
                           />
-                          <IconButton
+                          <Button
                             icon={<FaPlus />}
                             onClick={() => handleStatDelta(status.nome, +1)}
                             disabled={saving || remaining <= 0 || value >= serverConfig.maxStatValue}
-                            hoverColor="var(--dark-2)"
+                            style={{ minWidth: '32px', padding: '0.25rem' }}
                           />
                         </div>
                       </div>
@@ -516,106 +512,145 @@ export default function ClassModal({
                   })}
                 </div>
               </fieldset>
-            </div>
-          </Modal.Body>
 
-          {/* Seção: Skills (Full Width) */}
-          <div className={styles.skillsSection}>
-            <fieldset className={styles.fieldset}>
-              <legend>Skills Disponíveis</legend>
+              {/* Skill Tree Roots */}
+              <fieldset className={styles.fieldset}>
+                <legend>🌳 Skill Tree</legend>
+                <p style={{ fontSize: '0.85rem', color: 'var(--light-1)', marginBottom: '1rem' }}>
+                  Adicione skills na árvore de progressão. Marque como "Desbloqueada" para que o personagem já comece com ela.
+                </p>
               
-              <Button
-                type="button"
-                icon={<FaMagic />}
-                onClick={addSkillRow}
-                disabled={saving}
-                className={styles.addButton}
-                style={{ marginBottom: '1rem' }}
-              >
-                Adicionar Skill
-              </Button>
-
-              {/* Lista de Skills */}
-              {form.skills.map((row, idx) => (
-                <div key={idx} className={styles.skillCard}>
-                  <div className={styles.cardHeader}>
-                    {skillsList.find(s => s._id === row.skillId)?.iconUrl && (
-                      <img
-                        src={skillsList.find(s => s._id === row.skillId).iconUrl}
-                        alt=""
-                        className={styles.skillIcon}
-                      />
-                    )}
-                    <span>
-                      {skillsList.find(s => s._id === row.skillId)?.name ||
-                        `Skill #${idx + 1}`}
-                    </span>
-                    <IconButton
-                      icon={<FaTrash />}
-                      onClick={() => removeSkillRow(idx)}
-                      disabled={saving}
-                      hoverColor="transparent"
-                      className={styles.removeButton}
-                    />
-                  </div>
-
-                  <div className={styles.skillFields}>
-                    <div className={styles.field}>
-                      <label>Skill</label>
-                      <Select
-                        value={row.skillId}
-                        onChange={val => updateSkillRow(idx, 'skillId', val)}
-                        options={[
-                          { value: '', label: '— selecione —' },
-                          ...skillsList.map(s => ({ value: s._id, label: s.name }))
-                        ]}
-                        disabled={saving}
-                        className={styles.dropdown}
-                      />
-                    </div>
-
-                    <div className={styles.field}>
-                      <label>Nível Mín.</label>
-                      <TextInput
-                        type="number"
-                        min={1}
-                        value={row.requiredLevel}
-                        onChange={e =>
-                          updateSkillRow(idx, 'requiredLevel', +e.target.value)
-                        }
-                        disabled={saving}
-                      />
-                    </div>
-
-                    <div className={styles.field}>
-                      <label>Pré-requisitos</label>
-                      <select
-                        multiple
-                        disabled={saving}
-                        className={styles.dropdown}
-                        value={row.prerequisites.length > 0 ? row.prerequisites : ['none']}
-                        onChange={e => {
-                          const sel = Array.from(e.target.selectedOptions, o => o.value);
-                          updateSkillRow(
-                            idx,
-                            'prerequisites',
-                            sel.includes('none') ? [] : sel
-                          );
+              <div className={styles.field}>
+                <label>Selecionar Skills</label>
+                <div 
+                  style={{ 
+                    maxHeight: '300px', 
+                    overflowY: 'auto', 
+                    border: '1px solid var(--dark-3)',
+                    borderRadius: '4px',
+                    padding: '0.5rem',
+                    background: 'var(--dark-2)'
+                  }}
+                >
+                  {skillsList.map(s => {
+                    const isSelected = form.skillTreeRoots.some(r => r.skill === s._id);
+                    return (
+                      <label 
+                        key={s._id} 
+                        style={{ 
+                          display: 'flex', 
+                          alignItems: 'center', 
+                          padding: '0.5rem',
+                          cursor: 'pointer',
+                          borderRadius: '4px',
+                          marginBottom: '0.25rem',
+                          background: isSelected ? 'var(--dark-3)' : 'transparent',
+                          border: isSelected ? '1px solid var(--gold)' : '1px solid transparent',
+                          transition: 'all 0.2s ease'
+                        }}
+                        onMouseEnter={e => {
+                          if (!isSelected) {
+                            e.currentTarget.style.background = 'var(--dark-3)';
+                          }
+                        }}
+                        onMouseLeave={e => {
+                          if (!isSelected) {
+                            e.currentTarget.style.background = 'transparent';
+                          }
                         }}
                       >
-                        <option value="none">Nenhum</option>
-                        {skillsList.map(s => (
-                          <option key={s._id} value={s._id}>
-                            {s.name}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
+                        <input
+                          type="checkbox"
+                          disabled={saving}
+                          checked={isSelected}
+                          onChange={e => {
+                            const newRoots = e.target.checked
+                              ? [...form.skillTreeRoots, { skill: s._id, requiredLevel: 1, unlocked: false }]
+                              : form.skillTreeRoots.filter(r => r.skill !== s._id);
+                            handleChangeField('skillTreeRoots', newRoots);
+                          }}
+                          style={{ 
+                            marginRight: '0.75rem',
+                            width: '16px',
+                            height: '16px',
+                            cursor: 'pointer'
+                          }}
+                        />
+                        {s.iconUrl && (
+                          <img 
+                            src={s.iconUrl} 
+                            alt="" 
+                            style={{ 
+                              width: '20px', 
+                              height: '20px', 
+                              marginRight: '0.5rem',
+                              objectFit: 'contain'
+                            }} 
+                          />
+                        )}
+                        <span style={{ fontSize: '0.85rem', color: 'var(--light-2)' }}>
+                          {s.name} (Lv.{s.levelRequirement || 1})
+                        </span>
+                      </label>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {form.skillTreeRoots.length > 0 && (
+                <div style={{ marginTop: '1rem' }}>
+                  <strong style={{ fontSize: '0.85rem', color: 'var(--gold)' }}>
+                    Skills Selecionadas ({form.skillTreeRoots.length}):
+                  </strong>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginTop: '0.5rem' }}>
+                    {form.skillTreeRoots.map(root => {
+                      const skill = skillsList.find(s => s._id === root.skill);
+                      return skill ? (
+                        <div
+                          key={root.skill}
+                          style={{
+                            padding: '0.5rem',
+                            background: 'var(--dark-3)',
+                            border: `1px solid ${root.unlocked ? 'var(--gold)' : 'var(--maroon)'}`,
+                            borderRadius: '4px',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'space-between'
+                          }}
+                        >
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                            {skill.iconUrl && (
+                              <img src={skill.iconUrl} alt="" style={{ width: '20px', height: '20px' }} />
+                            )}
+                            <span style={{ fontSize: '0.85rem', color: 'var(--light-2)' }}>
+                              {skill.name}
+                            </span>
+                          </div>
+                          <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', margin: 0 }}>
+                            <input
+                              type="checkbox"
+                              checked={root.unlocked}
+                              onChange={e => {
+                                const newRoots = form.skillTreeRoots.map(r =>
+                                  r.skill === root.skill ? { ...r, unlocked: e.target.checked } : r
+                                );
+                                handleChangeField('skillTreeRoots', newRoots);
+                              }}
+                              style={{ width: '16px', height: '16px', cursor: 'pointer' }}
+                            />
+                            <span style={{ fontSize: '0.75rem', color: root.unlocked ? 'var(--gold)' : 'var(--light-1)' }}>
+                              {root.unlocked ? '✨ Desbloqueada' : 'Bloqueada'}
+                            </span>
+                          </label>
+                        </div>
+                      ) : null;
+                    })}
                   </div>
                 </div>
-              ))}
+              )}
             </fieldset>
-          </div>
+            </div>
+          </Modal.Body>
 
           <Modal.Footer alignment="between">
             <Button

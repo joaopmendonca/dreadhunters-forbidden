@@ -10,8 +10,6 @@ export default function Settings() {
   const { enqueueSnackbar } = useSnackbar();
   const { state, functions } = useSettings({ onLogout: logout });
 
-  console.log('Settings state:', state);
-
   const handleServerChange = async (slug) => {
     if (!slug) {
       functions.setSelectedSlug('');
@@ -45,6 +43,25 @@ export default function Settings() {
     }
   };
 
+  const handleResetToDefaults = () => {
+    const defaultConfig = {
+      ...state.config,
+      maxCharactersPerUser: 3,
+      allowDuplicateNames: false,
+      initialStatPoints: 6,
+      maxStatPointsPerClass: 18,
+      baselinePerStat: 1,
+      minStatValue: 1,
+      maxStatValue: 24,
+      statPointsPerLevel: 1,
+      statPointsLevelInterval: 2,
+      maxLevel: 99,
+      minutesPerUnit: 1,
+    };
+    functions.setConfig(defaultConfig);
+    enqueueSnackbar('Valores resetados para os padrões recomendados. Clique em Salvar para aplicar.', { variant: 'info' });
+  };
+
   return (
     <SettingsPage
       servers={state.servers}
@@ -56,6 +73,7 @@ export default function Settings() {
       onServerChange={handleServerChange}
       onConfigChange={handleConfigChange}
       onSave={handleSave}
+      onResetToDefaults={handleResetToDefaults}
     />
   );
 }

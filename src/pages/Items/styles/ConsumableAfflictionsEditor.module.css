@@ -1,0 +1,111 @@
+/* ConsumableAfflictionsEditor.module.css */
+
+.editor {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--gold);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.addButton {
+  font-size: 0.75rem;
+  padding: 0.4rem 0.75rem !important;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 600;
+}
+
+.empty {
+  font-size: 0.85rem;
+  color: var(--dark-6);
+  font-style: italic;
+  text-align: center;
+  padding: 1.5rem;
+  background: var(--dark-2);
+  border-radius: 8px;
+  border: 1px dashed var(--dark-4);
+}
+
+.effectRow {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.6rem 0.875rem;
+  background: var(--dark-3);
+  border: 1px solid var(--dark-4);
+  border-radius: 8px;
+  transition: all 0.2s;
+}
+
+.effectRow:hover {
+  border-color: var(--dark-5);
+}
+
+.effectField {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  min-width: 0;
+}
+
+.effectField:nth-child(1) {
+  flex: 1;
+}
+
+.effectField:nth-child(2) {
+  width: 80px;
+}
+
+.effectField:nth-child(3) {
+  width: 140px;
+}
+
+.effectField label {
+  font-size: 0.75rem;
+  color: rgba(250, 245, 229, 0.7);
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  font-weight: 500;
+}
+
+.effectField input {
+  text-align: center;
+  font-weight: 600;
+}
+
+.removeButton {
+  padding: 0.4rem !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 32px;
+  height: 32px;
+  margin-top: 18px;
+}
+
+.hint {
+  font-size: 0.8rem;
+  color: rgba(250, 245, 229, 0.7);
+  padding: 0.75rem 1rem;
+  background: rgba(33, 150, 243, 0.1);
+  border-left: 3px solid #2196f3;
+  border-radius: 8px;
+  line-height: 1.5;
+}

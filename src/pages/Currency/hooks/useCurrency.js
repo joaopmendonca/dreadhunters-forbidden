@@ -64,12 +64,85 @@ export default function useCurrency() {
     }
   };
 
+  // Importação em lote
+  const handleImportCurrencies = async (currencies) => {
+    try {
+      let created = 0;
+      let errors = 0;
+      
+      for (const currency of currencies) {
+        try {
+          await api.post('/currency', currency);
+          created++;
+        } catch (err) {
+          errors++;
+          console.error(`Erro ao importar ${currency.name}:`, err);
+        }
+      }
+      
+      enqueueSnackbar(
+        `Importação concluída: ${created} criadas, ${errors} erros`,
+        { variant: errors > 0 ? 'warning' : 'success' }
+      );
+      
+      return { success: created, errors };
+    } catch (err) {
+      enqueueSnackbar('Erro na importação', { variant: 'error' });
+      throw err;
+    }
+  };
+
+  // Exportação para CSV
+  const handleExportCSV = () => {
+    if (currencyList.length === 0) {
+      enqueueSnackbar('Nenhuma moeda para exportar', { variant: 'warning' });
+      return;
+    }
+
+    const headers = ['name', 'symbol', 'slug', 'description'];
+    const csvContent = [
+      headers.join(','),
+      ...currencyList.map(currency => 
+        headers.map(h => {
+          const value = currency[h] || '';
+          return `"${String(value).replace(/"/g, '""')}"`;
+        }).join(',')
+      )
+    ].join('\n');
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'moedas-export.csv';
+    link.click();
+    
+    enqueueSnackbar('CSV exportado com sucesso', { variant: 'success' });
+  };
+
+  // Download do template
+  const handleDownloadTemplate = () => {
+    const headers = ['name', 'symbol', 'slug', 'description'];
+    const example = ['Ouro', 'G', 'gold', 'Moeda principal do jogo'];
+    const csvContent = [headers.join(','), example.join(',')].join('\n');
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'moedas-template.csv';
+    link.click();
+    
+    enqueueSnackbar('Template baixado com sucesso', { variant: 'success' });
+  };
+
   return {
     currencyList,
     loading,
     fetchCurrencies,
     handleDelete,
     handleSave,
-    handleDeleteIcon
+    handleDeleteIcon,
+    handleImportCurrencies,
+    handleExportCSV,
+    handleDownloadTemplate
   };
 }

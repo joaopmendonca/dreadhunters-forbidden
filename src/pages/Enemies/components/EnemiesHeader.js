@@ -1,4 +1,4 @@
-import { FaPlus, FaSkull, FaStar, FaCrown } from 'react-icons/fa';
+import { FaPlus, FaSkull, FaStar, FaCrown, FaFileUpload, FaDownload } from 'react-icons/fa';
 import Button from '../../../shared/components/Button';
 import PageHeader from '../../../shared/components/PageHeader';
 import TextInput from '../../../shared/components/TextInput';
@@ -13,7 +13,10 @@ export default function EnemiesHeader({
   onSearchChange,
   filterType,
   onFilterChange,
-  onNew
+  onNew,
+  onImport,
+  onExport,
+  onDownloadTemplate
 }) {
   return (
     <PageHeader
@@ -33,6 +36,36 @@ export default function EnemiesHeader({
             icon={<FaPlus />}
           >
             Novo Inimigo
+          </Button>
+
+          <Button
+            backgroundColor="var(--dark-3)"
+            textColor="var(--light)"
+            hoverColor="var(--gold)"
+            onClick={onImport}
+            icon={<FaFileUpload />}
+          >
+            Importar CSV
+          </Button>
+
+          <Button
+            backgroundColor="var(--dark-3)"
+            textColor="var(--light)"
+            hoverColor="var(--gold)"
+            onClick={onExport}
+            icon={<FaDownload />}
+          >
+            Exportar CSV
+          </Button>
+
+          <Button
+            backgroundColor="var(--dark-4)"
+            textColor="var(--light-1)"
+            hoverColor="var(--gold)"
+            onClick={onDownloadTemplate}
+            icon={<FaDownload />}
+          >
+            Template
           </Button>
 
           <TextInput

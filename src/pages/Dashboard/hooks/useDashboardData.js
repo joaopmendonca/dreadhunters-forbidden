@@ -43,31 +43,22 @@ export function useDashboardData() {
   const fetchAllData = useCallback(async () => {
     setLoading(true);
     try {
-      const [
-        usersRes, charsRes, classesRes, itemsRes, enemiesRes,
-        skillsRes, questsRes, locationsRes, afflictionsRes,
-        currenciesRes, serversRes, logsRes
-      ] = await Promise.all([
-        api.get('/users'),
-        api.get('/characters'),
-        api.get('/classes'),
-        api.get('/items'),
-        api.get('/enemies'),
-        api.get('/skills'),
-        api.get('/quests'),
-        api.get('/locations'),
-        api.get('/afflictions'),
-        api.get('/currencies'),
-        api.get('/servers'),
-        api.get('/logs?limit=10000')
-      ]);
-
-      const users = usersRes.data;
-      const items = itemsRes.data;
-      const skills = skillsRes.data;
-      const quests = questsRes.data;
-      const servers = serversRes.data;
-      const logs = logsRes.data;
+      // Busca todos os dados em uma única requisição
+      const response = await api.get('/dashboard');
+      const {
+        users,
+        characters,
+        classes: classesData,
+        items,
+        enemies,
+        skills,
+        quests,
+        locations,
+        afflictions,
+        currencies,
+        servers,
+        logs
+      } = response.data;
 
       // Contadores de usuarios
       const usersActive = countByField(users, 'status', USER_STATUS.ACTIVE);
@@ -160,10 +151,10 @@ export function useDashboardData() {
         usersActive,
         usersBanned,
         usersPending,
-        characters: charsRes.data.length,
-        classes: classesRes.data.length,
+        characters: characters.length,
+        classes: classesData.length,
         items: items.length,
-        enemies: enemiesRes.data.length,
+        enemies: enemies.length,
         skills: skills.length,
         skillsActive,
         skillsPassive,
@@ -172,9 +163,9 @@ export function useDashboardData() {
         questsSide,
         questsDaily,
         questsEvent,
-        locations: locationsRes.data.length,
-        afflictions: afflictionsRes.data.length,
-        currencies: currenciesRes.data.length,
+        locations: locations.length,
+        afflictions: afflictions.length,
+        currencies: currencies.length,
         servers: servers.length,
         serversOnline,
         totalPlayers

@@ -320,7 +320,7 @@ export default function QuestModal({
                         <span>{opt.label}</span>
                       </label>
                     ))}
-                    {questOptions.length === 1 && <p style={{ opacity: 0.5 }}>Nenhuma quest disponível</p>}
+                    {questOptions.length === 1 && <p className={styles.emptyText}>Nenhuma quest disponível</p>}
                   </div>
                 </div>
               </div>
@@ -335,7 +335,7 @@ export default function QuestModal({
                   <IconButton icon={<FaBullseye />} onClick={() => addRow('objectives')} disabled={saving} hoverColor="var(--gold)" />
                 </h3>
                 {form.objectives.length === 0 ? (
-                  <p style={{ opacity: 0.5 }}>Nenhum objetivo configurado</p>
+                  <p className={styles.emptyText}>Nenhum objetivo configurado</p>
                 ) : (
                   form.objectives.map((obj, idx) => (
                     <div key={idx} className={styles.objectiveRow}>

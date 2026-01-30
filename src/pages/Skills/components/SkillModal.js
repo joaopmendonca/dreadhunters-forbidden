@@ -8,6 +8,13 @@ import TextArea from '../../../shared/components/TextArea';
 import Select from '../../../shared/components/Select';
 import PhotoInput from '../../../shared/components/PhotoInput';
 import Button from '../../../shared/components/Button';
+import StatsModifiersEditor from './StatsModifiersEditor';
+import DurationEditor from './DurationEditor';
+import AfflictionEffectsEditor from './AfflictionEffectsEditor';
+import RecurringEffectsEditor from './RecurringEffectsEditor';
+import DamageEditor from './DamageEditor';
+import TargetSelector from './TargetSelector';
+import { CostEditor } from './CostEditor';
 import api from '../../../config/api';
 import { TYPE_OPTIONS } from '../constants';
 import styles from '../styles/SkillModal.module.css';
@@ -33,6 +40,31 @@ export function SkillModal({
   const [deleting, setDeleting] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [statsModifiers, setStatsModifiers] = useState({});
+  const [duration, setDuration] = useState({ type: 'permanent' });
+  const [afflictionEffects, setAfflictionEffects] = useState([]);
+  const [recurringEffects, setRecurringEffects] = useState([]);
+  const [cost, setCost] = useState({ resources: {}, items: [] });
+  const [damage, setDamage] = useState({ formula: '', type: 'none' });
+  const [targets, setTargets] = useState(['enemy']);
+  const [statusList, setStatusList] = useState([]);
+  const [itemsList, setItemsList] = useState([]);
+
+  // Buscar status e itens ao montar
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [statusRes, itemsRes] = await Promise.all([
+          api.get('/status'),
+          api.get('/items')
+        ]);
+        setStatusList(statusRes.data);
+        setItemsList(itemsRes.data);
+      } catch (err) {
+        console.error('Erro ao carregar status/items:', err);
+      }
+    };
+    if (isOpen) fetchData();
+  }, [isOpen]);
 
   useEffect(() => {
     setForm({
@@ -55,6 +87,24 @@ export function SkillModal({
       }
     }
     setStatsModifiers(modifiers);
+    
+    // Duration
+    setDuration(initialData.duration || { type: 'permanent' });
+    
+    // Affliction Effects
+    setAfflictionEffects(initialData.afflictionEffects || []);
+    
+    // Recurring Effects
+    setRecurringEffects(initialData.recurringEffects || []);
+    
+    // Cost
+    setCost(initialData.cost || { resources: {}, items: [] });
+    
+    // Damage
+    setDamage(initialData.damage || { formula: '', type: 'none' });
+    
+    // Targets
+    setTargets(initialData.targets || ['enemy']);
     
     setIconFile(null);
     setPreviewUrl(initialData.iconUrl || '');
@@ -107,6 +157,12 @@ export function SkillModal({
       fd.append('levelRequirement', form.levelRequirement);
       fd.append('classRestrictions', JSON.stringify(form.classRestrictions));
       fd.append('statsModifiers', JSON.stringify(statsModifiers));
+      fd.append('duration', JSON.stringify(duration));
+      fd.append('afflictionEffects', JSON.stringify(afflictionEffects));
+      fd.append('recurringEffects', JSON.stringify(recurringEffects));
+      fd.append('cost', JSON.stringify(cost));
+      fd.append('damage', JSON.stringify(damage));
+      fd.append('targets', JSON.stringify(targets));
       if (iconFile) fd.append('icon', iconFile);
 
       await onSave(fd, initialData._id);
@@ -154,7 +210,7 @@ export function SkillModal({
       >
         <form onSubmit={handleSubmit}>
           <Modal.Body columns={COLUMN_LAYOUTS.DOUBLE}>
-            {/* Coluna Esquerda - Informações Básicas */}
+            {/* Coluna Esquerda */}
             <div className={styles.column}>
               <div className={styles.section}>
                 <span className={styles.sectionTitle}>Identidade</span>
@@ -206,10 +262,7 @@ export function SkillModal({
                   />
                 </div>
               </div>
-            </div>
 
-            {/* Coluna Direita - Visuais */}
-            <div className={styles.column}>
               <div className={styles.section}>
                 <span className={styles.sectionTitle}>Visuais</span>
 
@@ -225,32 +278,92 @@ export function SkillModal({
                   />
                 </div>
               </div>
+
+              <div className={styles.section}>
+                <DurationEditor
+                  duration={duration}
+                  onChange={setDuration}
+                  disabled={saving}
+                />
+              </div>
+            </div>
+
+            {/* Coluna Direita */}
+            <div className={styles.column}>
+              <div className={styles.section}>
+                <CostEditor
+                  cost={cost}
+                  onChange={setCost}
+                  disabled={saving}
+                  statusList={statusList}
+                  itemsList={itemsList}
+                />
+              </div>
+
+              <div className={styles.section}>
+                <DamageEditor
+                  damage={damage}
+                  onChange={setDamage}
+                  disabled={saving}
+                  statusList={statusList}
+                />
+              </div>
+
+              <div className={styles.section}>
+                <TargetSelector
+                  value={targets}
+                  onChange={setTargets}
+                />
+              </div>
+
+              <div className={styles.section}>
+                <StatsModifiersEditor
+                  modifiers={statsModifiers}
+                  onChange={setStatsModifiers}
+                  disabled={saving}
+                />
+              </div>
+
+              <div className={styles.section}>
+                <AfflictionEffectsEditor
+                  effects={afflictionEffects}
+                  onChange={setAfflictionEffects}
+                  disabled={saving}
+                />
+              </div>
+
+              <div className={styles.section}>
+                <RecurringEffectsEditor
+                  effects={recurringEffects}
+                  onChange={setRecurringEffects}
+                  disabled={saving}
+                />
+              </div>
             </div>
           </Modal.Body>
 
-          </form>
-
-        <Modal.Footer alignment="between">
-          <Button
-            backgroundColor="var(--dark-3)"
-            textColor="var(--light)"
-            hoverColor="var(--gold)"
-            onClick={onClose}
-            disabled={saving}
-          >
-            Cancelar
-          </Button>
-          <Button
-            type="submit"
-            backgroundColor="var(--maroon)"
-            textColor="#fff"
-            hoverColor="#a00030"
-            disabled={saving}
-            onClick={handleSubmit}
-          >
-            {saving ? 'Salvando…' : 'Salvar'}
-          </Button>
-        </Modal.Footer>
+          <Modal.Footer alignment="between">
+            <Button
+              backgroundColor="var(--dark-3)"
+              textColor="var(--light)"
+              hoverColor="var(--gold)"
+              onClick={onClose}
+              disabled={saving}
+              type="button"
+            >
+              Cancelar
+            </Button>
+            <Button
+              type="submit"
+              backgroundColor="var(--maroon)"
+              textColor="#fff"
+              hoverColor="#a00030"
+              disabled={saving}
+            >
+              {saving ? 'Salvando…' : 'Salvar'}
+            </Button>
+          </Modal.Footer>
+        </form>
       </Modal>
     </>
   );

@@ -1,9 +1,10 @@
 import { useState, useEffect, useCallback } from 'react';
 import api from '../../../config/api';
+import { CONFIG_DEFAULTS } from '../constants';
 
 export const useSettings = ({ onLogout }) => {
   const [servers, setServers] = useState([]);
-  const [config, setConfig] = useState({});
+  const [config, setConfig] = useState(CONFIG_DEFAULTS);
   const [loadingServers, setLoadingServers] = useState(true);
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -39,7 +40,8 @@ export const useSettings = ({ onLogout }) => {
       setLoading(true);
       try {
         const res = await api.get(`/server-config/${slug}`);
-        setConfig(res.data || {});
+        // Mescla com defaults para garantir que todos os campos existam
+        setConfig({ ...CONFIG_DEFAULTS, ...res.data });
         localStorage.setItem('selectedServerSlug', slug);
       } catch (err) {
         if (err.response?.status === 401) onLogout();
@@ -56,8 +58,11 @@ export const useSettings = ({ onLogout }) => {
       if (!slug) throw new Error('Slug é obrigatório');
       setSaving(true);
       try {
-        await api.put(`/admin/server-config/${slug}`, data);
-        setConfig(data);
+        // Remove campos que não devem ser enviados
+        const { _id, kind, server, __v, createdAt, updatedAt, stats, ...cleanData } = data;
+        
+        await api.put(`/admin/server-config/${slug}`, cleanData);
+        await loadConfig(slug);
       } catch (err) {
         if (err.response?.status === 401) onLogout();
         throw err;
@@ -65,7 +70,7 @@ export const useSettings = ({ onLogout }) => {
         setSaving(false);
       }
     },
-    [onLogout]
+    [onLogout, loadConfig]
   );
 
   return {
@@ -85,3 +90,4 @@ export const useSettings = ({ onLogout }) => {
     },
   };
 };
+

@@ -1,22 +1,45 @@
+@import '../../../shared/styles/theme.css';
+
+/* ============================================
+   Item Modal - Design Clean
+   ============================================ */
+
+/* === FORM LAYOUT === */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
 .column {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
 }
 
+.row {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+/* === SECTIONS === */
 .section {
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  padding: 1.25rem;
+  background: linear-gradient(135deg, rgba(128, 0, 32, 0.05) 0%, transparent 100%);
+  border: 1px solid var(--dark-4);
+  border-radius: 12px;
 }
 
 .sectionTitle {
+  font-size: 0.9rem;
+  font-weight: 700;
   color: var(--gold);
-  font-size: 1rem;
-  font-weight: 600;
-  margin: 0;
-  padding-bottom: 0.5rem;
-  border-bottom: 1px solid var(--dark-3);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .subsection {
@@ -30,33 +53,73 @@
   margin: 0 0 0.75rem 0;
 }
 
+/* === FIELD STYLES === */
 .field {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  flex: 1;
+  font-size: 0.9rem;
 }
 
 .field label {
+  font-weight: 500;
+  color: rgba(250, 245, 229, 0.9);
+}
+
+.field input,
+.field textarea,
+.field select,
+.dropdown {
+  padding: 0.65rem 0.85rem;
+  background: var(--dark-3);
+  border: 1px solid var(--dark-4);
+  border-radius: 8px;
   color: var(--light);
-  font-weight: 600;
-  font-size: 0.875rem;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
 }
 
-.row {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 1rem;
+.field input:focus,
+.field textarea:focus,
+.field select:focus,
+.dropdown:focus {
+  background: var(--dark-2);
+  border-color: var(--maroon);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(128, 0, 32, 0.15);
 }
 
+.field input:hover:not(:focus):not(:disabled),
+.field textarea:hover:not(:focus):not(:disabled),
+.field select:hover:not(:focus):not(:disabled),
+.dropdown:hover:not(:focus):not(:disabled) {
+  border-color: var(--dark-5);
+}
+
+.field input::placeholder,
+.field textarea::placeholder {
+  color: var(--dark-5);
+}
+
+.dropdown {
+  width: 100%;
+  appearance: none;
+  cursor: pointer;
+}
+
+/* === CHECKBOXES === */
 .classesCheckboxes {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
   max-height: 200px;
   overflow-y: auto;
-  padding: 0.5rem;
-  background: var(--dark-4);
-  border-radius: 4px;
+  padding: 0.75rem;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--dark-4);
+  border-radius: 8px;
 }
 
 .checkboxLabel {
@@ -66,40 +129,40 @@
   color: var(--light);
   font-size: 0.875rem;
   cursor: pointer;
-  padding: 0.25rem;
-  transition: background 0.2s;
+  padding: 0.5rem;
+  border-radius: 6px;
+  transition: all 0.2s ease;
 }
 
 .checkboxLabel:hover {
-  background: var(--dark-3);
+  background: rgba(128, 0, 32, 0.1);
 }
 
 .checkboxLabel input[type="checkbox"] {
   cursor: pointer;
+  width: 16px;
+  height: 16px;
 }
 
-.selectWithButton {
-  display: flex;
-  gap: 0.5rem;
-  align-items: center;
-}
-
+/* === BUTTONS === */
 .selectAllBtn {
-  padding: 0.5rem 0.75rem;
+  padding: 0.65rem 0.85rem;
   background: var(--dark-3);
   color: var(--light);
-  border: none;
-  border-radius: 4px;
+  border: 1px solid var(--dark-4);
+  border-radius: 8px;
   cursor: pointer;
-  font-size: 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 500;
   white-space: nowrap;
-  transition: background 0.2s;
+  transition: all 0.2s ease;
   width: 100%;
   margin-top: 0.5rem;
 }
 
 .selectAllBtn:hover:not(:disabled) {
   background: var(--dark-2);
+  border-color: var(--maroon);
 }
 
 .selectAllBtn:disabled {
@@ -107,7 +170,7 @@
   cursor: not-allowed;
 }
 
-/* Stats Grid */
+/* === STATS GRID === */
 .statsGrid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
@@ -124,9 +187,9 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  color: var(--light);
-  font-size: 0.75rem;
-  font-weight: 600;
+  color: rgba(250, 245, 229, 0.9);
+  font-size: 0.8rem;
+  font-weight: 500;
 }
 
 .statIcon {
@@ -137,4 +200,30 @@
 
 .smallInput {
   max-width: 100px;
+}
+
+.smallInput:disabled {
+  background: rgba(0, 0, 0, 0.3);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* === HINTS === */
+.derivedNote {
+  font-size: 0.8rem;
+  color: rgba(250, 245, 229, 0.7);
+  margin: 0.75rem 0 0 0;
+  opacity: 0.8;
+  font-style: italic;
+}
+
+.migrationHint {
+  padding: 0.85rem 1rem;
+  background: rgba(255, 193, 7, 0.1);
+  border-left: 3px solid #ffc107;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 1.5;
+  margin-top: 0.75rem;
 }

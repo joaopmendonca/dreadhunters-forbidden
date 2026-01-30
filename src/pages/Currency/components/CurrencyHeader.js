@@ -1,4 +1,4 @@
-import { FaPlus } from 'react-icons/fa';
+import { FaPlus, FaFileImport, FaFileExport, FaDownload } from 'react-icons/fa';
 import Button from '../../../shared/components/Button';
 import PageHeader from '../../../shared/components/PageHeader';
 import TextInput from '../../../shared/components/TextInput';
@@ -8,7 +8,10 @@ export default function CurrencyHeader({
   totalCount,
   searchName,
   onSearchChange,
-  onNew
+  onNew,
+  onImport,
+  onExport,
+  onDownloadTemplate
 }) {
   return (
     <PageHeader
@@ -25,6 +28,36 @@ export default function CurrencyHeader({
             icon={<FaPlus />}
           >
             Nova Moeda
+          </Button>
+
+          <Button
+            backgroundColor="var(--dark-3)"
+            textColor="var(--light)"
+            hoverColor="var(--gold)"
+            onClick={onImport}
+            icon={<FaFileImport />}
+          >
+            Importar CSV
+          </Button>
+
+          <Button
+            backgroundColor="var(--dark-3)"
+            textColor="var(--light)"
+            hoverColor="var(--gold)"
+            onClick={onExport}
+            icon={<FaFileExport />}
+          >
+            Exportar CSV
+          </Button>
+
+          <Button
+            backgroundColor="var(--dark-3)"
+            textColor="var(--light)"
+            hoverColor="var(--gold)"
+            onClick={onDownloadTemplate}
+            icon={<FaDownload />}
+          >
+            Template
           </Button>
 
           <TextInput

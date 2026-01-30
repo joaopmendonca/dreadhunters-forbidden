@@ -15,18 +15,19 @@ export const CONFIG_DEFAULTS = {
   initialStatPoints: 6,
   baselinePerStat: 1,
   statPointsPerLevel: 1,
+  statPointsLevelInterval: 2,
   maxStatValue: 24,
   minStatValue: 1,
   maxLevel: 99,
-  maxStatPointsPerClass: 20,
+  maxStatPointsPerClass: 18,
   minutesPerUnit: 1,
 };
 
 export const SETTINGS_SECTIONS = [
   {
-    id: 'general',
+    id: 'characters',
     icon: 'FaUsers',
-    title: 'Configurações Gerais',
+    title: 'Configurações de Personagens',
     fields: [
       {
         key: 'maxCharactersPerUser',
@@ -42,39 +43,30 @@ export const SETTINGS_SECTIONS = [
     ],
   },
   {
-    id: 'gameplay',
-    icon: 'FaGamepad',
-    title: 'Configurações de Gameplay',
+    id: 'stats',
+    icon: 'FaDice',
+    title: 'Sistema de Atributos (Stats)',
     fields: [
       {
         key: 'initialStatPoints',
         label: 'Pontos Iniciais de Atributos',
         type: 'number',
         min: 0,
+        helpText: 'Pontos extras distribuíveis na criação do personagem',
       },
       {
         key: 'maxStatPointsPerClass',
         label: 'Máximo de Pontos por Classe',
         type: 'number',
         min: 1,
+        helpText: 'Limite total de pontos que podem ser distribuídos na criação',
       },
       {
         key: 'baselinePerStat',
         label: 'Valor Base por Atributo',
         type: 'number',
         min: 1,
-      },
-      {
-        key: 'statPointsPerLevel',
-        label: 'Pontos por Nível',
-        type: 'number',
-        min: 0,
-      },
-      {
-        key: 'maxStatValue',
-        label: 'Valor Máximo de Atributo',
-        type: 'number',
-        min: 1,
+        helpText: 'Valor mínimo inicial de cada atributo',
       },
       {
         key: 'minStatValue',
@@ -83,17 +75,52 @@ export const SETTINGS_SECTIONS = [
         min: 1,
       },
       {
+        key: 'maxStatValue',
+        label: 'Valor Máximo de Atributo',
+        type: 'number',
+        min: 1,
+      },
+    ],
+  },
+  {
+    id: 'progression',
+    icon: 'FaGamepad',
+    title: 'Progressão e Level-Up',
+    fields: [
+      {
+        key: 'statPointsPerLevel',
+        label: 'Pontos por Nível',
+        type: 'number',
+        min: 0,
+        helpText: 'Quantos pontos de atributo o jogador ganha por level-up',
+      },
+      {
+        key: 'statPointsLevelInterval',
+        label: 'A Cada Quantos Níveis',
+        type: 'number',
+        min: 1,
+        helpText: 'Intervalo de níveis para ganhar pontos manuais (ex: 2 = níveis 2, 4, 6...)',
+      },
+      {
         key: 'maxLevel',
         label: 'Nível Máximo de Personagem',
         type: 'number',
         min: 1,
       },
+    ],
+  },
+  {
+    id: 'world',
+    icon: 'FaMap',
+    title: 'Mundo e Gameplay',
+    fields: [
       {
         key: 'minutesPerUnit',
         label: 'Tempo de Viagem (min/unidade)',
         type: 'number',
         min: 0.01,
         step: 0.01,
+        helpText: 'Minutos necessários para percorrer 1 unidade de distância',
       },
     ],
   },
