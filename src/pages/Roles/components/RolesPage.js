@@ -1,11 +1,13 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FaPlus } from 'react-icons/fa';
 import BaseLayout from '../../../shared/components/BaseLayout';
 import Card from '../../../shared/components/Card';
 import EmptyState from '../../../shared/components/EmptyState';
 import Pagination from '../../../shared/components/Pagination';
 import Button from '../../../shared/components/Button';
+import GenericCSVImport from '../../../shared/components/GenericCSVImport';
 import useRoles from '../hooks/useRoles';
+import useRolesImport from '../hooks/useRolesImport';
 import RoleCard from './RoleCard';
 import RoleModal from './RoleModal';
 import RolesHeader from './RolesHeader';
@@ -14,19 +16,24 @@ import LoadingState from './LoadingState';
 const ITEMS_PER_PAGE = 12;
 
 export default function RolesPage() {
-  const fileInputRef = useRef(null);
   const {
-    rolesList,
-    loading,
+    rolesList = [],
+    loading = false,
     fetchRoles,
     handleDelete,
     handleSave,
-    handleCSVUpload,
+    handleImport,
     handleExportCSV,
-    downloadTemplate
+    downloadTemplate,
+    filterStatus = 'all',
+    setFilterStatus,
+    importModalOpen = false,
+    setImportModalOpen,
+    totalCount = 0
   } = useRoles();
 
-  const [uploading, setUploading] = useState(false);
+  const rolesImportConfig = useRolesImport();
+
   const [searchName, setSearchName] = useState('');
   const [page, setPage] = useState(0);
   const [modalOpen, setModalOpen] = useState(false);
@@ -34,6 +41,7 @@ export default function RolesPage() {
 
   useEffect(() => {
     fetchRoles();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleNew = () => {
@@ -46,17 +54,8 @@ export default function RolesPage() {
     setModalOpen(true);
   };
 
-  const handleCSVUploadEvent = async (event) => {
-    const file = event.target.files?.[0];
-    if (!file) return;
-
-    setUploading(true);
-    try {
-      await handleCSVUpload(file);
-    } finally {
-      setUploading(false);
-      if (fileInputRef.current) fileInputRef.current.value = '';
-    }
+  const handleImportClick = () => {
+    setImportModalOpen(true);
   };
 
   const filtered = rolesList.filter(r =>
@@ -71,18 +70,18 @@ export default function RolesPage() {
   return (
     <BaseLayout title="Roles">
       <RolesHeader
-        totalCount={rolesList.length}
+        totalCount={totalCount}
         searchName={searchName}
         onSearchChange={(value) => {
           setSearchName(value);
           setPage(0);
         }}
         onNew={handleNew}
-        onUploadCSV={handleCSVUploadEvent}
+        onImport={handleImportClick}
         onExportCSV={handleExportCSV}
         onDownloadTemplate={downloadTemplate}
-        uploading={uploading}
-        fileInputRef={fileInputRef}
+        filterStatus={filterStatus}
+        onFilterChange={setFilterStatus}
       />
 
       {loading ? (
@@ -137,6 +136,22 @@ export default function RolesPage() {
             onSave={handleSave}
             initialData={editing || {}}
           />
+
+          {importModalOpen && (
+            <GenericCSVImport
+              fieldDefinitions={rolesImportConfig.fields}
+              autoMapping={rolesImportConfig.autoMapping}
+              onImport={(mappedData) => {
+                const transformedData = rolesImportConfig.transformDataForAPI(mappedData);
+                handleImport(transformedData);
+                setImportModalOpen(false);
+              }}
+              onClose={() => setImportModalOpen(false)}
+              existingData={rolesList}
+              isDuplicate={rolesImportConfig.isDuplicate}
+              entityNamePlural={rolesImportConfig.entityNamePlural}
+            />
+          )}
         </>
       )}
     </BaseLayout>

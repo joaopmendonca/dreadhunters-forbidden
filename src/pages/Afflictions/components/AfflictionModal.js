@@ -361,8 +361,9 @@ export default function AfflictionModal({ isOpen, onClose, onSave, initialData =
                           backgroundColor="transparent"
                           textColor="var(--light)"
                           className={styles.addPenaltyBtn}
+                          icon={<FaPlus />}
                         >
-                          <FaPlus /> Adicionar
+                          Adicionar
                         </Button>
                       </div>
                     </div>

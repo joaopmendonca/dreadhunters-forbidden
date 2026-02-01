@@ -129,6 +129,51 @@ dex,DEX,base,Destreza - Aumenta velocidade de ataque e evasão,pontos,,true,2`;
     exportToCSV(csv, 'template-attributes.csv');
   };
 
+  // Export CSV
+  const handleExportCSV = () => {
+    if (attributes.length === 0) {
+      enqueueSnackbar('Nenhum atributo para exportar', { variant: 'warning' });
+      return;
+    }
+
+    const lines = ['nome,label,tipo,descricao,unidade,formula,visivel,ordem'];
+    for (const attr of attributes) {
+      lines.push([
+        attr.nome,
+        attr.label || attr.nome,
+        attr.tipo || 'base',
+        `"${(attr.descricao || '').replace(/"/g, '""')}"`,
+        attr.unidade || 'pontos',
+        `"${(attr.formula || '').replace(/"/g, '""')}"`,
+        attr.visivel !== false ? 'true' : 'false',
+        attr.ordem || 0
+      ].join(','));
+    }
+
+    exportToCSV(lines.join('\n'), 'attributes-export.csv');
+    enqueueSnackbar('Exportado com sucesso!', { variant: 'success' });
+  };
+
+  // Import de atributos via GenericCSVImport
+  const handleImport = async (attributes) => {
+    let created = 0;
+    let errors = 0;
+
+    for (const attribute of attributes) {
+      try {
+        await api.post('/status', attribute);
+        created++;
+      } catch (error) {
+        console.error('Error importing attribute:', attribute, error);
+        errors++;
+      }
+    }
+
+    const message = `Importação concluída: ${created} atributo(s) criado(s), ${errors} erro(s).`;
+    enqueueSnackbar(message, { variant: created > 0 ? 'success' : 'warning' });
+    fetchAttributes();
+  };
+
   // Contadores
   const totalCount = attributes.length;
   const baseCount = attributes.filter(a => a.tipo === 'base').length;
@@ -162,7 +207,9 @@ dex,DEX,base,Destreza - Aumenta velocidade de ataque e evasão,pontos,,true,2`;
     handleEdit,
     handleDelete,
     handleSave,
+    handleImport,
     handleCSVUpload,
+    handleExportCSV,
     handleDownloadTemplate,
     totalCount,
     baseCount,

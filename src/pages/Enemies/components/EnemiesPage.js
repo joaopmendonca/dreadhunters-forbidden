@@ -31,7 +31,7 @@ export default function EnemiesPage() {
   } = useEnemies();
 
   const {
-    fields,
+    fields: fieldDefinitions,
     autoMapping,
     transformDataForAPI,
     isDuplicate,
@@ -153,8 +153,8 @@ export default function EnemiesPage() {
 
               {pageCount > 1 && (
                 <Pagination
+                  pageCount={pageCount}
                   currentPage={page}
-                  totalPages={pageCount}
                   onPageChange={setPage}
                 />
               )}
@@ -178,12 +178,12 @@ export default function EnemiesPage() {
 
       {importModalOpen && (
         <GenericCSVImport
-          fieldDefinitions={fields}
+          fieldDefinitions={fieldDefinitions}
           autoMapping={autoMapping}
           onImport={async (enemies) => {
             await handleImportEnemies(enemies.map(transformDataForAPI));
             setImportModalOpen(false);
-            fetchEnemies();
+            await fetchEnemies();
           }}
           onClose={() => setImportModalOpen(false)}
           existingData={enemiesList}

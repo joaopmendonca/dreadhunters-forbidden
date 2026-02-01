@@ -185,6 +185,25 @@ Exemplo Mental,mental,"Descrição aqui",max_sp:-1|accuracy:-15,max_sp:-1|accura
     link.click();
   };
 
+  const handleImport = async (afflictions) => {
+    let created = 0;
+    let errors = 0;
+
+    for (const affliction of afflictions) {
+      try {
+        await api.post('/afflictions', affliction);
+        created++;
+      } catch (error) {
+        console.error('Error importing affliction:', affliction, error);
+        errors++;
+      }
+    }
+
+    const message = `Importação concluída: ${created} aflição(ões) criada(s), ${errors} erro(s).`;
+    enqueueSnackbar(message, { variant: created > 0 ? 'success' : 'warning' });
+    await fetchData();
+  };
+
   return {
     afflictions,
     statusList,
@@ -192,6 +211,7 @@ Exemplo Mental,mental,"Descrição aqui",max_sp:-1|accuracy:-15,max_sp:-1|accura
     fetchData,
     handleDelete,
     handleSave,
+    handleImport,
     handleCSVUpload,
     handleExportCSV,
     downloadTemplate

@@ -1,20 +1,5 @@
 .searchInput {
-  width: 100%;
-  padding: 0.75rem;
-  border: 2px solid var(--dark-3);
-  background: var(--dark-2);
-  color: var(--light);
-  border-radius: 8px;
-  font-size: 1rem;
-}
-
-.searchInput::placeholder {
-  color: var(--dark-5);
-}
-
-.searchInput:focus {
-  outline: none;
-  border-color: var(--maroon);
+  max-width: 300px;
 }
 
 .loading {

@@ -17,8 +17,10 @@ import Attributes from './pages/Attributes';
 import Characters from './pages/Characters';
 import Classes from './pages/Classes';
 import Currency from './pages/Currency';
+import DamageTypes from './pages/DamageTypes';
 import Dashboard from './pages/Dashboard';
 import Enemies from './pages/Enemies';
+import ForbiddenBook from './pages/ForbiddenBook';
 import Items from './pages/Items';
 import Locations from './pages/Locations';
 import Login from './pages/Login';
@@ -105,6 +107,7 @@ export default function AppRoutes() {
             <Route path="/skills"      element={<Skills />} />
             <Route path="/attributes"  element={<Attributes />} />
             <Route path="/afflictions" element={<Afflictions />} />
+            <Route path="/damage-types" element={<DamageTypes />} />
             <Route path="/roles"       element={<Roles />} />
             <Route path="/items"       element={<Items />} />
             <Route path="/currency"    element={<Currency />} />
@@ -113,6 +116,7 @@ export default function AppRoutes() {
             <Route path="/locations"   element={<Locations />} />
             <Route path="/logs"        element={<Logs />} />
             <Route path="/servers"     element={<Servers />} />
+            <Route path="/forbidden-book" element={<ForbiddenBook />} />
             <Route path="/settings"    element={<Settings />} />
             <Route path="/users/:id"   element={<UserDetail />} />
 

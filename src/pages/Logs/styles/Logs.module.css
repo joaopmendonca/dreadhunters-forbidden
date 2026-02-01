@@ -1,3 +1,15 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   LOGS MODULE STYLES
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ─── Header Controls ───────────────────────────────────────────────────────── */
+.headerControls {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+}
+
 .searchInput {
   width: 100%;
   padding: 0.75rem;
@@ -17,14 +29,21 @@
   border-color: var(--maroon);
 }
 
+.filtersRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
 .filterSelect {
-  padding: 0.75rem;
+  padding: 0.6rem 0.75rem;
   border: 2px solid var(--dark-3);
   background: var(--dark-2);
   color: var(--light);
   border-radius: 8px;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   cursor: pointer;
+  min-width: 140px;
 }
 
 .filterSelect:focus {
@@ -37,12 +56,456 @@
   color: var(--light);
 }
 
+.headerActions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.resetButton,
+.refreshButton {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1rem;
+  border: 2px solid var(--dark-3);
+  background: var(--dark-2);
+  color: var(--light);
+  border-radius: 8px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.resetButton:hover,
+.refreshButton:hover {
+  border-color: var(--maroon);
+  background: var(--dark-3);
+}
+
+.refreshButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.spinning {
+  animation: spin 1s linear infinite;
+}
+
+/* ─── Dashboard Toggle ──────────────────────────────────────────────────────── */
+.dashboardToggle {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 1rem;
+}
+
+.toggleButton {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border: 2px solid var(--dark-3);
+  background: var(--dark-2);
+  color: var(--light);
+  border-radius: 8px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.toggleButton:hover {
+  border-color: var(--maroon);
+}
+
+.toggleButton.active {
+  border-color: var(--maroon);
+  background: var(--dark-3);
+}
+
+/* ─── Dashboard ─────────────────────────────────────────────────────────────── */
+.dashboard {
+  margin-bottom: 2rem;
+}
+
+.dashboardLoading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  gap: 1rem;
+  color: var(--light);
+}
+
+.statsRow {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.statCard {
+  background: var(--dark-2);
+  border: 2px solid var(--dark-3);
+  border-radius: 12px;
+  padding: 1.25rem;
+  text-align: center;
+  transition: all 0.2s ease;
+}
+
+.statCard:hover {
+  transform: translateY(-2px);
+  border-color: var(--dark-4);
+}
+
+.statblue { border-left: 4px solid #3b82f6; }
+.statred { border-left: 4px solid #ef4444; }
+.statyellow { border-left: 4px solid #f59e0b; }
+.statpurple { border-left: 4px solid #8b5cf6; }
+.statgray { border-left: 4px solid #6b7280; }
+
+.statIcon {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+  opacity: 0.8;
+}
+
+.statValue {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--light);
+}
+
+.statLabel {
+  font-size: 0.85rem;
+  color: var(--dark-5);
+  margin-top: 0.25rem;
+}
+
+.dashboardRow {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+.dashboardCard {
+  background: var(--dark-2);
+  border: 2px solid var(--dark-3);
+  border-radius: 12px;
+  padding: 1.25rem;
+}
+
+.dashboardCardTitle {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--light);
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--dark-3);
+}
+
+.entityList,
+.errorList,
+.categoryList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.entityItem,
+.categoryItem {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--dark-3);
+}
+
+.entityItem:last-child,
+.categoryItem:last-child {
+  border-bottom: none;
+}
+
+.entityIcon,
+.categoryIcon {
+  font-size: 1.2rem;
+  margin-right: 0.75rem;
+}
+
+.entityLabel,
+.categoryLabel {
+  flex: 1;
+  color: var(--light);
+  font-size: 0.9rem;
+}
+
+.entityCount,
+.categoryCount {
+  background: var(--dark-3);
+  color: var(--light);
+  padding: 0.2rem 0.6rem;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.errorItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--dark-3);
+}
+
+.errorItem:last-child {
+  border-bottom: none;
+}
+
+.errorIcon {
+  font-size: 1.2rem;
+}
+
+.errorContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.errorSummary {
+  color: var(--light);
+  font-size: 0.9rem;
+}
+
+.errorTime {
+  color: var(--dark-5);
+  font-size: 0.75rem;
+}
+
+.noData {
+  color: var(--dark-5);
+  text-align: center;
+  padding: 1rem;
+  font-size: 0.9rem;
+}
+
+/* ─── Logs Section ──────────────────────────────────────────────────────────── */
+.logsSection {
+  background: var(--dark-2);
+  border: 2px solid var(--dark-3);
+  border-radius: 12px;
+  padding: 1.5rem;
+}
+
+.logsSectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.logsSectionTitle {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--light);
+}
+
+.logsCount {
+  font-size: 0.85rem;
+  color: var(--dark-5);
+}
+
+.logsList {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* ─── Log Card ──────────────────────────────────────────────────────────────── */
+.logCard {
+  background: var(--dark-1);
+  border: 2px solid var(--dark-3);
+  border-radius: 10px;
+  padding: 1rem;
+  transition: all 0.2s ease;
+}
+
+.logCard:hover {
+  border-color: var(--dark-4);
+}
+
+/* Level-based border colors */
+.levelINFO { border-left: 4px solid #3b82f6; }
+.levelWARNING { border-left: 4px solid #f59e0b; }
+.levelERROR { border-left: 4px solid #ef4444; }
+.levelCRITICAL { border-left: 4px solid #dc2626; background: rgba(220, 38, 38, 0.05); }
+
+.logCardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 0.75rem;
+}
+
+.logCardBadges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.25rem 0.6rem;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.badgeINFO { background: rgba(59, 130, 246, 0.2); color: #60a5fa; }
+.badgeWARNING { background: rgba(245, 158, 11, 0.2); color: #fbbf24; }
+.badgeERROR { background: rgba(239, 68, 68, 0.2); color: #f87171; }
+.badgeCRITICAL { background: rgba(220, 38, 38, 0.3); color: #fca5a5; }
+
+.badgeCategory { background: var(--dark-3); color: var(--light); }
+.badgeAction { background: rgba(139, 92, 246, 0.2); color: #a78bfa; }
+
+.logCardTime {
+  font-size: 0.8rem;
+  color: var(--dark-5);
+  white-space: nowrap;
+}
+
+.logCardSummary {
+  font-size: 1rem;
+  color: var(--light);
+  margin-bottom: 0.75rem;
+  line-height: 1.4;
+}
+
+.logCardMeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  font-size: 0.85rem;
+}
+
+.metaItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  color: var(--dark-5);
+}
+
+.statusSuccess { color: #10b981; }
+.statusWarning { color: #f59e0b; }
+.statusError { color: #ef4444; }
+
+.expandButton {
+  display: block;
+  width: 100%;
+  margin-top: 1rem;
+  padding: 0.5rem;
+  background: var(--dark-2);
+  border: 1px solid var(--dark-3);
+  border-radius: 6px;
+  color: var(--dark-5);
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.expandButton:hover {
+  background: var(--dark-3);
+  color: var(--light);
+}
+
+/* ─── Log Card Details ──────────────────────────────────────────────────────── */
+.logCardDetails {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--dark-3);
+}
+
+.detailSection {
+  margin-bottom: 1rem;
+}
+
+.detailSection:last-child {
+  margin-bottom: 0;
+}
+
+.detailTitle {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--light);
+  margin-bottom: 0.75rem;
+}
+
+.detailGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 0.5rem;
+}
+
+.detailItem {
+  display: flex;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+}
+
+.detailLabel {
+  color: var(--dark-5);
+}
+
+.detailValue {
+  color: var(--light);
+  word-break: break-all;
+}
+
+.changedFields {
+  font-size: 0.85rem;
+  color: var(--dark-5);
+  margin-bottom: 0.75rem;
+}
+
+.changesGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.changesBefore,
+.changesAfter {
+  background: var(--dark-2);
+  border-radius: 6px;
+  padding: 0.75rem;
+}
+
+.changesBefore h5,
+.changesAfter h5 {
+  font-size: 0.8rem;
+  color: var(--dark-5);
+  margin-bottom: 0.5rem;
+}
+
+.changesBefore { border-left: 3px solid #ef4444; }
+.changesAfter { border-left: 3px solid #10b981; }
+
+.changesBefore pre,
+.changesAfter pre {
+  font-size: 0.75rem;
+  color: var(--light);
+  overflow-x: auto;
+  margin: 0;
+}
+
+/* ─── Loading ───────────────────────────────────────────────────────────────── */
 .loading {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 60vh;
+  height: 40vh;
   gap: 1rem;
   color: var(--light);
 }
@@ -58,9 +521,42 @@
   to { transform: rotate(360deg); }
 }
 
+/* ─── Details (Legacy) ──────────────────────────────────────────────────────── */
 .details {
   color: var(--light);
   font-size: 0.9rem;
   word-break: break-word;
   white-space: pre-wrap;
+}
+
+/* ─── Responsive ────────────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .statsRow {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .dashboardRow {
+    grid-template-columns: 1fr;
+  }
+  
+  .filtersRow {
+    flex-direction: column;
+  }
+  
+  .filterSelect {
+    width: 100%;
+  }
+  
+  .changesGrid {
+    grid-template-columns: 1fr;
+  }
+  
+  .logCardHeader {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .logCardTime {
+    align-self: flex-start;
+  }
 }

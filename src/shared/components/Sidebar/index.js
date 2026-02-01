@@ -3,10 +3,12 @@
 import { useContext, useState } from 'react';
 import {
   FaBolt,
+  FaBook,
   FaBoxOpen,
   FaChalkboardTeacher,
   FaClipboardList,
   FaCoins,
+  FaCrosshairs,
   FaMapMarkedAlt,
   FaMapMarkerAlt,
   FaServer, // ícone para Servidores
@@ -38,6 +40,7 @@ export default function Sidebar({ isOpen = true, onClose }) {
     { to: '/skills',      label: 'Skills',       icon: <FaBolt /> },
     { to: '/attributes',  label: 'Atributos',    icon: <FaHeart /> },
     { to: '/afflictions', label: 'Aflições',     icon: <FaSkullCrossbones /> },
+    { to: '/damage-types', label: 'Tipos de Dano', icon: <FaCrosshairs /> },
     { to: '/roles',       label: 'Roles',        icon: <FaUserShield /> },
     { to: '/items',       label: 'Itens',        icon: <FaBoxOpen /> },
     { to: '/currency',    label: 'Moedas',       icon: <FaCoins /> },
@@ -46,6 +49,7 @@ export default function Sidebar({ isOpen = true, onClose }) {
     { to: '/locations',   label: 'Locais',       icon: <FaMapMarkerAlt /> },
     { to: '/logs',        label: 'Logs',         icon: <FaClipboardList /> },
     { to: '/servers',     label: 'Servidores',   icon: <FaServer /> },
+    { to: '/forbidden-book', label: 'Forbidden Book', icon: <FaBook /> },
     { to: '/settings',    label: 'Configurações', icon: <FaUserShield /> }
   ];
 

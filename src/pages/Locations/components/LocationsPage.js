@@ -3,7 +3,9 @@ import BaseLayout from '../../../shared/components/BaseLayout';
 import Card from '../../../shared/components/Card';
 import EmptyState from '../../../shared/components/EmptyState';
 import Pagination from '../../../shared/components/Pagination';
+import GenericCSVImport from '../../../shared/components/GenericCSVImport';
 import useLocations from '../hooks/useLocations';
+import useLocationsImport from '../hooks/useLocationsImport';
 import LocationsHeader from './LocationsHeader';
 import LocationCard from './LocationCard';
 import LocationModal from './LocationModal';
@@ -12,7 +14,21 @@ import LoadingState from './LoadingState';
 const ITEMS_PER_PAGE = 10;
 
 export default function LocationsPage() {
-  const { locationsList, loading, fetchLocations, handleDelete, handleSave, handleDeleteIcon } = useLocations();
+  const { 
+    locationsList, 
+    loading, 
+    fetchLocations, 
+    handleDelete, 
+    handleSave, 
+    handleDeleteIcon,
+    handleImport,
+    handleExportCSV,
+    downloadTemplate,
+    importModalOpen,
+    setImportModalOpen
+  } = useLocations();
+
+  const locationsImportConfig = useLocationsImport();
 
   const [searchName, setSearchName] = useState('');
   const [page, setPage] = useState(0);
@@ -50,6 +66,10 @@ export default function LocationsPage() {
     fetchLocations();
   };
 
+  const handleImportClick = () => {
+    setImportModalOpen(true);
+  };
+
   const filtered = locationsList.filter(l =>
     l.name?.toLowerCase().includes(searchName.toLowerCase())
   );
@@ -70,6 +90,9 @@ export default function LocationsPage() {
           setPage(0);
         }}
         onNew={handleNew}
+        onImport={handleImportClick}
+        onExportCSV={handleExportCSV}
+        onDownloadTemplate={downloadTemplate}
       />
 
       {loading ? (
@@ -109,6 +132,16 @@ export default function LocationsPage() {
                 />
               )}
             </>
+          )}
+
+          {importModalOpen && (
+            <GenericCSVImport
+              isOpen={importModalOpen}
+              onClose={() => setImportModalOpen(false)}
+              onImport={handleImport}
+              existingItems={locationsList}
+              config={locationsImportConfig}
+            />
           )}
 
           <LocationModal

@@ -27,6 +27,8 @@ export default function ClassesPage() {
     editing,
     searchName,
     setSearchName,
+    filterRole,
+    setFilterRole,
     page,
     setPage,
     fileInputRef,
@@ -42,15 +44,33 @@ export default function ClassesPage() {
   // Lazy load ClassModal
   const ClassModal = React.lazy(() => import('./ClassModal'));
 
+  // Contadores por role
+  const totalCount = classesList.length;
+  const roleCounters = rolesList.reduce((acc, role) => {
+    acc[role._id] = classesList.filter(c => c.role?._id === role._id || c.role === role._id).length;
+    return acc;
+  }, {});
+
   // Filter and paginate
-  const filtered = filterByName(classesList, searchName);
+  const filtered = classesList.filter(cls => {
+    const matchName = cls.name?.toLowerCase().includes(searchName.toLowerCase());
+    const matchRole = filterRole === 'all' || cls.role?._id === filterRole || cls.role === filterRole;
+    return matchName && matchRole;
+  });
   const pageCount = Math.ceil(filtered.length / ITEMS_PER_PAGE);
   const pageItems = paginateItems(filtered, page, ITEMS_PER_PAGE);
 
   return (
     <BaseLayout title={PAGE_TITLE}>
       <ClassesHeader
-        classesCount={classesList.length}
+        totalCount={totalCount}
+        rolesList={rolesList}
+        roleCounters={roleCounters}
+        filterRole={filterRole}
+        onFilterChange={(role) => {
+          setFilterRole(role);
+          setPage(0);
+        }}
         onNew={handleNew}
         onImport={handleCSVUpload}
         onExport={handleExportCSV}

@@ -48,6 +48,10 @@ export const ServersPage = ({
   const filtered = servers.filter((s) =>
     s.slug.toLowerCase().includes(searchSlug.toLowerCase())
   );
+
+  const onlineCount = servers.filter(s => s.status === 'online').length;
+  const offlineCount = servers.filter(s => s.status !== 'online').length;
+
   const pageCount = Math.ceil(filtered.length / ITEMS_PER_PAGE);
   const pageItems = filtered.slice(
     page * ITEMS_PER_PAGE,
@@ -58,6 +62,8 @@ export const ServersPage = ({
     <BaseLayout title="Servidores">
       <ServersHeader
         totalServers={servers.length}
+        onlineCount={onlineCount}
+        offlineCount={offlineCount}
         searchSlug={searchSlug}
         onSearchChange={(value) => {
           setSearchSlug(value);

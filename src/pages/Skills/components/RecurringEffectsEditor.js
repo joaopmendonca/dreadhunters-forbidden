@@ -4,6 +4,7 @@ import { FaPlus, FaTrash, FaRedoAlt } from 'react-icons/fa';
 import Select from '../../../shared/components/Select';
 import TextInput from '../../../shared/components/TextInput';
 import Button from '../../../shared/components/Button';
+import useStatus from '../../../shared/hooks/useStatus';
 import styles from '../styles/RecurringEffectsEditor.module.css';
 
 const FREQUENCY_TYPE_OPTIONS = [
@@ -16,36 +17,21 @@ const MODIFIER_TYPE_OPTIONS = [
   { value: 'percent', label: 'Porcentagem (%)' }
 ];
 
-const STAT_OPTIONS = [
-  // Stats base
-  { value: 'STR', label: 'STR (Força)' },
-  { value: 'DEX', label: 'DEX (Destreza)' },
-  { value: 'INT', label: 'INT (Inteligência)' },
-  { value: 'WIT', label: 'WIT (Sagacidade)' },
-  { value: 'MEN', label: 'MEN (Mente)' },
-  { value: 'CON', label: 'CON (Constituição)' },
-  
-  // Stats dinâmicos/derivados
-  { value: 'max_hp', label: 'HP Máximo' },
-  { value: 'max_mp', label: 'MP Máximo' },
-  { value: 'hp', label: 'HP Atual' },
-  { value: 'mp', label: 'MP Atual' },
-  { value: 'p_atk', label: 'Ataque Físico' },
-  { value: 'p_def', label: 'Defesa Física' },
-  { value: 'm_atk', label: 'Ataque Mágico' },
-  { value: 'm_def', label: 'Defesa Mágica' },
-  { value: 'atk_spd', label: 'Velocidade de Ataque' },
-  { value: 'cast_spd', label: 'Velocidade de Conjuração' },
-  { value: 'move_spd', label: 'Velocidade de Movimento' },
-  { value: 'accuracy', label: 'Precisão' },
-  { value: 'evasion', label: 'Evasão' },
-  { value: 'crit_rate', label: 'Taxa Crítica' },
-  { value: 'crit_damage', label: 'Dano Crítico' },
-  { value: 'hp_regen', label: 'Regeneração HP' },
-  { value: 'mp_regen', label: 'Regeneração MP' }
-];
-
 export default function RecurringEffectsEditor({ effects = [], onChange, disabled = false }) {
+  const { baseStatus, derivedStatus } = useStatus();
+
+  // Gera opções de stats dinamicamente
+  const statOptions = [
+    ...baseStatus.map(s => ({ 
+      value: s.nome, 
+      label: `${s.iconeUrl ? '📊' : '⚡'} ${s.label} (${s.nome.toUpperCase()})` 
+    })),
+    ...derivedStatus.map(s => ({ 
+      value: s.nome, 
+      label: `${s.iconeUrl ? '📈' : '💫'} ${s.label}` 
+    }))
+  ];
+
   const handleAdd = () => {
     onChange([
       ...effects,
@@ -95,8 +81,9 @@ export default function RecurringEffectsEditor({ effects = [], onChange, disable
           onClick={handleAdd}
           disabled={disabled}
           type="button"
+          icon={<FaPlus />}
         >
-          <FaPlus /> Adicionar
+          Adicionar
         </Button>
       </div>
 
@@ -138,7 +125,7 @@ export default function RecurringEffectsEditor({ effects = [], onChange, disable
                 <Select
                   value={effect.stat}
                   onChange={val => handleChangeEffect(idx, 'stat', val)}
-                  options={STAT_OPTIONS}
+                  options={statOptions}
                   disabled={disabled}
                 />
               </div>

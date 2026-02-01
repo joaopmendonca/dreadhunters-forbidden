@@ -1,5 +1,6 @@
 // src/pages/Users/utils/index.js
 
+import Papa from 'papaparse';
 import api from '../../../config/api';
 
 export const buildAvatarSrc = (url) => {
@@ -9,31 +10,59 @@ export const buildAvatarSrc = (url) => {
   return `${base}${url}`;
 };
 
+/**
+ * Converte objeto User para formato CSV
+ */
+export const userToCSV = (user) => {
+  return {
+    username: user.username || '',
+    email: user.email || '',
+    status: user.status || '',
+    country: user.country || '',
+    roles: (user.roles || []).join('|'),
+    createdAt: user.createdAt ? new Date(user.createdAt).toISOString().slice(0, 10) : '',
+    lastLogin: user.lastLogin ? new Date(user.lastLogin).toISOString().slice(0, 10) : ''
+  };
+};
+
 export const exportUsersToCSV = (users) => {
   if (users.length === 0) {
     return null;
   }
 
-  const lines = ['username,email,status,country,roles,createdAt,lastLogin'];
-  for (const user of users) {
-    lines.push([
-      user.username,
-      user.email,
-      user.status,
-      user.country || '',
-      (user.roles || []).join('|'),
-      user.createdAt ? new Date(user.createdAt).toISOString().slice(0, 10) : '',
-      user.lastLogin ? new Date(user.lastLogin).toISOString().slice(0, 10) : ''
-    ].join(','));
-  }
+  const headers = ['username', 'email', 'status', 'country', 'roles', 'createdAt', 'lastLogin'];
+  const rows = users.map(userToCSV);
 
-  const blob = new Blob([lines.join('\n')], { type: 'text/csv;charset=utf-8;' });
+  const csv = Papa.unparse({ fields: headers, data: rows });
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
   const link = document.createElement('a');
   link.href = URL.createObjectURL(blob);
-  link.download = 'users-export.csv';
+  link.download = `usuarios-${new Date().toISOString().slice(0, 10)}.csv`;
   link.click();
   
   return true;
+};
+
+export const downloadUsersTemplate = () => {
+  const headers = ['username', 'email', 'password', 'status', 'country', 'roles'];
+  
+  const rows = [
+    {
+      username: 'jogador1',
+      email: 'jogador1@email.com',
+      password: 'senha123',
+      status: 'active',
+      country: 'BR',
+      roles: 'player'
+    }
+  ];
+
+  const csv = Papa.unparse({ fields: headers, data: rows });
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = 'template-usuarios.csv';
+  link.click();
 };
 
 export const filterUsers = (users, searchName, filterStatus) => {

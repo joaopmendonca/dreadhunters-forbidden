@@ -7,7 +7,9 @@ import styles from '../styles/Attributes.module.css';
 
 export function AttributesHeader({
   onNew,
+  onImport,
   onCSVUpload,
+  onExportCSV,
   onDownloadTemplate,
   searchName,
   onSearchChange,
@@ -40,6 +42,26 @@ export function AttributesHeader({
             Novo Atributo
           </Button>
 
+          <Button
+            backgroundColor="var(--dark-3)"
+            textColor="var(--light)"
+            hoverColor="var(--gold)"
+            onClick={onImport}
+            icon={<FaFileUpload />}
+          >
+            Importar CSV
+          </Button>
+
+          <Button
+            backgroundColor="var(--dark-3)"
+            textColor="var(--light)"
+            hoverColor="var(--gold)"
+            onClick={onExportCSV}
+            icon={<FaDownload />}
+          >
+            Exportar CSV
+          </Button>
+
           <input
             ref={fileInputRef}
             type="file"
@@ -47,17 +69,6 @@ export function AttributesHeader({
             onChange={onCSVUpload}
             style={{ display: 'none' }}
           />
-
-          <Button
-            backgroundColor="var(--dark-3)"
-            textColor="var(--light)"
-            hoverColor="var(--gold)"
-            onClick={() => fileInputRef.current?.click()}
-            disabled={uploading}
-            icon={<FaFileUpload />}
-          >
-            {uploading ? 'Importando...' : 'Importar CSV'}
-          </Button>
 
           <Button
             backgroundColor="var(--dark-4)"

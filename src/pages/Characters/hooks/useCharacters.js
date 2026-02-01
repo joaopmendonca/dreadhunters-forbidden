@@ -1,27 +1,24 @@
 // src/pages/Characters/hooks/useCharacters.js
 
-import { useState, useCallback, useEffect, useContext, useRef } from 'react';
+import { useState, useCallback, useEffect, useContext } from 'react';
 import { useSnackbar } from 'notistack';
 import api from '../../../config/api';
 import { AuthContext } from '../../../shared/contexts/AuthContext';
 import {
-  parseCSV,
   exportCharactersToCSV,
   downloadCSVTemplate,
   filterCharacters,
   mapCharactersWithClass
 } from '../utils';
-import { ITEMS_PER_PAGE, DEFAULT_GENDER } from '../constants';
+import { ITEMS_PER_PAGE } from '../constants';
 
 export function useCharacters() {
   const { logout } = useContext(AuthContext);
   const { enqueueSnackbar } = useSnackbar();
-  const fileInputRef = useRef(null);
 
   const [characters, setCharacters] = useState([]);
   const [classes, setClasses] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [uploading, setUploading] = useState(false);
 
   const [filterClass, setFilterClass] = useState('');
   const [searchName, setSearchName] = useState('');
@@ -122,53 +119,41 @@ export function useCharacters() {
     }
   };
 
-  const handleCSVUpload = async (event) => {
-    const file = event.target.files[0];
-    if (!file) return;
+  const handleImport = async (npcs) => {
+    let created = 0;
+    let errors = 0;
 
-    if (!file.name.endsWith('.csv')) {
-      enqueueSnackbar('Selecione um arquivo CSV', { variant: 'error' });
-      return;
-    }
-
-    if (classes.length === 0) {
-      enqueueSnackbar('Carregue as classes primeiro', { variant: 'error' });
-      return;
-    }
-
-    setUploading(true);
-    try {
-      const text = await file.text();
-      const npcData = parseCSV(text);
-
-      let created = 0;
-      let errors = 0;
-
-      for (const npc of npcData) {
-        try {
-          const classObj = classes.find(c => c.name.toLowerCase() === npc.class?.toLowerCase());
-          const payload = {
-            name: npc.name,
-            description: npc.description || '',
-            class: classObj?._id || classes[0]?._id,
-            level: parseInt(npc.level, 10) || 1,
-            gender: npc.gender || DEFAULT_GENDER
-          };
-          await api.post('/characters', payload);
-          created++;
-        } catch {
+    for (const npc of npcs) {
+      try {
+        const classObj = classes.find(c => c.name.toLowerCase() === npc.class?.toLowerCase());
+        if (!classObj) {
+          console.error(`Classe "${npc.class}" não encontrada para NPC "${npc.name}"`);
           errors++;
+          continue;
         }
-      }
 
-      enqueueSnackbar(`Importação: ${created} criados, ${errors} erros`, 
-        { variant: created > 0 ? 'success' : 'warning' });
-      fetchData();
-    } catch {
-      enqueueSnackbar('Erro ao processar CSV', { variant: 'error' });
-    } finally {
-      setUploading(false);
-      if (fileInputRef.current) fileInputRef.current.value = '';
+        const payload = {
+          name: npc.name,
+          description: npc.description || '',
+          class: classObj._id,
+          gender: npc.gender || 'male',
+          hp: npc.hp || 100,
+          mp: npc.mp || 50
+        };
+
+        await api.post('/characters', payload);
+        created++;
+      } catch (error) {
+        console.error(`Erro ao importar NPC "${npc.name}":`, error);
+        errors++;
+      }
+    }
+
+    if (created > 0) {
+      enqueueSnackbar(`${created} NPC(s) importado(s) com sucesso!`, { variant: 'success' });
+    }
+    if (errors > 0) {
+      enqueueSnackbar(`${errors} erro(s) ao importar. Verifique o console.`, { variant: 'warning' });
     }
   };
 
@@ -215,7 +200,6 @@ export function useCharacters() {
     characters,
     classes,
     loading,
-    uploading,
     page,
     setPage,
     searchName,
@@ -223,17 +207,17 @@ export function useCharacters() {
     modalOpen,
     setModalOpen,
     editingCharacter,
-    fileInputRef,
     handleNew,
     handleEdit,
     handleDelete,
     handleSave,
-    handleCSVUpload,
+    handleImport,
     handleDownloadTemplate,
     handleExportCSV,
     handleSearch,
     handleFilterChange,
     handleIconDeleted,
+    fetchData,
     filtered,
     pageItems,
     pageCount,

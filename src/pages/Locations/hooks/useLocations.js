@@ -8,6 +8,7 @@ export default function useLocations() {
 
   const [locationsList, setLocationsList] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [importModalOpen, setImportModalOpen] = useState(false);
 
   const fetchLocations = useCallback(async () => {
     setLoading(true);
@@ -58,12 +59,66 @@ export default function useLocations() {
     }
   };
 
+  const handleImport = async (locationsData) => {
+    try {
+      await api.post('/locations', locationsData);
+      enqueueSnackbar(MESSAGES.SAVE_SUCCESS_CREATE, { variant: 'success' });
+      fetchLocations();
+      return true;
+    } catch (err) {
+      enqueueSnackbar(err.response?.data?.message || MESSAGES.SAVE_ERROR, { variant: 'error' });
+      return false;
+    }
+  };
+
+  const handleExportCSV = () => {
+    if (locationsList.length === 0) {
+      enqueueSnackbar('Não há locais para exportar', { variant: 'warning' });
+      return;
+    }
+
+    const csvData = locationsList.map(location => ({
+      name: location.name || '',
+      description: location.description || ''
+    }));
+
+    const Papa = require('papaparse');
+    const csv = Papa.unparse(csvData);
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `locais_${new Date().toISOString().split('T')[0]}.csv`;
+    link.click();
+
+    enqueueSnackbar('CSV exportado com sucesso', { variant: 'success' });
+  };
+
+  const downloadTemplate = () => {
+    const templateData = [
+      { name: 'Floresta Sombria', description: 'Uma floresta perigosa cheia de criaturas hostis' },
+      { name: 'Vila do Porto', description: 'Um vilarejo comercial próximo ao mar' }
+    ];
+
+    const Papa = require('papaparse');
+    const csv = Papa.unparse(templateData);
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'template_locais.csv';
+    link.click();
+  };
+
   return {
     locationsList,
     loading,
     fetchLocations,
     handleDelete,
     handleSave,
-    handleDeleteIcon
+    handleDeleteIcon,
+    handleImport,
+    handleExportCSV,
+    downloadTemplate,
+    importModalOpen,
+    setImportModalOpen
   };
 }

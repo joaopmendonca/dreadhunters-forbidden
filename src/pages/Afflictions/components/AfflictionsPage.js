@@ -3,7 +3,9 @@ import BaseLayout from '../../../shared/components/BaseLayout';
 import Card from '../../../shared/components/Card';
 import EmptyState from '../../../shared/components/EmptyState';
 import Pagination from '../../../shared/components/Pagination';
+import GenericCSVImport from '../../../shared/components/GenericCSVImport';
 import useAfflictions from '../hooks/useAfflictions';
+import { useAfflictionsImport } from '../hooks/useAfflictionsImport';
 import AfflictionCard from './AfflictionCard';
 import AfflictionModal from './AfflictionModal';
 import AfflictionsHeader from './AfflictionsHeader';
@@ -20,16 +22,26 @@ export default function AfflictionsPage() {
     fetchData,
     handleDelete,
     handleSave,
+    handleImport,
     handleCSVUpload,
     handleExportCSV,
     downloadTemplate
   } = useAfflictions();
+
+  const {
+    fields: fieldDefinitions,
+    autoMapping,
+    transformDataForAPI,
+    isDuplicate,
+    entityNamePlural
+  } = useAfflictionsImport();
 
   const [uploading, setUploading] = useState(false);
   const [searchName, setSearchName] = useState('');
   const [filterTipo, setFilterTipo] = useState('all');
   const [page, setPage] = useState(0);
   const [modalOpen, setModalOpen] = useState(false);
+  const [importModalOpen, setImportModalOpen] = useState(false);
   const [editingAffliction, setEditing] = useState(null);
 
   useEffect(() => {
@@ -89,6 +101,7 @@ export default function AfflictionsPage() {
           setPage(0);
         }}
         onNew={handleNew}
+        onImport={() => setImportModalOpen(true)}
         onUploadCSV={handleCSVUploadEvent}
         onExportCSV={handleExportCSV}
         onDownloadTemplate={downloadTemplate}
@@ -131,6 +144,22 @@ export default function AfflictionsPage() {
             onSave={handleSave}
             initialData={editingAffliction || {}}
           />
+
+          {importModalOpen && (
+            <GenericCSVImport
+              fieldDefinitions={fieldDefinitions}
+              autoMapping={autoMapping}
+              onImport={(mappedData) => {
+                const transformedData = transformDataForAPI(mappedData);
+                handleImport(transformedData);
+                setImportModalOpen(false);
+              }}
+              onClose={() => setImportModalOpen(false)}
+              existingData={afflictions}
+              isDuplicate={isDuplicate}
+              entityNamePlural={entityNamePlural}
+            />
+          )}
         </>
       )}
     </BaseLayout>

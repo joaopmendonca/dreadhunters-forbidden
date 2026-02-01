@@ -22,9 +22,15 @@ export const ServerSelector = ({
         disabled={disabled}
         className={styles.select}
       >
-        <option value="">— selecione um servidor —</option>
+        <option value="" style={{ background: '#1a1a1a', color: '#e0e0e0' }}>
+          — selecione um servidor —
+        </option>
         {servers.map((s) => (
-          <option key={s.slug} value={s.slug}>
+          <option 
+            key={s.slug} 
+            value={s.slug}
+            style={{ background: '#1a1a1a', color: '#e0e0e0' }}
+          >
             {s.name} ({s.slug})
           </option>
         ))}

@@ -1,23 +1,26 @@
 // src/pages/Characters/components/CharactersPage.js
 
-import React from 'react';
+import React, { useState } from 'react';
 import BaseLayout from '../../../shared/components/BaseLayout';
 import Card from '../../../shared/components/Card';
 import EmptyState from '../../../shared/components/EmptyState';
 import Button from '../../../shared/components/Button';
 import Pagination from '../../../shared/components/Pagination';
+import GenericCSVImport from '../../../shared/components/GenericCSVImport';
 import { FaPlus } from 'react-icons/fa';
 import CharactersHeader from './CharactersHeader';
 import CharacterCard from './CharacterCard';
 import LoadingState from './LoadingState';
 import CharacterModal from './CharacterModal';
 import { useCharacters } from '../hooks/useCharacters';
+import { useCharactersImport } from '../hooks/useCharactersImport';
 
 export default function CharactersPage() {
+  const [showImportModal, setShowImportModal] = useState(false);
+
   const {
     classes,
     loading,
-    uploading,
     page,
     setPage,
     searchName,
@@ -25,22 +28,24 @@ export default function CharactersPage() {
     modalOpen,
     setModalOpen,
     editingCharacter,
-    fileInputRef,
     handleNew,
     handleEdit,
     handleDelete,
     handleSave,
-    handleCSVUpload,
+    handleImport: importNPCs,
     handleDownloadTemplate,
     handleExportCSV,
     handleSearch,
     handleFilterChange,
     handleIconDeleted,
+    fetchData,
     filtered,
     pageItems,
     pageCount,
     totalCount,
   } = useCharacters();
+
+  const { fieldDefinitions, autoMapping, transformDataForAPI, isDuplicate, entityNamePlural } = useCharactersImport();
 
   return (
     <BaseLayout title="NPCs">
@@ -50,12 +55,10 @@ export default function CharactersPage() {
         characters={pageItems}
         searchName={searchName}
         filterClass={filterClass}
-        uploading={uploading}
-        fileInputRef={fileInputRef}
         onNew={handleNew}
         onSearch={handleSearch}
         onFilterChange={handleFilterChange}
-        onCSVUpload={handleCSVUpload}
+        onOpenImport={() => setShowImportModal(true)}
         onExportCSV={handleExportCSV}
         onDownloadTemplate={handleDownloadTemplate}
       />
@@ -108,6 +111,22 @@ export default function CharactersPage() {
             classes={classes}
           />
         </>
+      )}
+
+      {showImportModal && (
+        <GenericCSVImport
+          fieldDefinitions={fieldDefinitions}
+          autoMapping={autoMapping}
+          onImport={async (npcs) => {
+            await importNPCs(npcs.map(transformDataForAPI));
+            setShowImportModal(false);
+            await fetchData();
+          }}
+          onClose={() => setShowImportModal(false)}
+          existingData={filtered}
+          isDuplicate={isDuplicate}
+          entityNamePlural={entityNamePlural}
+        />
       )}
     </BaseLayout>
   );

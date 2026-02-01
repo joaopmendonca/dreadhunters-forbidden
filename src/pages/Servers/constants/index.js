@@ -1,6 +1,15 @@
 export const STATUS_OPTIONS = [
   { value: 'online', label: 'Online' },
   { value: 'offline', label: 'Offline' },
+  { value: 'maintenance', label: 'Manutenção' },
+];
+
+export const REGION_OPTIONS = [
+  { value: 'sa', label: 'América do Sul' },
+  { value: 'na', label: 'América do Norte' },
+  { value: 'eu', label: 'Europa' },
+  { value: 'asia', label: 'Ásia' },
+  { value: 'oce', label: 'Oceania' },
 ];
 
 export const MESSAGES = {

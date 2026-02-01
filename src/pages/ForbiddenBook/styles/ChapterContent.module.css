@@ -1,0 +1,859 @@
+/* ============================================
+   Chapter Content - Conteúdo dos Capítulos
+   ============================================ */
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* === EMPTY STATE === */
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 4rem 2rem;
+  text-align: center;
+}
+
+.emptyIcon {
+  font-size: 3rem;
+  opacity: 0.5;
+}
+
+.emptyText {
+  font-size: 1.1rem;
+  color: rgba(250, 245, 229, 0.7);
+}
+
+.emptyHint {
+  font-size: 0.85rem;
+  color: rgba(250, 245, 229, 0.4);
+  font-style: italic;
+}
+
+/* === INTRODUÇÃO === */
+.intro {
+  background: linear-gradient(135deg, rgba(139, 69, 19, 0.08) 0%, transparent 100%);
+  border: 1px solid rgba(139, 69, 19, 0.2);
+  border-radius: 8px;
+  padding: 1.5rem;
+}
+
+.introDecor {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.intro .introDecor:last-child {
+  margin-bottom: 0;
+  margin-top: 1rem;
+}
+
+.introLine {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(139, 69, 19, 0.4), transparent);
+}
+
+.introSymbol {
+  color: rgba(139, 69, 19, 0.6);
+  font-size: 1rem;
+}
+
+.introText {
+  color: rgba(250, 245, 229, 0.75);
+  line-height: 1.7;
+  font-size: 0.9rem;
+  white-space: pre-line;
+}
+
+/* === GAME DESIGN SECTION === */
+.gameDesign {
+  background: linear-gradient(135deg, rgba(75, 0, 130, 0.08) 0%, rgba(139, 69, 19, 0.05) 100%);
+  border: 1px solid rgba(147, 112, 219, 0.25);
+  border-left: 4px solid rgba(147, 112, 219, 0.5);
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.gameDesignHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid rgba(147, 112, 219, 0.2);
+  cursor: pointer;
+  user-select: none;
+  transition: opacity 0.2s ease;
+}
+
+.gameDesignHeader:hover {
+  opacity: 0.85;
+}
+
+.gameDesignIcon {
+  font-size: 1.5rem;
+  filter: drop-shadow(0 0 8px rgba(147, 112, 219, 0.4));
+}
+
+.gameDesignTitle {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: rgba(218, 165, 32, 0.95);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin: 0;
+  flex: 1;
+}
+
+.gameDesignToggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  font-size: 0.75rem;
+  color: rgba(218, 165, 32, 0.9);
+  background: linear-gradient(135deg, rgba(147, 112, 219, 0.15), rgba(75, 0, 130, 0.25));
+  border: 1px solid rgba(218, 165, 32, 0.3);
+  border-radius: 50%;
+  box-shadow: 
+    0 0 8px rgba(147, 112, 219, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  transition: all 0.3s ease;
+}
+
+.gameDesignHeader:hover .gameDesignToggle {
+  background: linear-gradient(135deg, rgba(147, 112, 219, 0.25), rgba(75, 0, 130, 0.35));
+  border-color: rgba(218, 165, 32, 0.5);
+  box-shadow: 
+    0 0 12px rgba(147, 112, 219, 0.4),
+    0 0 20px rgba(218, 165, 32, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  color: rgba(218, 165, 32, 1);
+}
+
+.gameDesignDisclaimer {
+  background: rgba(255, 193, 7, 0.1);
+  border-left: 3px solid rgba(255, 193, 7, 0.5);
+  padding: 0.75rem 1rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  color: rgba(255, 193, 7, 0.9);
+  line-height: 1.4;
+}
+
+.gameDesignContent {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.gameDesignSubtitle {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: rgba(147, 112, 219, 0.9);
+  margin: 1rem 0 0.5rem 0;
+  padding-left: 0.5rem;
+  border-left: 3px solid rgba(147, 112, 219, 0.5);
+}
+
+.gameDesignSubtitle:first-child {
+  margin-top: 0;
+}
+
+.gameDesignText {
+  color: rgba(250, 245, 229, 0.8);
+  font-size: 0.85rem;
+  line-height: 1.6;
+  margin: 0.25rem 0;
+}
+
+.gameDesignListItem {
+  color: rgba(250, 245, 229, 0.75);
+  font-size: 0.85rem;
+  line-height: 1.5;
+  margin-left: 1.5rem;
+  padding-left: 0.5rem;
+  list-style: none;
+  position: relative;
+}
+
+.gameDesignListItem::before {
+  content: '▸';
+  position: absolute;
+  left: -1rem;
+  color: rgba(147, 112, 219, 0.6);
+}
+
+.gameDesignCode {
+  display: block;
+  font-family: 'Consolas', 'Monaco', monospace;
+  font-size: 0.75rem;
+  background: rgba(0, 0, 0, 0.4);
+  border-left: 2px solid rgba(147, 112, 219, 0.5);
+  padding: 0.4rem 0.8rem;
+  margin: 0.25rem 0;
+  border-radius: 3px;
+  color: #a8d5ff;
+  overflow-x: auto;
+}
+
+/* === BARRA DE PESQUISA === */
+.searchBar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(139, 69, 19, 0.3);
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+}
+
+.searchIcon {
+  font-size: 1rem;
+  opacity: 0.6;
+}
+
+.searchInput {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--light);
+  font-size: 0.9rem;
+}
+
+.searchInput::placeholder {
+  color: rgba(250, 245, 229, 0.4);
+}
+
+.resultCount {
+  font-size: 0.75rem;
+  color: rgba(250, 245, 229, 0.5);
+  padding: 0.25rem 0.5rem;
+  background: rgba(139, 69, 19, 0.2);
+  border-radius: 4px;
+}
+
+/* === GRID DE ITENS === */
+.itemsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+/* === CARD WRAPPER === */
+.cardWrapper {
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.cardWrapper:hover {
+  transform: translateY(-2px);
+}
+
+.cardWrapper.expanded {
+  grid-column: span 1;
+}
+
+/* === CARDS BASE === */
+.classCard,
+.skillCard,
+.itemCard,
+.enemyCard,
+.questCard,
+.locationCard,
+.genericCard {
+  background: linear-gradient(135deg, rgba(26, 15, 20, 0.9) 0%, rgba(13, 5, 7, 0.95) 100%);
+  border: 1px solid rgba(139, 69, 19, 0.3);
+  border-radius: 8px;
+  padding: 1rem;
+  transition: all 0.2s ease;
+}
+
+.classCard:hover,
+.skillCard:hover,
+.itemCard:hover,
+.enemyCard:hover,
+.questCard:hover,
+.locationCard:hover,
+.genericCard:hover {
+  border-color: rgba(218, 165, 32, 0.5);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* === HEADERS DOS CARDS === */
+.classHeader,
+.skillHeader,
+.itemHeader,
+.enemyHeader,
+.questHeader,
+.locationHeader,
+.genericHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+/* === ÍCONES === */
+.classIcon,
+.skillType,
+.enemyIcon,
+.questIcon,
+.locationIcon {
+  font-size: 1.5rem;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(139, 69, 19, 0.2);
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+
+/* === IMAGENS DOS CARDS === */
+.classImage,
+.skillImage,
+.enemyImage,
+.questImage,
+.locationImage {
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  object-fit: cover;
+  border: 1px solid rgba(139, 69, 19, 0.3);
+  flex-shrink: 0;
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.genericIcon {
+  font-size: 1rem;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.skillType[data-type="active"] {
+  background: rgba(255, 200, 0, 0.15);
+}
+
+.skillType[data-type="passive"] {
+  background: rgba(100, 100, 255, 0.15);
+}
+
+.skillType[data-type="ultimate"] {
+  background: rgba(255, 50, 50, 0.15);
+}
+
+/* === IMAGEM DO ITEM === */
+.itemImage {
+  width: 50px;
+  height: 50px;
+  border-radius: 6px;
+  object-fit: cover;
+  border: 1px solid rgba(139, 69, 19, 0.3);
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.itemPlaceholder {
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(139, 69, 19, 0.2);
+  border-radius: 6px;
+  font-size: 1.5rem;
+}
+
+/* === INFO DOS CARDS === */
+.classInfo,
+.skillInfo,
+.itemInfo,
+.enemyInfo,
+.questInfo,
+.locationInfo,
+.genericInfo {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.itemTitle {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--light);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* === METAS === */
+.classRole {
+  display: inline-block;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: white;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  width: fit-content;
+}
+
+.skillMeta,
+.itemMeta,
+.enemyMeta,
+.questMeta,
+.locationMeta {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.skillCost,
+.skillCooldown,
+.itemType,
+.itemRarity,
+.enemyLevel,
+.enemyType,
+.questType,
+.questLevel,
+.locationType,
+.locationLevel,
+.genericCategory {
+  font-size: 0.75rem;
+  color: rgba(250, 245, 229, 0.6);
+}
+
+.itemRarity {
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+/* === DETALHES EXPANDIDOS === */
+.itemDetails {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(139, 69, 19, 0.2);
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.itemDesc {
+  color: rgba(250, 245, 229, 0.7);
+  font-size: 0.85rem;
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
+.detailSection {
+  margin-bottom: 0.75rem;
+}
+
+.detailSection h5 {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: rgba(218, 165, 32, 0.8);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 0.5rem;
+}
+
+/* === TAGS === */
+.tagList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.tag {
+  padding: 0.2rem 0.5rem;
+  background: rgba(139, 69, 19, 0.3);
+  border-radius: 4px;
+  font-size: 0.7rem;
+  color: var(--light);
+}
+
+.tagMore {
+  font-size: 0.7rem;
+  color: rgba(250, 245, 229, 0.5);
+  font-style: italic;
+}
+
+/* === STATS LIST === */
+.statsList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+}
+
+.statItem {
+  font-size: 0.8rem;
+  color: rgba(250, 245, 229, 0.7);
+}
+
+.statItem strong {
+  color: var(--gold);
+}
+
+/* === OBJECTIVES === */
+.objectiveList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.objectiveList li {
+  position: relative;
+  padding-left: 1.25rem;
+  font-size: 0.8rem;
+  color: rgba(250, 245, 229, 0.7);
+  margin-bottom: 0.25rem;
+}
+
+.objectiveList li::before {
+  content: '◆';
+  position: absolute;
+  left: 0;
+  color: rgba(139, 69, 19, 0.6);
+  font-size: 0.6rem;
+}
+
+/* === NO RESULTS === */
+.noResults {
+  text-align: center;
+  padding: 2rem;
+  color: rgba(250, 245, 229, 0.5);
+  font-style: italic;
+}
+
+/* === ATTRIBUTE CARD === */
+.attributeCard {
+  background: linear-gradient(135deg, rgba(26, 15, 20, 0.9) 0%, rgba(13, 5, 7, 0.95) 100%);
+  border: 1px solid rgba(139, 69, 19, 0.3);
+  border-radius: 8px;
+  padding: 1rem;
+  transition: all 0.2s ease;
+}
+
+.attributeCard:hover {
+  border-color: rgba(218, 165, 32, 0.5);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.attributeHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.attributeIcon {
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  object-fit: contain;
+  background: rgba(139, 69, 19, 0.2);
+  padding: 4px;
+}
+
+.attributePlaceholder {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(139, 69, 19, 0.2);
+  border-radius: 8px;
+  font-size: 1.5rem;
+}
+
+.attributeInfo {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.attributeMeta {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.attributeCode {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--gold);
+  font-family: monospace;
+  background: rgba(218, 165, 32, 0.15);
+  padding: 0.15rem 0.4rem;
+  border-radius: 3px;
+}
+
+.attributeType {
+  font-size: 0.7rem;
+  padding: 0.15rem 0.4rem;
+  border-radius: 3px;
+  font-weight: 500;
+}
+
+.attributeType[data-type="base"] {
+  background: rgba(100, 200, 100, 0.2);
+  color: #7dce7d;
+}
+
+.attributeType[data-type="derivado"] {
+  background: rgba(100, 150, 255, 0.2);
+  color: #8bb8ff;
+}
+
+.formula {
+  display: block;
+  background: rgba(0, 0, 0, 0.4);
+  padding: 0.5rem 0.75rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  color: #8bb8ff;
+  font-family: 'Consolas', 'Monaco', monospace;
+  border-left: 3px solid rgba(100, 150, 255, 0.5);
+}
+
+.attributeExtra {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 0.75rem;
+  font-size: 0.75rem;
+  color: rgba(250, 245, 229, 0.5);
+}
+
+/* === AFFLICTION CARD === */
+.afflictionCard {
+  background: linear-gradient(135deg, rgba(40, 10, 20, 0.9) 0%, rgba(20, 5, 10, 0.95) 100%);
+  border: 1px solid rgba(180, 50, 80, 0.3);
+  border-radius: 8px;
+  padding: 1rem;
+  transition: all 0.2s ease;
+}
+
+.afflictionCard:hover {
+  border-color: rgba(255, 100, 100, 0.5);
+  box-shadow: 0 4px 15px rgba(100, 0, 30, 0.3);
+}
+
+.afflictionHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.afflictionIcon {
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  object-fit: contain;
+  background: rgba(180, 50, 80, 0.2);
+  padding: 4px;
+}
+
+.afflictionPlaceholder {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(180, 50, 80, 0.2);
+  border-radius: 8px;
+  font-size: 1.5rem;
+}
+
+.afflictionInfo {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.afflictionMeta {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.afflictionType {
+  font-size: 0.7rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 3px;
+  font-weight: 500;
+}
+
+.afflictionType[data-type="mental"] {
+  background: rgba(150, 100, 200, 0.25);
+  color: #c4a8e8;
+}
+
+.afflictionType[data-type="fisica"] {
+  background: rgba(200, 100, 100, 0.25);
+  color: #e8a8a8;
+}
+
+.afflictionLevels {
+  font-size: 0.7rem;
+  color: rgba(250, 245, 229, 0.5);
+}
+
+/* === SEVERITY LIST === */
+.severityList {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.severityItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  min-width: 70px;
+}
+
+.severityItem[data-severity="leve"] {
+  background: rgba(255, 200, 100, 0.15);
+  border: 1px solid rgba(255, 200, 100, 0.3);
+}
+
+.severityItem[data-severity="media"] {
+  background: rgba(255, 150, 50, 0.15);
+  border: 1px solid rgba(255, 150, 50, 0.3);
+}
+
+.severityItem[data-severity="grave"] {
+  background: rgba(255, 80, 80, 0.15);
+  border: 1px solid rgba(255, 80, 80, 0.3);
+}
+
+.severityLabel {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--light);
+}
+
+.severityPenalties {
+  font-size: 0.65rem;
+  color: rgba(250, 245, 229, 0.5);
+}
+
+/* === DAMAGE TYPE CARD === */
+.damageTypeCard {
+  background: linear-gradient(135deg, rgba(26, 15, 20, 0.9) 0%, rgba(13, 5, 7, 0.95) 100%);
+  border: 1px solid rgba(139, 69, 19, 0.3);
+  border-radius: 8px;
+  padding: 1rem;
+  transition: all 0.2s ease;
+}
+
+.damageTypeCard:hover {
+  border-color: rgba(218, 165, 32, 0.5);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.damageTypeHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.damageTypeIcon {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-size: 1.3rem;
+  box-shadow: 0 0 15px currentColor;
+}
+
+.damageTypeImg {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+  filter: brightness(1.2);
+}
+
+.damageTypeInfo {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.damageTypeMeta {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.damageTypeCode {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: rgba(250, 245, 229, 0.6);
+  font-family: monospace;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 0.1rem 0.35rem;
+  border-radius: 3px;
+  letter-spacing: 1px;
+}
+
+.damageTypeColor {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 0 8px currentColor;
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 600px) {
+  .itemsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .searchBar {
+    flex-wrap: wrap;
+  }
+
+  .resultCount {
+    width: 100%;
+    text-align: center;
+    margin-top: 0.5rem;
+  }
+}

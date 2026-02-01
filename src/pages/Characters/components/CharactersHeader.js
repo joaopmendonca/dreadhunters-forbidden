@@ -13,12 +13,10 @@ export default function CharactersHeader({
   characters,
   searchName,
   filterClass,
-  uploading,
-  fileInputRef,
   onNew,
   onSearch,
   onFilterChange,
-  onCSVUpload,
+  onOpenImport,
   onExportCSV,
   onDownloadTemplate,
 }) {
@@ -63,23 +61,14 @@ export default function CharactersHeader({
             Novo NPC
           </Button>
 
-          <input 
-            ref={fileInputRef} 
-            type="file" 
-            accept=".csv" 
-            onChange={onCSVUpload} 
-            style={{ display: 'none' }} 
-          />
-
           <Button 
             backgroundColor="var(--dark-3)" 
             textColor="var(--light)" 
             hoverColor="var(--gold)" 
-            onClick={() => fileInputRef.current?.click()} 
-            disabled={uploading} 
+            onClick={onOpenImport} 
             icon={<FaFileUpload />}
           >
-            {uploading ? 'Importando...' : 'Importar CSV'}
+            Importar CSV
           </Button>
 
           <Button 

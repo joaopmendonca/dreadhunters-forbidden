@@ -3,7 +3,9 @@ import BaseLayout from '../../../shared/components/BaseLayout';
 import Card from '../../../shared/components/Card';
 import EmptyState from '../../../shared/components/EmptyState';
 import Pagination from '../../../shared/components/Pagination';
+import GenericCSVImport from '../../../shared/components/GenericCSVImport';
 import useQuests from '../hooks/useQuests';
+import useQuestsImport from '../hooks/useQuestsImport';
 import QuestsHeader from './QuestsHeader';
 import QuestCard from './QuestCard';
 import QuestModal from './QuestModal';
@@ -25,8 +27,15 @@ export default function QuestsPage() {
     fetchMeta,
     handleDelete,
     handleSave,
-    handleDeleteIcon
+    handleDeleteIcon,
+    handleImport,
+    handleExportCSV,
+    downloadTemplate,
+    importModalOpen,
+    setImportModalOpen
   } = useQuests();
+
+  const questsImportConfig = useQuestsImport();
 
   const [searchTitle, setSearchTitle] = useState('');
   const [filterType, setFilterType] = useState('all');
@@ -47,6 +56,10 @@ export default function QuestsPage() {
   const handleEdit = quest => {
     setEditing(quest);
     setModalOpen(true);
+  };
+
+  const handleImportClick = () => {
+    setImportModalOpen(true);
   };
 
   const handleSaveQuest = async fd => {
@@ -101,6 +114,9 @@ export default function QuestsPage() {
           setPage(0);
         }}
         onNew={handleNew}
+        onImport={handleImportClick}
+        onExportCSV={handleExportCSV}
+        onDownloadTemplate={downloadTemplate}
       />
 
       {loading || loadingMeta ? (
@@ -161,6 +177,22 @@ export default function QuestsPage() {
             locations={locationsList}
             currencies={currenciesList}
           />
+
+          {importModalOpen && (
+            <GenericCSVImport
+              fieldDefinitions={questsImportConfig.fields}
+              autoMapping={questsImportConfig.autoMapping}
+              onImport={(mappedData) => {
+                const transformedData = questsImportConfig.transformDataForAPI(mappedData);
+                handleImport(transformedData);
+                setImportModalOpen(false);
+              }}
+              onClose={() => setImportModalOpen(false)}
+              existingData={questsList}
+              isDuplicate={questsImportConfig.isDuplicate}
+              entityNamePlural={questsImportConfig.entityNamePlural}
+            />
+          )}
         </>
       )}
     </BaseLayout>

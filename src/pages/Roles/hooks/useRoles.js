@@ -6,6 +6,8 @@ const useRoles = () => {
   const { enqueueSnackbar } = useSnackbar();
   const [rolesList, setRolesList] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [filterStatus, setFilterStatus] = useState('all');
+  const [importModalOpen, setImportModalOpen] = useState(false);
 
   const fetchRoles = useCallback(async () => {
     setLoading(true);
@@ -35,13 +37,15 @@ const useRoles = () => {
       if (id) {
         await api.put(`/roles/${id}`, {
           name: payload.name,
-          description: payload.description
+          description: payload.description,
+          statsDistribution: payload.statsDistribution
         });
         enqueueSnackbar('Role atualizada com sucesso.', { variant: 'success' });
       } else {
         await api.post('/roles', {
           name: payload.name,
-          description: payload.description
+          description: payload.description,
+          statsDistribution: payload.statsDistribution
         });
         enqueueSnackbar('Role criada com sucesso.', { variant: 'success' });
       }
@@ -51,6 +55,16 @@ const useRoles = () => {
         err.response?.data?.message || 'Erro ao salvar role.',
         { variant: 'error' }
       );
+      throw err;
+    }
+  };
+
+  const handleImport = async (data) => {
+    try {
+      await api.post('/roles', data);
+      await fetchRoles();
+      return true;
+    } catch (err) {
       throw err;
     }
   };
@@ -152,15 +166,23 @@ Player,"Jogador padrão"`;
     link.click();
   };
 
+  const totalCount = rolesList.length;
+
   return {
     rolesList,
     loading,
     fetchRoles,
     handleDelete,
     handleSave,
+    handleImport,
     handleCSVUpload,
     handleExportCSV,
-    downloadTemplate
+    downloadTemplate,
+    filterStatus,
+    setFilterStatus,
+    importModalOpen,
+    setImportModalOpen,
+    totalCount
   };
 };
 

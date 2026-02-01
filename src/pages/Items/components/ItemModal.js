@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { useSnackbar } from 'notistack';
-import { FaTrash, FaPlus } from 'react-icons/fa';
+import { FaTrash } from 'react-icons/fa';
 import Modal, { MODAL_SIZES, COLUMN_LAYOUTS } from '../../../shared/components/Modal';
 import TextInput from '../../../shared/components/TextInput';
 import TextArea from '../../../shared/components/TextArea';
 import Select from '../../../shared/components/Select';
 import PhotoInput from '../../../shared/components/PhotoInput';
 import Button from '../../../shared/components/Button';
-import IconButton from '../../../shared/components/IconButton';
 import ConfirmationModal from '../../../shared/components/ConfirmationModal';
 import ConsumableStatsEditor from './ConsumableStatsEditor';
 import ConsumableAfflictionsEditor from './ConsumableAfflictionsEditor';
+import ConsumableRemovesAfflictionsEditor from './ConsumableRemovesAfflictionsEditor';
 import useStatus from '../../../shared/hooks/useStatus';
 import api from '../../../config/api';
 import { TYPE_OPTIONS, RARITY_OPTIONS, SLOT_OPTIONS, MESSAGES } from '../constants';
@@ -57,6 +57,7 @@ export default function ItemModal({ isOpen, onClose, onSave, onIconDeleted, init
   // Estados para consumível dinâmico
   const [consumableStats, setConsumableStats] = useState(new Map());
   const [consumableAfflictions, setConsumableAfflictions] = useState([]);
+  const [consumableRemoves, setConsumableRemoves] = useState([]);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -121,9 +122,11 @@ export default function ItemModal({ isOpen, onClose, onSave, onIconDeleted, init
     if (initialData.type === 'consumable') {
       setConsumableStats(initialData.consumable?.statsModifiers || new Map());
       setConsumableAfflictions(initialData.consumable?.afflictionEffects || []);
+      setConsumableRemoves(initialData.consumable?.removesAfflictions || []);
     } else {
       setConsumableStats(new Map());
       setConsumableAfflictions([]);
+      setConsumableRemoves([]);
     }
 
     api.get('/classes')
@@ -137,7 +140,6 @@ export default function ItemModal({ isOpen, onClose, onSave, onIconDeleted, init
 
   const changeField = (field, value) => setForm(f => ({ ...f, [field]: value }));
   const changeReqField = (key, value) => setForm(f => ({ ...f, requirements: { ...f.requirements, [key]: value } }));
-  const changeConField = (key, value) => setForm(f => ({ ...f, consumable: { ...f.consumable, [key]: value } }));
   const changeEquipField = (key, value) => setForm(f => ({ ...f, equipment: { ...f.equipment, [key]: value } }));
   const changeDurability = (sub, value) => setForm(f => ({ ...f, equipment: { ...f.equipment, durability: { ...f.equipment.durability, [sub]: value } } }));
   
@@ -173,7 +175,7 @@ export default function ItemModal({ isOpen, onClose, onSave, onIconDeleted, init
             formula = formula.replace(/\blevel\b/g, '0');
             
             // Calcula o valor (usando Function ao invés de eval para segurança)
-            const calcValue = new Function('return ' + formula)();
+            const calcValue = new Function('return ' + formula)(); // eslint-disable-line no-new-func
             newStats[derivedStat.nome] = Number(calcValue.toFixed(2));
           } catch (err) {
             console.error(`Erro ao calcular ${derivedStat.nome}:`, err);
@@ -245,7 +247,8 @@ export default function ItemModal({ isOpen, onClose, onSave, onIconDeleted, init
         const consumableData = {
           ...form.consumable,
           statsModifiers: consumableStats,
-          afflictionEffects: consumableAfflictions
+          afflictionEffects: consumableAfflictions,
+          removesAfflictions: consumableRemoves
         };
         fd.append('consumable', JSON.stringify(consumableData));
       }
@@ -278,8 +281,6 @@ export default function ItemModal({ isOpen, onClose, onSave, onIconDeleted, init
       setSaving(false);
     }
   };
-
-  const classOptions = allClasses.map(c => ({ value: c._id.toString(), label: c.name }));
 
   return (
     <>
@@ -437,6 +438,14 @@ export default function ItemModal({ isOpen, onClose, onSave, onIconDeleted, init
                     <ConsumableAfflictionsEditor
                       afflictionEffects={consumableAfflictions}
                       onChange={setConsumableAfflictions}
+                      disabled={saving}
+                    />
+                  </div>
+
+                  <div className={styles.section}>
+                    <ConsumableRemovesAfflictionsEditor
+                      removesAfflictions={consumableRemoves}
+                      onChange={setConsumableRemoves}
                       disabled={saving}
                     />
                   </div>

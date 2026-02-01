@@ -3,14 +3,8 @@ import { FaPlus, FaTrash } from 'react-icons/fa';
 import Select from '../../../shared/components/Select';
 import TextInput from '../../../shared/components/TextInput';
 import Button from '../../../shared/components/Button';
+import api from '../../../config/api';
 import styles from '../styles/DamageEditor.module.css';
-
-const DAMAGE_TYPE_OPTIONS = [
-  { value: 'none', label: 'Sem Dano' },
-  { value: 'physical', label: 'Físico' },
-  { value: 'magical', label: 'Mágico' },
-  { value: 'true', label: 'Verdadeiro' }
-];
 
 export default function DamageEditor({ 
   damage = { formula: '', type: 'none' }, 
@@ -22,6 +16,20 @@ export default function DamageEditor({
   const [scalings, setScalings] = useState([]);
   const [damageType, setDamageType] = useState('none');
   const [initialized, setInitialized] = useState(false);
+  const [damageTypes, setDamageTypes] = useState([]);
+
+  // Buscar tipos de dano da API
+  useEffect(() => {
+    const fetchDamageTypes = async () => {
+      try {
+        const response = await api.get('/damage-types');
+        setDamageTypes(response.data);
+      } catch (err) {
+        console.error('Erro ao carregar tipos de dano:', err);
+      }
+    };
+    fetchDamageTypes();
+  }, []);
 
   // Parse da fórmula para os campos visuais (apenas na primeira vez)
   useEffect(() => {
@@ -111,6 +119,12 @@ export default function DamageEditor({
     .filter(s => s.tipo === 'base')
     .map(s => ({ value: s.nome, label: s.nome }));
 
+  // Opções de tipos de dano (dinâmicas)
+  const damageTypeOptions = damageTypes.map(dt => ({
+    value: dt.nome,
+    label: dt.label
+  }));
+
   // Preview da fórmula
   const getFormulaPreview = () => {
     if (damageType === 'none') return 'Skill sem dano';
@@ -134,10 +148,11 @@ export default function DamageEditor({
       <div className={styles.field}>
         <label>Tipo de Dano</label>
         <Select
-          options={DAMAGE_TYPE_OPTIONS}
+          options={damageTypeOptions}
           value={damageType}
           onChange={handleTypeChange}
           disabled={disabled}
+          placeholder="Selecione o tipo de dano..."
         />
       </div>
 

@@ -1,0 +1,146 @@
+/* ============================================
+   Technical Details - Detalhes Técnicos
+   ============================================ */
+
+.container {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px dashed rgba(139, 69, 19, 0.3);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.headerIcon {
+  font-size: 1rem;
+  opacity: 0.8;
+}
+
+.headerTitle {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: rgba(218, 165, 32, 0.9);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin: 0;
+}
+
+/* === SECTIONS === */
+.sections {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.section {
+  background: rgba(0, 0, 0, 0.25);
+  border-radius: 6px;
+  padding: 0.75rem;
+  border-left: 3px solid rgba(139, 69, 19, 0.4);
+}
+
+.sectionTitle {
+  display: block;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: rgba(218, 165, 32, 0.8);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 0.5rem;
+  padding-bottom: 0.35rem;
+  border-bottom: 1px solid rgba(139, 69, 19, 0.2);
+}
+
+/* === ITEMS === */
+.items {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.item {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 0.5rem;
+  align-items: start;
+  font-size: 0.8rem;
+  line-height: 1.4;
+}
+
+.label {
+  color: rgba(250, 245, 229, 0.6);
+  font-weight: 500;
+}
+
+.value {
+  color: rgba(250, 245, 229, 0.9);
+  word-break: break-word;
+}
+
+.hint {
+  grid-column: 2;
+  font-size: 0.7rem;
+  color: rgba(250, 245, 229, 0.4);
+  font-style: italic;
+  margin-top: -0.2rem;
+}
+
+/* === CODE & FORMULA === */
+.code {
+  font-family: 'Consolas', 'Monaco', monospace;
+  font-size: 0.75rem;
+  background: rgba(0, 0, 0, 0.4);
+  padding: 0.15rem 0.4rem;
+  border-radius: 3px;
+  color: #8bb8ff;
+}
+
+.formula {
+  display: block;
+  font-family: 'Consolas', 'Monaco', monospace;
+  font-size: 0.75rem;
+  background: rgba(0, 0, 0, 0.4);
+  padding: 0.4rem 0.6rem;
+  border-radius: 4px;
+  color: #a8e6cf;
+  border-left: 2px solid rgba(100, 200, 150, 0.5);
+  margin-top: 0.25rem;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+/* === COLOR VALUE === */
+.colorValue {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.colorSwatch {
+  width: 16px;
+  height: 16px;
+  border-radius: 3px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  flex-shrink: 0;
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 480px) {
+  .item {
+    grid-template-columns: 1fr;
+    gap: 0.15rem;
+  }
+
+  .label {
+    font-size: 0.7rem;
+    color: rgba(218, 165, 32, 0.7);
+  }
+
+  .hint {
+    grid-column: 1;
+  }
+}

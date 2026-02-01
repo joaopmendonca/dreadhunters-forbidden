@@ -2,13 +2,25 @@
 
 import React from 'react';
 import { FaDownload, FaFileUpload, FaPlus } from 'react-icons/fa';
+import { GiSwordman, GiShield, GiCrossedSwords, GiSpellBook } from 'react-icons/gi';
 import PageHeader from '../../../shared/components/PageHeader';
 import Button from '../../../shared/components/Button';
 import TextInput from '../../../shared/components/TextInput';
 import styles from '../styles/Classes.module.css';
 
+const ROLE_ICONS = {
+  'tank': <GiShield />,
+  'dps': <GiCrossedSwords />,
+  'support': <GiSpellBook />,
+  'default': <GiSwordman />
+};
+
 export default function ClassesHeader({
-  classesCount,
+  totalCount,
+  rolesList,
+  roleCounters,
+  filterRole,
+  onFilterChange,
   onNew,
   onImport,
   onExport,
@@ -21,7 +33,7 @@ export default function ClassesHeader({
   return (
     <PageHeader
       statsCounters={[
-        { icon: '⚔️', value: classesCount, label: 'Classes' }
+        { icon: '⚔️', value: totalCount, label: 'Total' }
       ]}
       controls={
         <>
@@ -82,6 +94,25 @@ export default function ClassesHeader({
           />
         </>
       }
+      filterTabs={[
+        {
+          id: 'all',
+          icon: <GiSwordman />,
+          label: 'Todas',
+          count: totalCount,
+          active: filterRole === 'all',
+          onClick: () => onFilterChange('all')
+        },
+        ...rolesList.map((role, index) => ({
+          id: role._id,
+          icon: ROLE_ICONS[role.nome?.toLowerCase()] || ROLE_ICONS.default,
+          label: role.nome,
+          count: roleCounters[role._id] || 0,
+          active: filterRole === role._id,
+          onClick: () => onFilterChange(role._id),
+          variant: ['filterTabOrange', 'filterTabBlue', 'filterTabPurple', 'filterTabRed'][index % 4]
+        }))
+      ]}
     />
   );
 }

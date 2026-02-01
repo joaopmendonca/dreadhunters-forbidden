@@ -2,6 +2,7 @@
   "name": "dreadhunters-forbidden",
   "version": "0.1.0",
   "private": true,
+  "homepage": "/forbidden",
   "dependencies": {
     "@babel/core": "^7.24.0",
     "@babel/plugin-syntax-flow": "^7.23.3",

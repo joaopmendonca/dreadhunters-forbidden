@@ -4,8 +4,10 @@ import EmptyState from '../../../shared/components/EmptyState';
 import Pagination from '../../../shared/components/Pagination';
 import Card from '../../../shared/components/Card';
 import Button from '../../../shared/components/Button';
+import GenericCSVImport from '../../../shared/components/GenericCSVImport';
 import { FaPlus } from 'react-icons/fa';
 import { useAttributes } from '../hooks/useAttributes';
+import { useAttributesImport } from '../hooks/useAttributesImport';
 import { AttributesHeader } from './AttributesHeader';
 import { AttributeCard } from './AttributeCard';
 import { AttributeModal } from './AttributeModal';
@@ -29,7 +31,9 @@ export function AttributesPage() {
     handleEdit,
     handleDelete,
     handleSave,
+    handleImport,
     handleCSVUpload,
+    handleExportCSV,
     handleDownloadTemplate,
     totalCount,
     baseCount,
@@ -39,11 +43,23 @@ export function AttributesPage() {
     fileInputRef
   } = useAttributes();
 
+  const {
+    fields: fieldDefinitions,
+    autoMapping,
+    transformDataForAPI,
+    isDuplicate,
+    entityNamePlural
+  } = useAttributesImport();
+
+  const [importModalOpen, setImportModalOpen] = React.useState(false);
+
   return (
     <BaseLayout title="Atributos">
       <AttributesHeader
         onNew={handleNew}
+        onImport={() => setImportModalOpen(true)}
         onCSVUpload={handleCSVUpload}
+        onExportCSV={handleExportCSV}
         onDownloadTemplate={handleDownloadTemplate}
         searchName={searchName}
         onSearchChange={setSearchName}
@@ -104,6 +120,22 @@ export function AttributesPage() {
             onSave={handleSave}
             initialData={editingAttribute || {}}
           />
+
+          {importModalOpen && (
+            <GenericCSVImport
+              fieldDefinitions={fieldDefinitions}
+              autoMapping={autoMapping}
+              onImport={(mappedData) => {
+                const transformedData = transformDataForAPI(mappedData);
+                handleImport(transformedData);
+                setImportModalOpen(false);
+              }}
+              onClose={() => setImportModalOpen(false)}
+              existingData={attributes}
+              isDuplicate={isDuplicate}
+              entityNamePlural={entityNamePlural}
+            />
+          )}
         </>
       )}
     </BaseLayout>

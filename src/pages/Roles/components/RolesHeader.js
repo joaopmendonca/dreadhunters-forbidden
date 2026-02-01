@@ -1,4 +1,5 @@
-import { FaDownload, FaFileUpload, FaPlus } from 'react-icons/fa';
+import { FaDownload, FaPlus, FaFileUpload } from 'react-icons/fa';
+import { GiShield } from 'react-icons/gi';
 import Button from '../../../shared/components/Button';
 import PageHeader from '../../../shared/components/PageHeader';
 import TextInput from '../../../shared/components/TextInput';
@@ -9,17 +10,24 @@ export default function RolesHeader({
   searchName,
   onSearchChange,
   onNew,
-  onUploadCSV,
+  onImport,
   onExportCSV,
   onDownloadTemplate,
-  uploading,
-  fileInputRef
+  filterStatus,
+  onFilterChange
 }) {
+  const filterTabs = [
+    { value: 'all', label: 'Todas', icon: <GiShield />, variant: 'default' }
+  ];
+
   return (
     <PageHeader
       statsCounters={[
         { icon: '🛡️', value: totalCount, label: 'Roles' }
       ]}
+      filterTabs={filterTabs}
+      currentFilter={filterStatus}
+      onFilterChange={onFilterChange}
       controls={
         <>
           <Button
@@ -32,23 +40,14 @@ export default function RolesHeader({
             Nova Role
           </Button>
 
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept=".csv"
-            onChange={onUploadCSV}
-            style={{ display: 'none' }}
-          />
-
           <Button
             backgroundColor="var(--dark-3)"
             textColor="var(--light)"
             hoverColor="var(--gold)"
-            onClick={() => fileInputRef.current?.click()}
-            disabled={uploading}
+            onClick={onImport}
             icon={<FaFileUpload />}
           >
-            {uploading ? 'Importando...' : 'Importar CSV'}
+            Importar CSV
           </Button>
 
           <Button
@@ -82,3 +81,4 @@ export default function RolesHeader({
     />
   );
 }
+

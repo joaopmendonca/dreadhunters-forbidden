@@ -19,6 +19,7 @@ export default function useClasses() {
   const [modalOpen, setModalOpen] = useState(false);
   const [editing, setEditing] = useState(null);
   const [searchName, setSearchName] = useState('');
+  const [filterRole, setFilterRole] = useState('all');
   const [page, setPage] = useState(0);
 
   // Fetch classes
@@ -222,6 +223,8 @@ export default function useClasses() {
     editing,
     searchName,
     setSearchName,
+    filterRole,
+    setFilterRole,
     page,
     setPage,
     fileInputRef,

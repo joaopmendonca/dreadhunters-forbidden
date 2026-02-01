@@ -1,0 +1,178 @@
+/* src/pages/ForbiddenBook/styles/SettingsContent.module.css */
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* === SEÇÕES === */
+.section {
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(139, 90, 43, 0.2);
+  border-radius: 8px;
+  padding: 1.5rem;
+}
+
+.sectionTitle {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: rgba(218, 165, 32, 0.95);
+  margin: 0 0 1rem 0;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid rgba(139, 90, 43, 0.3);
+}
+
+.sectionIcon {
+  font-size: 1.4rem;
+}
+
+.sectionDesc {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: rgba(245, 222, 179, 0.8);
+  margin: 0 0 1.5rem 0;
+}
+
+/* === SERVER SELECTOR === */
+.serverSelector {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.select {
+  flex: 1;
+  min-width: 250px;
+  padding: 0.75rem 1rem;
+  background: rgba(0, 0, 0, 0.4);
+  color: rgba(245, 222, 179, 0.9);
+  border: 1px solid rgba(139, 90, 43, 0.4);
+  border-radius: 6px;
+  font-size: 1rem;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23daa520' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 36px;
+}
+
+.select:hover:not(:disabled) {
+  border-color: rgba(218, 165, 32, 0.6);
+}
+
+.select:focus:not(:disabled) {
+  outline: none;
+  border-color: rgba(218, 165, 32, 0.8);
+  box-shadow: 0 0 0 3px rgba(218, 165, 32, 0.1);
+}
+
+.select:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.loadingIndicator {
+  font-size: 0.85rem;
+  color: rgba(218, 165, 32, 0.7);
+  font-style: italic;
+}
+
+.serverInfo {
+  margin-top: 1rem;
+  padding: 0.75rem;
+  background: rgba(0, 128, 0, 0.1);
+  border: 1px solid rgba(50, 205, 50, 0.3);
+  border-radius: 6px;
+}
+
+.serverStatus {
+  font-size: 0.9rem;
+  color: rgba(50, 205, 50, 0.9);
+}
+
+.serverStatus strong {
+  color: rgba(218, 165, 32, 0.95);
+}
+
+/* === INSTRUÇÕES === */
+.instructionList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.instructionList li {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem;
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 6px;
+  font-size: 0.95rem;
+  color: rgba(245, 222, 179, 0.85);
+  transition: background 0.2s ease;
+}
+
+.instructionList li:hover {
+  background: rgba(0, 0, 0, 0.25);
+}
+
+.instructionIcon {
+  font-size: 1.1rem;
+  min-width: 28px;
+  text-align: center;
+}
+
+.instructionList strong {
+  color: rgba(218, 165, 32, 0.95);
+}
+
+/* === WARNING === */
+.warningSection {
+  margin-top: 0.5rem;
+}
+
+.warningBox {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  background: rgba(255, 193, 7, 0.08);
+  border: 1px solid rgba(255, 193, 7, 0.3);
+  border-left: 4px solid rgba(255, 193, 7, 0.6);
+  border-radius: 6px;
+}
+
+.warningIcon {
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.warningContent {
+  flex: 1;
+}
+
+.warningContent strong {
+  display: block;
+  font-size: 0.95rem;
+  color: rgba(255, 193, 7, 0.95);
+  margin-bottom: 0.5rem;
+}
+
+.warningContent p {
+  margin: 0;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: rgba(255, 193, 7, 0.75);
+}

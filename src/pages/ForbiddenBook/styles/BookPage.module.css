@@ -1,0 +1,456 @@
+/* ============================================
+   Book Page - Páginas Internas do Grimório
+   ============================================ */
+
+.pageContainer {
+  display: flex;
+  gap: 0;
+  max-width: 1400px;
+  width: 100%;
+  min-height: 85vh;
+}
+
+/* === ÍNDICE LATERAL === */
+.tableOfContents {
+  width: 220px;
+  flex-shrink: 0;
+  background: linear-gradient(135deg, #1a0a0f 0%, #0d0507 100%);
+  border: 2px solid rgba(139, 69, 19, 0.4);
+  border-right: none;
+  border-radius: 12px 0 0 12px;
+  padding: 1.5rem 0;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 
+    -4px 0 20px rgba(0, 0, 0, 0.3),
+    inset 0 0 30px rgba(0, 0, 0, 0.3);
+}
+
+.tocTitle {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--gold);
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  text-align: center;
+  padding: 0 1rem 1rem;
+  border-bottom: 1px solid rgba(139, 69, 19, 0.3);
+  margin-bottom: 0.5rem;
+}
+
+.tocList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.tocItem {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1.25rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-left: 3px solid transparent;
+  color: rgba(250, 245, 229, 0.6);
+}
+
+.tocItem:hover {
+  background: rgba(139, 69, 19, 0.1);
+  color: rgba(250, 245, 229, 0.9);
+  border-left-color: rgba(139, 69, 19, 0.5);
+}
+
+.tocActive {
+  background: rgba(139, 69, 19, 0.2);
+  color: var(--gold);
+  border-left-color: var(--gold);
+}
+
+.tocActive .tocIcon {
+  transform: scale(1.2);
+}
+
+.tocIcon {
+  font-size: 1rem;
+  transition: transform 0.2s ease;
+}
+
+.tocLabel {
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+/* === PÁGINA PRINCIPAL === */
+.page {
+  position: relative;
+  flex: 1;
+  background: linear-gradient(180deg, 
+    #1a0f0a 0%, 
+    #15090a 30%,
+    #0f0608 100%
+  );
+  border: 2px solid rgba(139, 69, 19, 0.5);
+  border-radius: 0 12px 12px 0;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 
+    4px 0 20px rgba(0, 0, 0, 0.3),
+    inset 0 0 50px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+}
+
+/* Textura de papel antigo */
+.page::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noise)'/%3E%3C/svg%3E");
+  opacity: 0.03;
+  pointer-events: none;
+}
+
+/* === CANTOS DA PÁGINA === */
+.pageCornerTL, .pageCornerTR, .pageCornerBL, .pageCornerBR {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  border: 2px solid rgba(218, 165, 32, 0.3);
+  pointer-events: none;
+}
+
+.pageCornerTL {
+  top: 10px;
+  left: 10px;
+  border-right: none;
+  border-bottom: none;
+}
+
+.pageCornerTR {
+  top: 10px;
+  right: 10px;
+  border-left: none;
+  border-bottom: none;
+}
+
+.pageCornerBL {
+  bottom: 10px;
+  left: 10px;
+  border-right: none;
+  border-top: none;
+}
+
+.pageCornerBR {
+  bottom: 10px;
+  right: 10px;
+  border-left: none;
+  border-top: none;
+}
+
+/* === CABEÇALHO === */
+.pageHeader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  padding-bottom: 1.5rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid rgba(139, 69, 19, 0.2);
+}
+
+.headerDecor {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: 60%;
+}
+
+.decorLine {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(218, 165, 32, 0.4), transparent);
+}
+
+.decorSymbol {
+  color: rgba(218, 165, 32, 0.6);
+  font-size: 0.8rem;
+}
+
+.chapterInfo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.chapterIcon {
+  font-size: 2rem;
+  filter: drop-shadow(0 0 10px rgba(218, 165, 32, 0.3));
+}
+
+.chapterTitle {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--gold);
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  font-family: 'Cinzel', serif;
+}
+
+.chapterSubtitle {
+  font-size: 0.9rem;
+  color: rgba(250, 245, 229, 0.6);
+  font-style: italic;
+  letter-spacing: 1px;
+}
+
+/* === CONTEÚDO === */
+.pageContent {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 0.5rem;
+  position: relative;
+  z-index: 1;
+}
+
+.pageContent::-webkit-scrollbar {
+  width: 8px;
+}
+
+.pageContent::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+}
+
+.pageContent::-webkit-scrollbar-thumb {
+  background: rgba(139, 69, 19, 0.4);
+  border-radius: 4px;
+}
+
+.pageContent::-webkit-scrollbar-thumb:hover {
+  background: rgba(139, 69, 19, 0.6);
+}
+
+/* === LOADING === */
+.loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  padding: 4rem;
+  color: rgba(250, 245, 229, 0.6);
+}
+
+.loadingSpinner {
+  width: 50px;
+  height: 50px;
+  border: 3px solid rgba(139, 69, 19, 0.2);
+  border-top-color: var(--gold);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* === LORE === */
+.loreContent {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 1rem 0;
+}
+
+.loreTitle {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--gold);
+  text-align: center;
+  margin-bottom: 2rem;
+  font-family: 'Cinzel', serif;
+}
+
+.loreSection {
+  margin-bottom: 2rem;
+}
+
+.loreSectionTitle {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: rgba(218, 165, 32, 0.9);
+  margin-bottom: 1rem;
+}
+
+.sectionNumber {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: rgba(139, 69, 19, 0.7);
+  font-family: 'Cinzel', serif;
+}
+
+.loreSectionContent {
+  color: rgba(250, 245, 229, 0.8);
+  line-height: 1.8;
+  text-align: justify;
+  font-size: 0.95rem;
+}
+
+.loreFooter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(139, 69, 19, 0.2);
+}
+
+.loreSymbol {
+  color: rgba(139, 69, 19, 0.5);
+  font-size: 1.2rem;
+}
+
+.loreQuote {
+  font-style: italic;
+  color: rgba(218, 165, 32, 0.7);
+  font-size: 1rem;
+}
+
+/* === RODAPÉ === */
+.pageFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 1.5rem;
+  margin-top: 1.5rem;
+  border-top: 1px solid rgba(139, 69, 19, 0.2);
+  position: relative;
+  z-index: 1;
+}
+
+.navButton {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: rgba(139, 69, 19, 0.15);
+  border: 1px solid rgba(139, 69, 19, 0.3);
+  border-radius: 6px;
+  color: rgba(250, 245, 229, 0.7);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.navButton:hover:not(:disabled) {
+  background: rgba(139, 69, 19, 0.25);
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
+.navButton:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.navArrow {
+  font-size: 0.8rem;
+}
+
+.navText {
+  font-size: 0.85rem;
+}
+
+.pageNumber {
+  color: rgba(218, 165, 32, 0.5);
+  font-size: 0.8rem;
+}
+
+.pageNumDecor {
+  letter-spacing: 2px;
+}
+
+.coverRedirect {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  color: rgba(250, 245, 229, 0.5);
+  font-style: italic;
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 900px) {
+  .pageContainer {
+    flex-direction: column;
+  }
+
+  .tableOfContents {
+    width: 100%;
+    border-radius: 12px 12px 0 0;
+    border-right: 2px solid rgba(139, 69, 19, 0.4);
+    border-bottom: none;
+    padding: 1rem;
+  }
+
+  .tocList {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: center;
+  }
+
+  .tocItem {
+    padding: 0.5rem 0.75rem;
+    border-left: none;
+    border-bottom: 2px solid transparent;
+    border-radius: 4px;
+  }
+
+  .tocItem:hover,
+  .tocActive {
+    border-left: none;
+    border-bottom-color: var(--gold);
+  }
+
+  .tocLabel {
+    font-size: 0.75rem;
+  }
+
+  .page {
+    border-radius: 0 0 12px 12px;
+    padding: 1.5rem;
+  }
+
+  .chapterTitle {
+    font-size: 1.4rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .page {
+    padding: 1rem;
+  }
+
+  .tocIcon {
+    font-size: 1.2rem;
+  }
+
+  .tocLabel {
+    display: none;
+  }
+
+  .headerDecor {
+    width: 80%;
+  }
+}

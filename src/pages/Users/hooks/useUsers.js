@@ -3,7 +3,7 @@
 import { useState, useCallback, useEffect } from 'react';
 import { useSnackbar } from 'notistack';
 import api from '../../../config/api';
-import { filterUsers, countUsersByStatus, exportUsersToCSV } from '../utils';
+import { filterUsers, countUsersByStatus, exportUsersToCSV, downloadUsersTemplate } from '../utils';
 import { ITEMS_PER_PAGE, USER_STATUS } from '../constants';
 
 export function useUsers() {
@@ -54,6 +54,33 @@ export function useUsers() {
     }
   };
 
+  const handleDownloadTemplate = () => {
+    downloadUsersTemplate();
+    enqueueSnackbar('Template baixado com sucesso!', { variant: 'success' });
+  };
+
+  const handleImport = async (users) => {
+    let successCount = 0;
+    let errorCount = 0;
+
+    for (const userData of users) {
+      try {
+        await api.post('/users', userData);
+        successCount++;
+      } catch (err) {
+        errorCount++;
+        console.error(`Erro ao importar ${userData.username}:`, err.response?.data?.message || err.message);
+      }
+    }
+
+    if (successCount > 0) {
+      enqueueSnackbar(`${successCount} usuário(s) importado(s) com sucesso!`, { variant: 'success' });
+    }
+    if (errorCount > 0) {
+      enqueueSnackbar(`${errorCount} erro(s) ao importar. Verifique o console.`, { variant: 'warning' });
+    }
+  };
+
   const handleSearch = (value) => {
     setSearchName(value);
     setPage(0);
@@ -86,6 +113,9 @@ export function useUsers() {
     handleFilterChange,
     handleDelete,
     handleExportCSV,
+    handleDownloadTemplate,
+    handleImport,
+    fetchUsers,
     filtered,
     pageItems,
     pageCount,

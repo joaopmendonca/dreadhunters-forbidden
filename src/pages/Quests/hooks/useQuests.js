@@ -15,6 +15,7 @@ export default function useQuests() {
   
   const [loading, setLoading] = useState(true);
   const [loadingMeta, setLoadingMeta] = useState(true);
+  const [importModalOpen, setImportModalOpen] = useState(false);
 
   const fetchQuests = useCallback(async () => {
     setLoading(true);
@@ -88,6 +89,51 @@ export default function useQuests() {
     }
   };
 
+  const handleImport = async (data) => {
+    try {
+      await api.post('/quests', data);
+      await fetchQuests();
+      return true;
+    } catch (err) {
+      throw err;
+    }
+  };
+
+  const handleExportCSV = () => {
+    if (questsList.length === 0) {
+      enqueueSnackbar('Nenhuma quest para exportar', { variant: 'warning' });
+      return;
+    }
+
+    const lines = ['title,type,description,levelRequirement'];
+    for (const quest of questsList) {
+      lines.push([
+        `"${(quest.title || '').replace(/"/g, '""')}"`,
+        quest.type || 'side',
+        `"${(quest.description || '').replace(/"/g, '""')}"`,
+        quest.levelRequirement || 1
+      ].join(','));
+    }
+
+    const blob = new Blob([lines.join('\n')], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'quests-export.csv';
+    link.click();
+    enqueueSnackbar('Exportado com sucesso!', { variant: 'success' });
+  };
+
+  const downloadTemplate = () => {
+    const csv = `title,type,description,levelRequirement
+"A Primeira Missão","main","Complete esta missão tutorial","1"
+"Coletar Ervas","side","Colete 10 ervas medicinais","5"`;
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'template-quests.csv';
+    link.click();
+  };
+
   return {
     questsList,
     itemsList,
@@ -101,6 +147,11 @@ export default function useQuests() {
     fetchMeta,
     handleDelete,
     handleSave,
-    handleDeleteIcon
+    handleDeleteIcon,
+    handleImport,
+    handleExportCSV,
+    downloadTemplate,
+    importModalOpen,
+    setImportModalOpen
   };
 }

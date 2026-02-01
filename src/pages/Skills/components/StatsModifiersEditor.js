@@ -5,34 +5,8 @@ import { FaPlus, FaTrash } from 'react-icons/fa';
 import TextInput from '../../../shared/components/TextInput';
 import Select from '../../../shared/components/Select';
 import Button from '../../../shared/components/Button';
+import useStatus from '../../../shared/hooks/useStatus';
 import styles from '../styles/StatsModifiersEditor.module.css';
-
-// Lista de stats disponíveis
-const STATS_OPTIONS = [
-  // === ATRIBUTOS BASE ===
-  { value: 'STR', label: '💪 STR (Força)' },
-  { value: 'DEX', label: '🎯 DEX (Destreza)' },
-  { value: 'INT', label: '🧠 INT (Inteligência)' },
-  { value: 'WIS', label: '📚 WIS (Sabedoria)' },
-  { value: 'CON', label: '❤️ CON (Constituição)' },
-  { value: 'CHA', label: '✨ CHA (Carisma)' },
-  
-  // === STATS DERIVADOS ===
-  { value: 'max_hp', label: '❤️ HP Máximo' },
-  { value: 'max_sp', label: '🧠 SP Máximo' },
-  { value: 'max_cp', label: '🛡️ CP Máximo' },
-  { value: 'p_atk', label: '⚔️ P.ATK (Ataque Físico)' },
-  { value: 'm_atk', label: '✨ M.ATK (Ataque Mágico)' },
-  { value: 'p_def', label: '🛡️ P.DEF (Defesa Física)' },
-  { value: 'm_def', label: '🌟 M.DEF (Defesa Mágica)' },
-  { value: 'accuracy', label: '🎯 Precisão' },
-  { value: 'evasion', label: '💨 Evasão' },
-  { value: 'crit_rate', label: '💥 Taxa Crítico' },
-  { value: 'crit_damage', label: '💢 Dano Crítico' },
-  { value: 'atk_speed', label: '⚡ Velocidade Ataque' },
-  { value: 'cast_speed', label: '🔮 Velocidade Conjuração' },
-  { value: 'move_speed', label: '🏃 Velocidade Movimento' },
-];
 
 const MODIFIER_TYPE_OPTIONS = [
   { value: 'flat', label: 'Valor Fixo (+10, -5, etc)' },
@@ -40,6 +14,22 @@ const MODIFIER_TYPE_OPTIONS = [
 ];
 
 export default function StatsModifiersEditor({ modifiers, onChange, disabled }) {
+  const { baseStatus, derivedStatus } = useStatus();
+
+  // Gera opções de stats dinamicamente
+  const statsOptions = React.useMemo(() => {
+    return [
+      ...baseStatus.map(s => ({ 
+        value: s.nome, 
+        label: `${s.iconeUrl ? '📊' : '⚡'} ${s.label} (${s.nome.toUpperCase()})` 
+      })),
+      ...derivedStatus.map(s => ({ 
+        value: s.nome, 
+        label: `${s.iconeUrl ? '📈' : '💫'} ${s.label}` 
+      }))
+    ];
+  }, [baseStatus, derivedStatus]);
+
   // Converter Map ou Object para array de modificadores
   const modifiersList = React.useMemo(() => {
     const list = [];
@@ -56,7 +46,8 @@ export default function StatsModifiersEditor({ modifiers, onChange, disabled }) 
   }, [modifiers]);
 
   const handleAdd = () => {
-    const newList = [...modifiersList, { stat: 'STR', value: 0, type: 'flat' }];
+    const defaultStat = baseStatus.length > 0 ? baseStatus[0].nome : 'hp';
+    const newList = [...modifiersList, { stat: defaultStat, value: 0, type: 'flat' }];
     updateModifiers(newList);
   };
 
@@ -113,7 +104,7 @@ export default function StatsModifiersEditor({ modifiers, onChange, disabled }) 
                 <Select
                   value={mod.stat}
                   onChange={(val) => handleChange(index, 'stat', val)}
-                  options={STATS_OPTIONS}
+                  options={statsOptions}
                   disabled={disabled}
                 />
               </div>

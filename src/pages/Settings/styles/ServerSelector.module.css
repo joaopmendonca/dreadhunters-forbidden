@@ -36,6 +36,19 @@
   transition: all 0.2s ease;
 }
 
+.select option {
+  background: var(--dark-400);
+  color: var(--light);
+  padding: 0.5rem;
+}
+
+.select option:hover,
+.select option:focus,
+.select option:checked {
+  background: var(--dark-300);
+  color: var(--gold);
+}
+
 .select:hover:not(:disabled) {
   border-color: var(--gold);
 }

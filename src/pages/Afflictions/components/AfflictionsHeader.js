@@ -13,6 +13,7 @@ export default function AfflictionsHeader({
   filterTipo,
   onFilterChange,
   onNew,
+  onImport,
   onUploadCSV,
   onExportCSV,
   onDownloadTemplate,
@@ -38,6 +39,16 @@ export default function AfflictionsHeader({
             Nova Aflição
           </Button>
 
+          <Button
+            backgroundColor="var(--dark-3)"
+            textColor="var(--light)"
+            hoverColor="var(--gold)"
+            onClick={onImport}
+            icon={<FaFileUpload />}
+          >
+            Importar CSV
+          </Button>
+
           <input
             ref={fileInputRef}
             type="file"
@@ -45,17 +56,6 @@ export default function AfflictionsHeader({
             onChange={onUploadCSV}
             style={{ display: 'none' }}
           />
-
-          <Button
-            backgroundColor="var(--dark-3)"
-            textColor="var(--light)"
-            hoverColor="var(--gold)"
-            onClick={() => fileInputRef.current?.click()}
-            disabled={uploading}
-            icon={<FaFileUpload />}
-          >
-            {uploading ? 'Importando...' : 'Importar CSV'}
-          </Button>
 
           <Button
             backgroundColor="var(--dark-3)"

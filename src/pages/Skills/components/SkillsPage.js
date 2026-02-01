@@ -4,8 +4,10 @@ import EmptyState from '../../../shared/components/EmptyState';
 import Pagination from '../../../shared/components/Pagination';
 import Card from '../../../shared/components/Card';
 import Button from '../../../shared/components/Button';
+import GenericCSVImport from '../../../shared/components/GenericCSVImport';
 import { FaPlus } from 'react-icons/fa';
 import { useSkills } from '../hooks/useSkills';
+import { useSkillsImport } from '../hooks/useSkillsImport';
 import { SkillsHeader } from './SkillsHeader';
 import { SkillCard } from './SkillCard';
 import { SkillModal } from './SkillModal';
@@ -15,31 +17,44 @@ export function SkillsPage() {
   const {
     skills,
     loading,
-    uploading,
     searchName,
     setSearchName,
+    filterType,
+    setFilterType,
     page,
     setPage,
     modalOpen,
     setModalOpen,
+    importModalOpen,
+    setImportModalOpen,
     editingSkill,
     handleNew,
     handleEdit,
     handleDelete,
     handleSave,
-    handleCSVUpload,
+    handleImportSkills,
     handleExportCSV,
     handleDownloadTemplate,
     pageCount,
     pageItems,
-    fileInputRef
+    totalCount,
+    activeCount,
+    passiveCount
   } = useSkills();
+
+  const {
+    fields: fieldDefinitions,
+    autoMapping,
+    transformDataForAPI,
+    isDuplicate,
+    entityNamePlural
+  } = useSkillsImport();
 
   return (
     <BaseLayout title="Skills">
       <SkillsHeader
         onNew={handleNew}
-        onCSVUpload={handleCSVUpload}
+        onImport={() => setImportModalOpen(true)}
         onExportCSV={handleExportCSV}
         onDownloadTemplate={handleDownloadTemplate}
         searchName={searchName}
@@ -47,9 +62,14 @@ export function SkillsPage() {
           setSearchName(val);
           setPage(0);
         }}
-        uploading={uploading}
-        fileInputRef={fileInputRef}
-        skillsCount={skills.length}
+        filterType={filterType}
+        onFilterChange={(type) => {
+          setFilterType(type);
+          setPage(0);
+        }}
+        totalCount={totalCount}
+        activeCount={activeCount}
+        passiveCount={passiveCount}
       />
 
       {loading ? (
@@ -92,12 +112,30 @@ export function SkillsPage() {
             onPageChange={setPage}
           />
 
-          <SkillModal
-            isOpen={modalOpen}
-            onClose={() => setModalOpen(false)}
-            onSave={handleSave}
-            initialData={editingSkill || {}}
-          />
+          {modalOpen && (
+            <SkillModal
+              isOpen={modalOpen}
+              onClose={() => setModalOpen(false)}
+              onSave={handleSave}
+              initialData={editingSkill || {}}
+            />
+          )}
+
+          {importModalOpen && (
+            <GenericCSVImport
+              fieldDefinitions={fieldDefinitions}
+              autoMapping={autoMapping}
+              onImport={(mappedData) => {
+                const transformedData = transformDataForAPI(mappedData);
+                handleImportSkills(transformedData);
+                setImportModalOpen(false);
+              }}
+              onClose={() => setImportModalOpen(false)}
+              existingData={skills}
+              isDuplicate={isDuplicate}
+              entityNamePlural={entityNamePlural}
+            />
+          )}
         </>
       )}
     </BaseLayout>

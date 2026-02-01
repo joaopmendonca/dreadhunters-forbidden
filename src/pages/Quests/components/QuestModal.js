@@ -7,7 +7,6 @@ import TextArea from '../../../shared/components/TextArea';
 import Select from '../../../shared/components/Select';
 import PhotoInput from '../../../shared/components/PhotoInput';
 import Button from '../../../shared/components/Button';
-import IconButton from '../../../shared/components/IconButton';
 import ConfirmationModal from '../../../shared/components/ConfirmationModal';
 import { TYPE_OPTIONS, OBJECTIVE_TYPE_OPTIONS, MESSAGES } from '../constants';
 import { toPrimitive } from '../utils';
@@ -332,7 +331,17 @@ export default function QuestModal({
               <div className={styles.section}>
                 <h3 className={styles.sectionTitle}>
                   Objetivos
-                  <IconButton icon={<FaBullseye />} onClick={() => addRow('objectives')} disabled={saving} hoverColor="var(--gold)" />
+                  <Button 
+                    type="button"
+                    icon={<FaBullseye />} 
+                    onClick={() => addRow('objectives')} 
+                    disabled={saving} 
+                    backgroundColor="var(--maroon)" 
+                    textColor="#fff" 
+                    hoverColor="#a00030"
+                  >
+                    Adicionar
+                  </Button>
                 </h3>
                 {form.objectives.length === 0 ? (
                   <p className={styles.emptyText}>Nenhum objetivo configurado</p>
@@ -381,11 +390,13 @@ export default function QuestModal({
                           />
                         </div>
                       </div>
-                      <IconButton
+                      <Button
                         icon={<FaTrash />}
                         onClick={() => removeRow('objectives', idx)}
                         disabled={saving}
-                        hoverColor="#d92828"
+                        backgroundColor="transparent"
+                        textColor="#d92828"
+                        hoverColor="var(--dark-4)"
                       />
                     </div>
                   ))
@@ -410,7 +421,17 @@ export default function QuestModal({
                 <div className={styles.subSection}>
                   <h4 className={styles.subSectionTitle}>
                     Itens
-                    <IconButton icon={<FaBoxOpen />} onClick={() => addRow('items')} disabled={saving} hoverColor="var(--gold)" />
+                    <Button 
+                      type="button"
+                      icon={<FaBoxOpen />} 
+                      onClick={() => addRow('items')} 
+                      disabled={saving} 
+                      backgroundColor="var(--maroon)" 
+                      textColor="#fff" 
+                      hoverColor="#a00030"
+                    >
+                      Adicionar
+                    </Button>
                   </h4>
                   {form.rewards.items.map((item, idx) => (
                     <div key={idx} className={styles.rewardRow}>
@@ -428,7 +449,7 @@ export default function QuestModal({
                         placeholder="Qtd"
                         disabled={saving}
                       />
-                      <IconButton icon={<FaTrash />} onClick={() => removeRow('items', idx)} disabled={saving} hoverColor="#d92828" />
+                      <Button icon={<FaTrash />} onClick={() => removeRow('items', idx)} disabled={saving} backgroundColor="transparent" textColor="#d92828" hoverColor="var(--dark-4)" />
                     </div>
                   ))}
                 </div>
@@ -437,7 +458,17 @@ export default function QuestModal({
                 <div className={styles.subSection}>
                   <h4 className={styles.subSectionTitle}>
                     Moedas
-                    <IconButton icon={<FaCoins />} onClick={() => addRow('currencies')} disabled={saving} hoverColor="var(--gold)" />
+                    <Button 
+                      type="button"
+                      icon={<FaCoins />} 
+                      onClick={() => addRow('currencies')} 
+                      disabled={saving} 
+                      backgroundColor="var(--maroon)" 
+                      textColor="#fff" 
+                      hoverColor="#a00030"
+                    >
+                      Adicionar
+                    </Button>
                   </h4>
                   {form.rewards.currencies.map((curr, idx) => (
                     <div key={idx} className={styles.rewardRow}>
@@ -455,7 +486,7 @@ export default function QuestModal({
                         placeholder="Qtd"
                         disabled={saving}
                       />
-                      <IconButton icon={<FaTrash />} onClick={() => removeRow('currencies', idx)} disabled={saving} hoverColor="#d92828" />
+                      <Button icon={<FaTrash />} onClick={() => removeRow('currencies', idx)} disabled={saving} backgroundColor="transparent" textColor="#d92828" hoverColor="var(--dark-4)" />
                     </div>
                   ))}
                 </div>

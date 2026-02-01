@@ -165,9 +165,23 @@ export function SkillModal({
       fd.append('targets', JSON.stringify(targets));
       if (iconFile) fd.append('icon', iconFile);
 
+      // Debug
+      console.log('Enviando skill:', {
+        name: form.name,
+        type: form.type,
+        damage: damage,
+        cost: cost,
+        duration: duration,
+        targets: targets,
+        statsModifiers: statsModifiers,
+        afflictionEffects: afflictionEffects,
+        recurringEffects: recurringEffects
+      });
+
       await onSave(fd, initialData._id);
       onClose();
-    } catch {
+    } catch (err) {
+      console.error('Erro ao salvar skill:', err);
       enqueueSnackbar('Falha ao salvar skill', { variant: 'error' });
     } finally {
       setSaving(false);
@@ -227,39 +241,37 @@ export function SkillModal({
                 </div>
 
                 <div className={styles.field}>
-                  <label>Tipo</label>
-                  <Select
-                    value={form.type}
-                    onChange={val => handleChange('type', val)}
-                    options={TYPE_OPTIONS}
-                    disabled={saving}
-                  />
-                </div>
-
-                <div className={styles.field}>
-                  <label>Level Mínimo</label>
-                  <TextInput
-                    type="number"
-                    min={1}
-                    value={form.levelRequirement}
-                    onChange={e => handleChange('levelRequirement', +e.target.value)}
-                    disabled={saving}
-                  />
-                </div>
-              </div>
-
-              <div className={styles.section}>
-                <span className={styles.sectionTitle}>Descrição</span>
-
-                <div className={styles.field}>
                   <label>Descrição da Skill</label>
                   <TextArea
                     value={form.description}
                     onChange={e => handleChange('description', e.target.value)}
                     placeholder="Descrição da skill"
-                    rows={5}
+                    rows={4}
                     disabled={saving}
                   />
+                </div>
+
+                <div className={styles.row}>
+                  <div className={styles.field}>
+                    <label>Tipo</label>
+                    <Select
+                      value={form.type}
+                      onChange={val => handleChange('type', val)}
+                      options={TYPE_OPTIONS}
+                      disabled={saving}
+                    />
+                  </div>
+
+                  <div className={styles.field}>
+                    <label>Level Mínimo</label>
+                    <TextInput
+                      type="number"
+                      min={1}
+                      value={form.levelRequirement}
+                      onChange={e => handleChange('levelRequirement', +e.target.value)}
+                      disabled={saving}
+                    />
+                  </div>
                 </div>
               </div>
 
@@ -267,7 +279,7 @@ export function SkillModal({
                 <span className={styles.sectionTitle}>Visuais</span>
 
                 <div className={styles.field}>
-                  <label>Ícone da Skill</label>
+                  <label>Ícone</label>
                   <PhotoInput
                     file={iconFile}
                     previewUrl={previewUrl}
@@ -279,17 +291,6 @@ export function SkillModal({
                 </div>
               </div>
 
-              <div className={styles.section}>
-                <DurationEditor
-                  duration={duration}
-                  onChange={setDuration}
-                  disabled={saving}
-                />
-              </div>
-            </div>
-
-            {/* Coluna Direita */}
-            <div className={styles.column}>
               <div className={styles.section}>
                 <CostEditor
                   cost={cost}
@@ -313,6 +314,17 @@ export function SkillModal({
                 <TargetSelector
                   value={targets}
                   onChange={setTargets}
+                />
+              </div>
+            </div>
+
+            {/* Coluna Direita */}
+            <div className={styles.column}>
+              <div className={styles.section}>
+                <DurationEditor
+                  duration={duration}
+                  onChange={setDuration}
+                  disabled={saving}
                 />
               </div>
 

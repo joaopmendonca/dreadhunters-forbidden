@@ -1,7 +1,7 @@
 // src/pages/Users/components/UsersHeader.js
 
 import React from 'react';
-import { FaBan, FaCheck, FaClock, FaDownload, FaUsers } from 'react-icons/fa';
+import { FaBan, FaCheck, FaClock, FaDownload, FaUpload, FaFileAlt, FaUsers } from 'react-icons/fa';
 import PageHeader from '../../../shared/components/PageHeader';
 import Button from '../../../shared/components/Button';
 import TextInput from '../../../shared/components/TextInput';
@@ -18,6 +18,8 @@ export default function UsersHeader({
   onSearchChange,
   onFilterChange,
   onExportCSV,
+  onDownloadTemplate,
+  onOpenImport,
 }) {
   const filterTabs = FILTER_TABS_CONFIG.map(tab => {
     let count, icon;
@@ -70,6 +72,26 @@ export default function UsersHeader({
             icon={<FaDownload />}
           >
             Exportar CSV
+          </Button>
+
+          <Button 
+            backgroundColor="var(--dark-3)" 
+            textColor="var(--light)" 
+            hoverColor="var(--gold)" 
+            onClick={onOpenImport} 
+            icon={<FaUpload />}
+          >
+            Importar CSV
+          </Button>
+
+          <Button 
+            backgroundColor="var(--dark-4)" 
+            textColor="var(--light-1)" 
+            hoverColor="var(--gold)" 
+            onClick={onDownloadTemplate} 
+            icon={<FaFileAlt />}
+          >
+            Template
           </Button>
 
           <TextInput

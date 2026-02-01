@@ -13,8 +13,10 @@ export const useSkills = () => {
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
   const [searchName, setSearchName] = useState('');
+  const [filterType, setFilterType] = useState('all');
   const [page, setPage] = useState(0);
   const [modalOpen, setModalOpen] = useState(false);
+  const [importModalOpen, setImportModalOpen] = useState(false);
   const [editingSkill, setEditing] = useState(null);
 
   const fetchSkills = useCallback(async () => {
@@ -66,12 +68,59 @@ export const useSkills = () => {
       fetchSkills();
       setModalOpen(false);
     } catch (err) {
-      enqueueSnackbar(err.response?.data?.message || 'Erro ao salvar skill', { variant: 'error' });
+      // Tratar erros de validação
+      if (err.response?.status === 400 && err.response?.data) {
+        const errorData = err.response.data;
+        
+        // Se for um objeto com array de erros (formato do SkillValidationService)
+        if (errorData.errors && Array.isArray(errorData.errors)) {
+          errorData.errors.forEach(error => {
+            enqueueSnackbar(`❌ ${error.field}: ${error.message}`, { variant: 'error', autoHideDuration: 5000 });
+          });
+        }
+        // Se for um array direto de erros
+        else if (Array.isArray(errorData)) {
+          errorData.forEach(error => {
+            enqueueSnackbar(`❌ ${error.field}: ${error.message}`, { variant: 'error', autoHideDuration: 5000 });
+          });
+        } 
+        // Se for um objeto com campo message
+        else if (errorData.message) {
+          enqueueSnackbar(`❌ ${errorData.message}`, { variant: 'error' });
+        }
+        // Fallback
+        else {
+          enqueueSnackbar('❌ Erro de validação ao salvar skill', { variant: 'error' });
+        }
+      } else {
+        enqueueSnackbar(err.response?.data?.message || 'Erro ao salvar skill', { variant: 'error' });
+      }
       throw err;
     }
   };
 
-  // Upload CSV
+  // Import de skills via GenericCSVImport
+  // eslint-disable-next-line no-unused-vars
+  const handleImportSkills = async (skills) => {
+    let created = 0;
+    let errors = 0;
+
+    for (const skill of skills) {
+      try {
+        await api.post('/skills', skill);
+        created++;
+      } catch (error) {
+        console.error('Error importing skill:', skill, error);
+        errors++;
+      }
+    }
+
+    const message = `Importação concluída: ${created} skill(s) criada(s), ${errors} erro(s).`;
+    enqueueSnackbar(message, { variant: created > 0 ? 'success' : 'warning' });
+    fetchSkills();
+  };
+
+  // Upload CSV (legacy - mantido para compatibilidade)
   const handleCSVUpload = async (event) => {
     const file = event.target.files[0];
     if (!file) return;
@@ -144,10 +193,17 @@ Golpe Certeiro,"Ataque físico preciso",active,1`;
     exportToCSV(csv, 'template-skills.csv');
   };
 
+  // Contadores por tipo
+  const totalCount = skills.length;
+  const activeCount = skills.filter(s => s.type === 'active').length;
+  const passiveCount = skills.filter(s => s.type === 'passive').length;
+
   // filtro + paginação
-  const filtered = skills.filter(s =>
-    s.name.toLowerCase().includes(searchName.toLowerCase())
-  );
+  const filtered = skills.filter(s => {
+    const matchName = s.name?.toLowerCase().includes(searchName.toLowerCase());
+    const matchType = filterType === 'all' || s.type === filterType;
+    return matchName && matchType;
+  });
   const pageCount = Math.ceil(filtered.length / ITEMS_PER_PAGE);
   const pageItems = filtered.slice(page * ITEMS_PER_PAGE, (page + 1) * ITEMS_PER_PAGE);
 
@@ -157,21 +213,29 @@ Golpe Certeiro,"Ataque físico preciso",active,1`;
     uploading,
     searchName,
     setSearchName,
+    filterType,
+    setFilterType,
     page,
     setPage,
     modalOpen,
     setModalOpen,
+    importModalOpen,
+    setImportModalOpen,
     editingSkill,
     handleNew,
     handleEdit,
     handleDelete,
     handleSave,
     handleCSVUpload,
+    handleImportSkills,
     handleExportCSV,
     handleDownloadTemplate,
     pageCount,
     pageItems,
     fileInputRef,
-    fetchSkills
+    fetchSkills,
+    totalCount,
+    activeCount,
+    passiveCount
   };
 };
