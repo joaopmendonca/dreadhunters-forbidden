@@ -1,16 +1,16 @@
 import { useMemo } from 'react';
-import { 
-  FaHistory, 
-  FaExclamationTriangle, 
-  FaUserShield, 
-  FaDatabase,
-  FaShieldAlt 
+import {
+    FaDatabase,
+    FaExclamationTriangle,
+    FaHistory,
+    FaShieldAlt,
+    FaUserShield
 } from 'react-icons/fa';
-import { 
-  CATEGORIES, 
-  ENTITY_TYPES,
-  getLevelIcon,
-  getEntityIcon 
+import {
+    CATEGORIES,
+    ENTITY_TYPES,
+    getEntityIcon,
+    getLevelIcon
 } from '../constants';
 import styles from '../styles/Logs.module.css';
 

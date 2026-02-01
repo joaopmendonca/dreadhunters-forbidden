@@ -2,25 +2,25 @@
 
 import { useContext, useState } from 'react';
 import {
-  FaBolt,
-  FaBook,
-  FaBoxOpen,
-  FaChalkboardTeacher,
-  FaClipboardList,
-  FaCoins,
-  FaCrosshairs,
-  FaMapMarkedAlt,
-  FaMapMarkerAlt,
-  FaServer, // ícone para Servidores
-  FaSignOutAlt,
-  FaSkull,
-  FaSkullCrossbones,
-  FaTachometerAlt,
-  FaTimes,
-  FaUser,
-  FaUsers,
-  FaUserShield,
-  FaHeart
+    FaBolt,
+    FaBook,
+    FaBoxOpen,
+    FaChalkboardTeacher,
+    FaClipboardList,
+    FaCoins,
+    FaCrosshairs,
+    FaHeart,
+    FaMapMarkedAlt,
+    FaMapMarkerAlt,
+    FaServer, // ícone para Servidores
+    FaSignOutAlt,
+    FaSkull,
+    FaSkullCrossbones,
+    FaTachometerAlt,
+    FaTimes,
+    FaUser,
+    FaUsers,
+    FaUserShield
 } from 'react-icons/fa';
 import { NavLink } from 'react-router-dom';
 import gameLogo from '../../../assets/game-logo-label.png';

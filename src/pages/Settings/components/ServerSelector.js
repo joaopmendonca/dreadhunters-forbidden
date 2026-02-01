@@ -1,4 +1,3 @@
-import React from 'react';
 import { FaServer } from 'react-icons/fa';
 import { BeatLoader } from 'react-spinners';
 import styles from '../styles/ServerSelector.module.css';

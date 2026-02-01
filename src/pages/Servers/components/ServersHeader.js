@@ -1,8 +1,7 @@
-import React from 'react';
 import { FaPlus, FaServer } from 'react-icons/fa';
 import Button from '../../../shared/components/Button';
-import TextInput from '../../../shared/components/TextInput';
 import PageHeader from '../../../shared/components/PageHeader';
+import TextInput from '../../../shared/components/TextInput';
 import styles from '../styles/ServersHeader.module.css';
 
 export const ServersHeader = ({

@@ -1,13 +1,13 @@
-import { FaHistory, FaFilter, FaSync } from 'react-icons/fa';
+import { FaFilter, FaHistory, FaSync } from 'react-icons/fa';
 import PageHeader from '../../../shared/components/PageHeader';
-import TextInput from '../../../shared/components/TextInput';
 import Select from '../../../shared/components/Select';
-import { 
-  PERIOD_OPTIONS, 
-  CATEGORY_OPTIONS, 
-  LEVEL_OPTIONS, 
-  ACTION_OPTIONS,
-  ENTITY_TYPE_OPTIONS 
+import TextInput from '../../../shared/components/TextInput';
+import {
+    ACTION_OPTIONS,
+    CATEGORY_OPTIONS,
+    ENTITY_TYPE_OPTIONS,
+    LEVEL_OPTIONS,
+    PERIOD_OPTIONS
 } from '../constants';
 import styles from '../styles/Logs.module.css';
 

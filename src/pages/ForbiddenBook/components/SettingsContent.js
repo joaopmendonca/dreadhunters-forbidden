@@ -1,6 +1,5 @@
 // src/pages/ForbiddenBook/components/SettingsContent.js
 
-import React from 'react';
 import styles from '../styles/SettingsContent.module.css';
 
 export default function SettingsContent({ 

@@ -1,21 +1,21 @@
 // src/pages/ForbiddenBook/components/EntityModal.js
 
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import { CHAPTERS, RARITY_COLORS } from '../constants';
-import TechnicalDetails, {
-  buildClassTechnicalDetails,
-  buildSkillTechnicalDetails,
-  buildAttributeTechnicalDetails,
-  buildAfflictionTechnicalDetails,
-  buildDamageTypeTechnicalDetails,
-  buildItemTechnicalDetails,
-  buildEnemyTechnicalDetails,
-  buildQuestTechnicalDetails,
-  buildLocationTechnicalDetails,
-  buildRoleTechnicalDetails
-} from './TechnicalDetails';
 import styles from '../styles/EntityModal.module.css';
+import TechnicalDetails, {
+    buildAfflictionTechnicalDetails,
+    buildAttributeTechnicalDetails,
+    buildClassTechnicalDetails,
+    buildDamageTypeTechnicalDetails,
+    buildEnemyTechnicalDetails,
+    buildItemTechnicalDetails,
+    buildLocationTechnicalDetails,
+    buildQuestTechnicalDetails,
+    buildRoleTechnicalDetails,
+    buildSkillTechnicalDetails
+} from './TechnicalDetails';
 
 export default function EntityModal({ item, chapter, config, onClose }) {
   // Fechar com ESC

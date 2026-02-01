@@ -1,6 +1,5 @@
 // src/pages/ForbiddenBook/components/TechnicalDetails.js
 
-import React from 'react';
 import styles from '../styles/TechnicalDetails.module.css';
 
 /**

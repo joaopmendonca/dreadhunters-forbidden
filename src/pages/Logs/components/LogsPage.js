@@ -1,13 +1,13 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import BaseLayout from '../../../shared/components/BaseLayout';
 import EmptyState from '../../../shared/components/EmptyState';
 import Pagination from '../../../shared/components/Pagination';
 import useLogs from '../hooks/useLogs';
-import LogsHeader from './LogsHeader';
-import LogsDashboard from './LogsDashboard';
-import LogCard from './LogCard';
-import LoadingState from './LoadingState';
 import styles from '../styles/Logs.module.css';
+import LoadingState from './LoadingState';
+import LogCard from './LogCard';
+import LogsDashboard from './LogsDashboard';
+import LogsHeader from './LogsHeader';
 
 export default function LogsPage() {
   const {

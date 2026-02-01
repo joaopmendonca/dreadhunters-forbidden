@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import BaseLayout from '../../../shared/components/BaseLayout';
 import Card from '../../../shared/components/Card';
 import EmptyState from '../../../shared/components/EmptyState';
 import Pagination from '../../../shared/components/Pagination';
 import { LoadingState } from './LoadingState';
-import { ServersHeader } from './ServersHeader';
 import { ServerCard } from './ServerCard';
 import { ServerModal } from './ServerModal';
+import { ServersHeader } from './ServersHeader';
 
 const ITEMS_PER_PAGE = 10;
 

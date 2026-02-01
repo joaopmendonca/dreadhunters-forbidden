@@ -1,9 +1,9 @@
 // src/pages/ForbiddenBook/components/ChapterContent.js
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { CHAPTERS, RARITY_COLORS } from '../constants';
-import EntityModal from './EntityModal';
 import styles from '../styles/ChapterContent.module.css';
+import EntityModal from './EntityModal';
 
 export default function ChapterContent({ chapter, config, data }) {
   const [selectedItem, setSelectedItem] = useState(null);

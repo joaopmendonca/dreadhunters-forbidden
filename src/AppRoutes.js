@@ -3,10 +3,10 @@
 import { useContext, useEffect, useState } from 'react';
 import { FaBars } from 'react-icons/fa';
 import {
-  Navigate,
-  Route,
-  Routes,
-  useLocation
+    Navigate,
+    Route,
+    Routes,
+    useLocation
 } from 'react-router-dom';
 
 import { AuthContext } from './shared/contexts/AuthContext';

@@ -1,11 +1,10 @@
 // src/pages/ForbiddenBook/components/ForbiddenBookPage.js
 
-import React from 'react';
 import { CHAPTERS } from '../constants';
 import useForbiddenBook from '../hooks/useForbiddenBook';
+import styles from '../styles/ForbiddenBookPage.module.css';
 import BookCover from './BookCover';
 import BookPage from './BookPage';
-import styles from '../styles/ForbiddenBookPage.module.css';
 
 export default function ForbiddenBookPage() {
   const {

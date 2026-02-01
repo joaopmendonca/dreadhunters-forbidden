@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
 import { useSnackbar } from 'notistack';
-import Modal, { MODAL_SIZES } from '../../../shared/components/Modal';
-import TextInput from '../../../shared/components/TextInput';
-import TextArea from '../../../shared/components/TextArea';
-import Select from '../../../shared/components/Select';
+import { useEffect, useState } from 'react';
 import Button from '../../../shared/components/Button';
-import { STATUS_OPTIONS, REGION_OPTIONS } from '../constants';
+import Modal, { MODAL_SIZES } from '../../../shared/components/Modal';
+import Select from '../../../shared/components/Select';
+import TextArea from '../../../shared/components/TextArea';
+import TextInput from '../../../shared/components/TextInput';
+import { REGION_OPTIONS, STATUS_OPTIONS } from '../constants';
 import styles from '../styles/ServerModal.module.css';
 
 const emptyForm = {

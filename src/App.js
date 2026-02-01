@@ -14,7 +14,7 @@ export default function App() {
       style={{ zIndex: 99999 }}
     >
       <AuthProvider>
-        <BrowserRouter>
+        <BrowserRouter basename="/forbidden">
           <AppRoutes />
         </BrowserRouter>
       </AuthProvider>

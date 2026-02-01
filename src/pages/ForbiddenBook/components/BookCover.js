@@ -1,6 +1,5 @@
 // src/pages/ForbiddenBook/components/BookCover.js
 
-import React from 'react';
 import styles from '../styles/BookCover.module.css';
 
 export default function BookCover({ stats, onOpen }) {

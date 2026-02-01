@@ -1,15 +1,13 @@
 import { useState } from 'react';
-import Card from '../../../shared/components/Card';
-import { 
-  getActionIcon, 
-  getActionLabel, 
-  getLevelIcon, 
-  getLevelVariant,
-  getCategoryIcon,
-  getCategoryLabel,
-  getEntityIcon,
-  getEntityLabel,
-  LEVELS
+import {
+    getActionIcon,
+    getActionLabel,
+    getCategoryIcon,
+    getCategoryLabel,
+    getEntityIcon,
+    getEntityLabel,
+    getLevelIcon,
+    LEVELS
 } from '../constants';
 import styles from '../styles/Logs.module.css';
 

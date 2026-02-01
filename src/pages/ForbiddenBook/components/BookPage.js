@@ -1,10 +1,9 @@
 // src/pages/ForbiddenBook/components/BookPage.js
 
-import React from 'react';
-import { CHAPTERS, LORE_CONTENT, CHAPTER_CONFIG } from '../constants';
+import { CHAPTER_CONFIG, CHAPTERS, LORE_CONTENT } from '../constants';
+import styles from '../styles/BookPage.module.css';
 import ChapterContent from './ChapterContent';
 import SettingsContent from './SettingsContent';
-import styles from '../styles/BookPage.module.css';
 
 export default function BookPage({ 
   chapter, 
