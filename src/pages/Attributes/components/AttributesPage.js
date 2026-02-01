@@ -121,21 +121,20 @@ export function AttributesPage() {
             initialData={editingAttribute || {}}
           />
 
-          {importModalOpen && (
-            <GenericCSVImport
-              fieldDefinitions={fieldDefinitions}
-              autoMapping={autoMapping}
-              onImport={(mappedData) => {
-                const transformedData = transformDataForAPI(mappedData);
-                handleImport(transformedData);
-                setImportModalOpen(false);
-              }}
-              onClose={() => setImportModalOpen(false)}
-              existingData={attributes}
-              isDuplicate={isDuplicate}
-              entityNamePlural={entityNamePlural}
-            />
-          )}
+          <GenericCSVImport
+            isOpen={importModalOpen}
+            fieldDefinitions={fieldDefinitions}
+            autoMapping={autoMapping}
+            onImport={(mappedData) => {
+              const transformedData = transformDataForAPI(mappedData);
+              handleImport(transformedData);
+              setImportModalOpen(false);
+            }}
+            onClose={() => setImportModalOpen(false)}
+            existingData={attributes}
+            isDuplicate={isDuplicate}
+            entityNamePlural={entityNamePlural}
+          />
         </>
       )}
     </BaseLayout>

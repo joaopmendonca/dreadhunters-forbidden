@@ -65,55 +65,59 @@ export default function ClassCard({ cls, statsList, onEdit, onDelete }) {
             <div className={styles.derivedStatsGrid}>
               <div className={styles.derivedItem}>
                 <span className={styles.derivedLabel}>HP Máximo</span>
-                <span className={styles.derivedValue}>{Math.floor(cls.calculatedStats.max_hp || 0)}</span>
+                <span className={styles.derivedValue}>{Math.floor(cls.calculatedStats.HP_MAX || cls.calculatedStats.max_hp || 0)}</span>
               </div>
               <div className={styles.derivedItem}>
                 <span className={styles.derivedLabel}>SP Máximo</span>
-                <span className={styles.derivedValue}>{Math.floor(cls.calculatedStats.max_sp || 0)}</span>
+                <span className={styles.derivedValue}>{Math.floor(cls.calculatedStats.SP_MAX || cls.calculatedStats.max_sp || 0)}</span>
               </div>
               <div className={styles.derivedItem}>
-                <span className={styles.derivedLabel}>CP Máximo</span>
-                <span className={styles.derivedValue}>{Math.floor(cls.calculatedStats.max_cp || 0)}</span>
+                <span className={styles.derivedLabel}>Stamina Máx</span>
+                <span className={styles.derivedValue}>{Math.floor(cls.calculatedStats.STAMINA_MAX || cls.calculatedStats.max_cp || 0)}</span>
               </div>
               <div className={styles.derivedItem}>
                 <span className={styles.derivedLabel}>Regen HP</span>
-                <span className={styles.derivedValue}>{(cls.calculatedStats.regen_hp || 0).toFixed(2)}</span>
+                <span className={styles.derivedValue}>{(cls.calculatedStats.HP_REGEN || cls.calculatedStats.regen_hp || 0).toFixed(2)}</span>
               </div>
               <div className={styles.derivedItem}>
                 <span className={styles.derivedLabel}>Regen SP</span>
-                <span className={styles.derivedValue}>{(cls.calculatedStats.regen_sp || 0).toFixed(2)}</span>
+                <span className={styles.derivedValue}>{(cls.calculatedStats.SP_REGEN || cls.calculatedStats.regen_sp || 0).toFixed(2)}</span>
               </div>
               <div className={styles.derivedItem}>
-                <span className={styles.derivedLabel}>Regen CP</span>
-                <span className={styles.derivedValue}>{(cls.calculatedStats.regen_cp || 0).toFixed(2)}</span>
+                <span className={styles.derivedLabel}>Regen Stamina</span>
+                <span className={styles.derivedValue}>{(cls.calculatedStats.STAMINA_REGEN || cls.calculatedStats.regen_cp || 0).toFixed(2)}</span>
               </div>
               <div className={styles.derivedItem}>
                 <span className={styles.derivedLabel}>Ataque Físico</span>
-                <span className={styles.derivedValue}>{Math.floor(cls.calculatedStats.p_atk || 0)}</span>
+                <span className={styles.derivedValue}>{Math.floor(cls.calculatedStats['P.ATK'] || cls.calculatedStats.p_atk || 0)}</span>
               </div>
               <div className={styles.derivedItem}>
-                <span className={styles.derivedLabel}>Ataque Mágico</span>
-                <span className={styles.derivedValue}>{Math.floor(cls.calculatedStats.m_atk || 0)}</span>
+                <span className={styles.derivedLabel}>Ataque Oculto</span>
+                <span className={styles.derivedValue}>{Math.floor(cls.calculatedStats['O.ATK'] || cls.calculatedStats.m_atk || 0)}</span>
               </div>
               <div className={styles.derivedItem}>
                 <span className={styles.derivedLabel}>Taxa Crítico</span>
-                <span className={styles.derivedValue}>{(cls.calculatedStats.crit_rate || 0).toFixed(1)}</span>
+                <span className={styles.derivedValue}>{(cls.calculatedStats['CRIT%'] || cls.calculatedStats.crit_rate || 0).toFixed(1)}%</span>
               </div>
               <div className={styles.derivedItem}>
                 <span className={styles.derivedLabel}>Dano Crítico</span>
-                <span className={styles.derivedValue}>{Math.floor(cls.calculatedStats.crit_dmg || 0)}</span>
+                <span className={styles.derivedValue}>{Math.floor(cls.calculatedStats.CRIT_DMG || cls.calculatedStats.crit_dmg || 0)}</span>
               </div>
               <div className={styles.derivedItem}>
                 <span className={styles.derivedLabel}>Defesa Física</span>
-                <span className={styles.derivedValue}>{Math.floor(cls.calculatedStats.p_def || 0)}</span>
+                <span className={styles.derivedValue}>{Math.floor(cls.calculatedStats['P.DEF'] || cls.calculatedStats.p_def || 0)}</span>
               </div>
               <div className={styles.derivedItem}>
-                <span className={styles.derivedLabel}>Defesa Mágica</span>
-                <span className={styles.derivedValue}>{Math.floor(cls.calculatedStats.m_def || 0)}</span>
+                <span className={styles.derivedLabel}>Resist. Oculta</span>
+                <span className={styles.derivedValue}>{Math.floor(cls.calculatedStats['O.RES'] || cls.calculatedStats.m_def || 0)}</span>
               </div>
               <div className={styles.derivedItem}>
-                <span className={styles.derivedLabel}>Evasão</span>
-                <span className={styles.derivedValue}>{(cls.calculatedStats.evasion || 0).toFixed(1)}</span>
+                <span className={styles.derivedLabel}>Precisão</span>
+                <span className={styles.derivedValue}>{Math.floor(cls.calculatedStats.ACC || 0)}%</span>
+              </div>
+              <div className={styles.derivedItem}>
+                <span className={styles.derivedLabel}>Esquiva</span>
+                <span className={styles.derivedValue}>{(cls.calculatedStats.EVA || cls.calculatedStats.evasion || 0).toFixed(1)}%</span>
               </div>
             </div>
           </Card.Section>

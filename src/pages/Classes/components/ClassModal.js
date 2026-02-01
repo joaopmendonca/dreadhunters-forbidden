@@ -51,6 +51,7 @@ export default function ClassModal({
   const [previewArtworkUrl, setPreviewArtworkUrl] = useState('');
   const [saving, setSaving] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
+  const [confirmArtworkOpen, setConfirmArtworkOpen] = useState(false);
   const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
@@ -175,51 +176,53 @@ export default function ClassModal({
     const stats = form.baseStats;
     const level = 1; // Classes sempre usam level 1 como base
     
-    const str = Number(stats.str) || 0;
-    const dex = Number(stats.dex) || 0;
-    const con = Number(stats.con) || 0;
-    const int = Number(stats.int) || 0;
-    const wit = Number(stats.wit) || 0;
-    const men = Number(stats.men) || 0;
+    const str = Number(stats.STR) || 0;
+    const dex = Number(stats.DEX) || 0;
+    const con = Number(stats.CON) || 0;
+    const int = Number(stats.INT) || 0;
+    const wis = Number(stats.WIS) || 0;
+    const luk = Number(stats.LUK) || 0;
 
     return {
-      // Pontos de Vida e Energia
-      max_hp: Math.floor((con * 8) + (level * 4.5)),
-      max_sp: Math.floor((men * 5) + (level * 2)),
-      max_cp: Math.floor((con * 6) + (level * 3.5)),
-      hp_regen: ((con * 0.1) + (level * 0.05)).toFixed(2),
-      sp_regen: ((men * 0.15) + (level * 0.03)).toFixed(2),
-      cp_regen: (con * 0.08).toFixed(2),
-      // Poder Ofensivo
-      p_atk: Math.floor((str * 1.2) + (level * 0.8)),
-      m_atk: Math.floor((int * 1.5) + (wit * 0.5) + (level * 0.7)),
-      crit_rate: ((dex * 0.3) + 10).toFixed(1),
-      crit_dmg: Math.floor((str * 0.2) + 100),
-      m_crit_rate: ((wit * 0.4) + 5).toFixed(1),
-      // Poder Defensivo
-      p_def: Math.floor((con * 1.5) + (dex * 0.3) + (level * 0.5)),
-      m_def: Math.floor((men * 1.3) + (int * 0.4) + (level * 0.4)),
-      evasion: ((dex * 0.5) + (level * 0.3)).toFixed(1)
+      // Recursos
+      HP_MAX: Math.floor(100 + (con * 18) + (str * 4) + (level * 10)),
+      SP_MAX: Math.floor(80 + (wis * 16) + (int * 8) + (level * 8)),
+      STAMINA_MAX: Math.floor(60 + (con * 10) + (str * 6) + (level * 6)),
+      // Regeneração
+      HP_REGEN: (con * 0.12).toFixed(2),
+      SP_REGEN: (wis * 0.10).toFixed(2),
+      STAMINA_REGEN: (dex * 0.15).toFixed(2),
+      // Combate Físico
+      'P.ATK': Math.floor((str * 2.5) + (dex * 1.2) + (level * 1.5)),
+      'P.DEF': Math.floor((con * 2.2) + (str * 0.8) + (level * 1.2)),
+      ACC: Math.min(95, Math.floor(75 + (dex * 0.35))),
+      EVA: Math.min(40, ((dex * 0.25) + (luk * 0.15)).toFixed(1)),
+      // Combate Oculto
+      'O.ATK': Math.floor((int * 3.0) + (wis * 1.5) + (level * 1.4)),
+      'O.RES': Math.floor((wis * 2.5) + (con * 1.0) + (level * 1.1)),
+      // Crítico
+      'CRIT%': ((dex * 0.20) + (luk * 0.15) + 5).toFixed(1),
+      CRIT_DMG: Math.floor(150 + (str * 0.6) + (luk * 0.4))
     };
   };
 
   const derivedStats = calculateDerivedStats();
 
   const derivedLabels = {
-    max_hp: 'HP Máximo',
-    max_sp: 'SP Máximo', 
-    max_cp: 'CP Máximo',
-    hp_regen: 'Regen HP',
-    sp_regen: 'Regen SP',
-    cp_regen: 'Regen CP',
-    p_atk: 'Ataque Físico',
-    m_atk: 'Ataque Mágico',
-    crit_rate: 'Taxa Crítico',
-    crit_dmg: 'Dano Crítico',
-    m_crit_rate: 'Crit. Mágico',
-    p_def: 'Defesa Física',
-    m_def: 'Defesa Mágica',
-    evasion: 'Evasão'
+    HP_MAX: 'HP Máximo',
+    SP_MAX: 'SP Máximo',
+    STAMINA_MAX: 'Stamina Máximo',
+    HP_REGEN: 'Regen HP',
+    SP_REGEN: 'Regen SP',
+    STAMINA_REGEN: 'Regen Stamina',
+    'P.ATK': 'Ataque Físico',
+    'P.DEF': 'Defesa Física',
+    ACC: 'Precisão',
+    EVA: 'Esquiva',
+    'O.ATK': 'Ataque Oculto',
+    'O.RES': 'Resistência Oculta',
+    'CRIT%': 'Taxa Crítico',
+    CRIT_DMG: 'Dano Crítico'
   };
 
   const handleFileChange = e => {
@@ -248,6 +251,7 @@ export default function ClassModal({
     try {
       await api.delete(`/classes/${form._id}/icon`);
       enqueueSnackbar('Ícone removido', { variant: 'success' });
+      setIconFile(null);
       setPreviewUrl('');
       setForm(f => ({ ...f, iconUrl: '' }));
       onIconDeleted?.();
@@ -256,6 +260,30 @@ export default function ClassModal({
     } finally {
       setDeleting(false);
       setConfirmOpen(false);
+    }
+  };
+
+  const performDeleteArtwork = async () => {
+    if (!form._id) {
+      setArtworkFile(null);
+      setPreviewArtworkUrl('');
+      setForm(f => ({ ...f, artworkUrl: '' }));
+      setConfirmArtworkOpen(false);
+      return;
+    }
+    setDeleting(true);
+    try {
+      await api.delete(`/classes/${form._id}/artwork`);
+      enqueueSnackbar('Artwork removido', { variant: 'success' });
+      setArtworkFile(null);
+      setPreviewArtworkUrl('');
+      setForm(f => ({ ...f, artworkUrl: '' }));
+      onIconDeleted?.();
+    } catch {
+      enqueueSnackbar('Erro ao remover artwork', { variant: 'error' });
+    } finally {
+      setDeleting(false);
+      setConfirmArtworkOpen(false);
     }
   };
 
@@ -334,10 +362,23 @@ export default function ClassModal({
         onClose={() => setConfirmOpen(false)}
         title="Remover Ícone"
         message="Tem certeza que deseja excluir o ícone da classe?"
-        confirmText="Sim, excluir"
         cancelText="Cancelar"
-        isLoading={deleting}
+        confirmText="Sim, excluir"
         onConfirm={performDeleteIcon}
+        isLoading={deleting}
+        confirmDanger={true}
+      />
+
+      <ConfirmationModal
+        isOpen={confirmArtworkOpen}
+        onClose={() => setConfirmArtworkOpen(false)}
+        title="Remover Artwork"
+        message="Tem certeza que deseja excluir o artwork da classe?"
+        cancelText="Cancelar"
+        confirmText="Sim, excluir"
+        onConfirm={performDeleteArtwork}
+        isLoading={deleting}
+        confirmDanger={true}
       />
 
       <Modal
@@ -412,7 +453,7 @@ export default function ClassModal({
                       file={artworkFile}
                       previewUrl={previewArtworkUrl}
                       onFileChange={handleArtworkChange}
-                      onRemove={() => { setArtworkFile(null); setPreviewArtworkUrl(''); setForm(f => ({ ...f, artworkUrl: '' })); }}
+                      onRemove={() => setConfirmArtworkOpen(true)}
                       placeholderLabel="Escolher artwork"
                       disabled={saving}
                     />

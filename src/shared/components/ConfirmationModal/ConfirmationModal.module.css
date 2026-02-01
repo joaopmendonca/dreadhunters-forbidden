@@ -1,67 +1,12 @@
 @import '../../styles/theme.css';
 
-/* ───── Animações ───── */
-@keyframes fadeIn {
-  from { opacity: 0 }
-  to   { opacity: 1 }
-}
-@keyframes slideDown {
-  from { transform: translateY(-20px); opacity: 0 }
-  to   { transform: translateY(0);       opacity: 1 }
-}
-
-/* ───── Overlay ───── */
-.overlay {
-  position: fixed;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  /* fundo semi-transparente + blur */
-  background: rgba(0, 0, 0, 0.4);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-
-  z-index: 10000;
-  animation: fadeIn .3s ease-out;
-}
-
-/* ───── Modal ───── */
-.modal {
-  background: var(--dark-1);
-  padding: 2rem;
-  border-radius: 8px;
-  box-sizing: border-box;
-  width: 100%;
-  max-width: 420px;
-  max-height: 90vh;
-  overflow-y: auto;
-  color: var(--light);
-  position: relative;
-  animation: slideDown .3s ease-out;
-  box-shadow: 0 4px 12px rgba(0,0,0,.5);
-}
-
-/* ───── Botão de fechar ───── */
-.close {
-  position: absolute;
-  top: .5rem;
-  right: .75rem;
-  background: none;
-  border: none;
-  font-size: 1.5rem;
-  color: var(--light);
-  cursor: pointer;
-}
-
 /* ───── Conteúdo ───── */
 .content {
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  gap: 1rem;
+  gap: 1.25rem;
 }
 
 /* ─ Icone ─ */
@@ -69,33 +14,54 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: rgba(230, 57, 70, 0.1);
 }
 
 /* ─ Mensagem ─ */
 .message {
+  font-family: var(--font-sans);
   font-size: 1rem;
-  line-height: 1.5;
+  line-height: 1.6;
+  color: var(--light);
   word-break: break-word;
 }
 
 /* ───── Botões ───── */
 .buttons {
   display: flex;
-  gap: .5rem;
-  margin-top: 1rem;
+  gap: 0.75rem;
+  width: 100%;
+  justify-content: flex-end;
 }
 
 .button {
-  padding: .75rem 1.5rem;
-  font-size: 1rem;
+  padding: 0.75rem 1.5rem;
+  font-family: var(--font-sans);
+  font-size: 0.9375rem;
+  font-weight: 500;
   border: none;
-  border-radius: 4px;
+  border-radius: 8px;
   cursor: pointer;
-  transition: filter .2s;
+  transition: all 0.2s ease;
+  min-width: 100px;
 }
 
 .button:hover:not(:disabled) {
-  filter: brightness(0.9);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  filter: brightness(1.1);
+}
+
+.button:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .button:disabled {

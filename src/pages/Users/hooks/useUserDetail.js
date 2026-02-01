@@ -95,7 +95,7 @@ export function useUserDetail(userId) {
       : [...roles, 'admin'];
 
     try {
-      await api.put(`/admin/users/${userId}/roles`, { roles: newRoles });
+      await api.patch(`/admin/users/${userId}/roles`, { roles: newRoles });
       setRoles(newRoles);
       setUser(prev => ({ ...prev, roles: newRoles }));
       enqueueSnackbar(`Admin ${isAdmin ? 'removido' : 'concedido'} com sucesso.`, { variant: 'success' });
