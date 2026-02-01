@@ -20,7 +20,7 @@ export default function BookCover({ stats, onOpen }) {
         ))}
       </div>
 
-      <div className={styles.book}>
+      <div className={styles.book} onClick={onOpen} role="button" tabIndex={0} onKeyDown={(e) => e.key === 'Enter' && onOpen()}>
         {/* Capa traseira */}
         <div className={styles.coverBack} />
 
@@ -124,17 +124,6 @@ export default function BookCover({ stats, onOpen }) {
 
       {/* Sombra do livro */}
       <div className={styles.bookShadow} />
-
-      {/* Botão de abrir - fixo na base da página */}
-      <button className={styles.openButton} onClick={onOpen}>
-        <span className={styles.openIcon}>📖</span>
-        <span className={styles.openText}>Abrir o Grimório</span>
-      </button>
-
-      {/* Aviso - fixo na base da página */}
-      <p className={styles.warning}>
-        ⚠️ Conhecimento Proibido ⚠️
-      </p>
     </div>
   );
 }
