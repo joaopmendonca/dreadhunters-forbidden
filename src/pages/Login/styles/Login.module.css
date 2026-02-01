@@ -1,127 +1,280 @@
 /* src/pages/Login/styles/Login.module.css */
+/* ============================================
+   Login Page - Estilo Grimório Proibido
+   ============================================ */
+
 @import '../../../shared/styles/theme.css';
 
-/* ===========================
-   WRAPPER - Tela cheia
-=========================== */
-.wrapper {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  padding: 1rem;
-  background: linear-gradient(135deg, var(--dark-1) 0%, var(--dark-2) 50%, #1a1614 100%);
+/* === CONTAINER PRINCIPAL === */
+.container {
   position: relative;
+  min-height: 100vh;
+  width: 100%;
   overflow: hidden;
+  background: linear-gradient(180deg, 
+    #0a0608 0%, 
+    #1a0a10 30%, 
+    #0d0507 70%, 
+    #000 100%
+  );
 }
 
-/* Efeito de pattern sutil no fundo */
-.wrapper::before {
-  content: '';
+/* === ATMOSFERA === */
+.atmosphere {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.fog {
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background-image: 
-    radial-gradient(circle at 20% 50%, rgba(128, 0, 32, 0.05) 0%, transparent 50%),
-    radial-gradient(circle at 80% 80%, rgba(212, 167, 69, 0.03) 0%, transparent 50%);
-  pointer-events: none;
+  background: 
+    radial-gradient(ellipse at 20% 80%, rgba(128, 0, 32, 0.15) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 20%, rgba(139, 69, 19, 0.1) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 50%, rgba(0, 0, 0, 0.3) 0%, transparent 70%);
+  animation: fogMove 20s ease-in-out infinite alternate;
 }
 
-/* ===========================
-   CARD - Container principal
-=========================== */
+@keyframes fogMove {
+  0% { opacity: 0.6; transform: translateX(-2%) scale(1.02); }
+  100% { opacity: 0.8; transform: translateX(2%) scale(1); }
+}
+
+.vignette {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(ellipse at center, transparent 30%, rgba(0, 0, 0, 0.8) 100%);
+}
+
+/* === PARTÍCULAS DE POEIRA === */
+.particles {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.particle {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  background: radial-gradient(circle, rgba(218, 165, 32, 0.6) 0%, transparent 70%);
+  border-radius: 50%;
+  animation: particleFloat 20s linear infinite;
+  opacity: 0;
+}
+
+@keyframes particleFloat {
+  0% {
+    transform: translateY(100vh) rotate(0deg);
+    opacity: 0;
+  }
+  10% { opacity: 0.8; }
+  90% { opacity: 0.8; }
+  100% {
+    transform: translateY(-100vh) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+/* === CONTEÚDO === */
+.content {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+/* === GRIMÓRIO (WRAPPER DO CARD) === */
+.grimoire {
+  display: flex;
+}
+
+/* === LOMBADA === */
+.spine {
+  position: relative;
+  width: 20px;
+  background: linear-gradient(90deg,
+    #1a0808 0%,
+    #2d1515 40%,
+    #3d2020 60%,
+    #2d1515 80%,
+    #1a0808 100%
+  );
+  border-radius: 8px 0 0 8px;
+  box-shadow: 
+    inset 3px 0 10px rgba(0,0,0,0.6),
+    inset -2px 0 5px rgba(0,0,0,0.3),
+    -5px 0 15px rgba(0,0,0,0.5);
+  overflow: hidden;
+}
+
+.spineTexture {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: repeating-linear-gradient(
+    180deg,
+    transparent,
+    transparent 40px,
+    rgba(139,69,19,0.2) 40px,
+    rgba(139,69,19,0.2) 42px
+  );
+}
+
+/* === CARD PRINCIPAL === */
 .card {
   position: relative;
   width: 100%;
   max-width: 420px;
   padding: 3rem 2.5rem;
-  background: var(--dark-2);
-  border-radius: 12px;
-  border: 1px solid var(--dark-4);
+  background: 
+    linear-gradient(135deg, 
+      #2a1a1a 0%,
+      #1f1010 30%,
+      #150808 70%,
+      #1a0a0a 100%
+    );
+  border-radius: 0 12px 12px 0;
+  border: 2px solid rgba(139, 69, 19, 0.4);
+  border-left: none;
   box-shadow: 
-    0 20px 60px rgba(0, 0, 0, 0.6),
-    0 0 0 1px rgba(212, 167, 69, 0.1);
+    0 25px 80px rgba(0, 0, 0, 0.8),
+    0 10px 30px rgba(0, 0, 0, 0.6);
+}
+
+/* === LOGO === */
+.logo {
+  width: 180px;
+  max-width: 60%;
+  margin: 0 auto 1.5rem;
+  display: block;
+  filter: 
+    drop-shadow(0 4px 12px rgba(0, 0, 0, 0.6))
+    drop-shadow(0 0 20px rgba(218, 165, 32, 0.2));
+  position: relative;
   z-index: 1;
 }
 
-/* ===========================
-   LOGO
-=========================== */
-.logo {
-  width: 200px;
-  max-width: 70%;
-  margin: 0 auto 2rem;
-  display: block;
-  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.5));
-}
-
-/* ===========================
-   TÍTULO
-=========================== */
+/* === TÍTULO === */
 .title {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 0.75rem;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
   font-family: var(--font-serif);
-  font-size: 1.75rem;
-  font-weight: 600;
-  color: var(--light);
-  letter-spacing: 0.5px;
-}
-
-.lockIcon {
   font-size: 1.5rem;
+  font-weight: 600;
   color: var(--gold);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  text-shadow: 
+    0 0 20px rgba(218, 165, 32, 0.4),
+    0 2px 4px rgba(0, 0, 0, 0.5);
+  position: relative;
+  z-index: 1;
 }
 
-/* ===========================
-   FORMULÁRIO
-=========================== */
+.titleIcon {
+  font-size: 1.3rem;
+  color: var(--gold);
+  filter: drop-shadow(0 0 8px rgba(218, 165, 32, 0.5));
+}
+
+/* === DIVISOR ORNAMENTAL === */
+.divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 2rem;
+  position: relative;
+}
+
+.divider::before,
+.divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(139, 69, 19, 0.5) 50%,
+    transparent 100%
+  );
+}
+
+.dividerOrnament {
+  padding: 0 1rem;
+  color: var(--gold);
+  font-size: 1rem;
+  opacity: 0.7;
+}
+
+/* === FORMULÁRIO === */
 .form {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
 }
 
-/* ===========================
-   LABEL + INPUT
-=========================== */
+/* === LABEL + INPUT === */
 .label {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
   font-family: var(--font-serif);
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   font-weight: 500;
-  color: var(--gold);
-  letter-spacing: 0.3px;
+  color: rgba(218, 165, 32, 0.8);
+  letter-spacing: 1px;
+  text-transform: uppercase;
 }
 
 .input {
   width: 100%;
   height: 3rem;
   padding: 0 1rem;
-  background: var(--dark-3);
-  border: 1px solid var(--dark-4);
-  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(139, 69, 19, 0.3);
+  border-radius: 6px;
   font-size: 1rem;
   font-family: var(--font-sans);
   color: var(--light);
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.3);
 }
 
 .input::placeholder {
-  color: var(--light-3);
+  color: rgba(255, 255, 255, 0.3);
+  font-style: italic;
 }
 
 .input:focus {
   outline: none;
-  border-color: var(--maroon);
-  box-shadow: 0 0 0 3px rgba(128, 0, 32, 0.2);
+  border-color: rgba(218, 165, 32, 0.5);
+  box-shadow: 
+    inset 0 2px 6px rgba(0, 0, 0, 0.3),
+    0 0 15px rgba(218, 165, 32, 0.15);
+  background: rgba(0, 0, 0, 0.5);
 }
 
 .input:disabled {
@@ -129,30 +282,38 @@
   cursor: not-allowed;
 }
 
-/* ===========================
-   BOTÃO
-=========================== */
+/* === BOTÃO === */
 .primaryButton {
   width: 100%;
-  height: 3rem;
+  height: 3.25rem;
   margin-top: 0.5rem;
-  background: linear-gradient(135deg, var(--maroon) 0%, #600018 100%);
-  border: none;
-  border-radius: 8px;
+  background: linear-gradient(135deg, 
+    #8B0000 0%, 
+    #600018 50%, 
+    #400010 100%
+  );
+  border: 1px solid rgba(139, 69, 19, 0.4);
+  border-radius: 6px;
   color: var(--light);
   font-size: 1rem;
   font-weight: 600;
   font-family: var(--font-serif);
-  letter-spacing: 0.5px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
   cursor: pointer;
-  transition: all 0.2s ease;
-  box-shadow: 0 4px 12px rgba(128, 0, 32, 0.3);
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(128, 0, 32, 0.4);
 }
 
 .primaryButton:hover:not(:disabled) {
-  background: linear-gradient(135deg, #a00028 0%, var(--maroon) 100%);
+  background: linear-gradient(135deg, 
+    #a00020 0%, 
+    #800020 50%, 
+    #600018 100%
+  );
+  border-color: rgba(218, 165, 32, 0.5);
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(128, 0, 32, 0.4);
+  box-shadow: 0 6px 25px rgba(128, 0, 32, 0.5);
 }
 
 .primaryButton:active:not(:disabled) {
@@ -164,28 +325,53 @@
   cursor: not-allowed;
 }
 
-/* ===========================
-   RESPONSIVIDADE
-=========================== */
+/* === RESPONSIVIDADE === */
 @media (max-width: 480px) {
+  .content {
+    padding: 1rem;
+  }
+
+  .grimoire {
+    width: 100%;
+  }
+
+  .spine {
+    width: 12px;
+  }
+
   .card {
-    padding: 2.5rem 2rem;
+    padding: 2.5rem 1.5rem;
+    border-radius: 0 8px 8px 0;
+  }
+
+  .corner {
+    width: 30px;
+    height: 30px;
+  }
+
+  .cornerTL::before, .cornerTR::before, 
+  .cornerBL::before, .cornerBR::before { width: 15px; }
+  .cornerTL::after, .cornerTR::after, 
+  .cornerBL::after, .cornerBR::after { height: 15px; }
+
+  .innerBorder {
+    top: 15px;
+    left: 15px;
+    right: 15px;
+    bottom: 15px;
   }
 
   .logo {
-    width: 160px;
+    width: 140px;
   }
 
   .title {
-    font-size: 1.5rem;
+    font-size: 1.25rem;
+    letter-spacing: 1px;
   }
 
-  .lockIcon {
-    font-size: 1.3rem;
-  }
-
-  .form {
-    gap: 1.25rem;
+  .titleIcon {
+    font-size: 1.1rem;
   }
 
   .input,
@@ -197,10 +383,7 @@
 
 @media (min-width: 481px) and (max-width: 768px) {
   .card {
-    max-width: 400px;
-  }
-
-  .title {
-    font-size: 1.6rem;
+    max-width: 380px;
+    padding: 2.75rem 2rem;
   }
 }

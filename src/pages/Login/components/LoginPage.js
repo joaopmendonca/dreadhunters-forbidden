@@ -32,8 +32,10 @@ export default function LoginPage() {
     <>
       <FullScreenLoader visible={loading} message={LOGIN_MESSAGES.AUTHENTICATING} />
 
-      <div className={styles.wrapper}>
-        <LoginCard formProps={formProps} />
+      <div className={styles.container}>
+        <div className={styles.content}>
+          <LoginCard formProps={formProps} />
+        </div>
       </div>
     </>
   );
