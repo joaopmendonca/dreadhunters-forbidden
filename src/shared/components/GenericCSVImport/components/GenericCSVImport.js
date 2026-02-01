@@ -19,6 +19,7 @@ import styles from '../styles/GenericCSVImport.module.css';
  * Componente de importação CSV genérico e configurável
  */
 export function GenericCSVImport({
+  isOpen,
   fieldDefinitions,
   autoMapping,
   onImport,
@@ -100,6 +101,8 @@ export function GenericCSVImport({
     }
   };
 
+  if (!isOpen) return null;
+
   return (
     <div className={styles.modalOverlay} onClick={onClose}>
       <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
@@ -137,6 +140,7 @@ export function GenericCSVImport({
 }
 
 GenericCSVImport.propTypes = {
+  isOpen: PropTypes.bool,
   fieldDefinitions: PropTypes.arrayOf(PropTypes.shape({
     key: PropTypes.string.isRequired,
     label: PropTypes.string.isRequired,
@@ -158,6 +162,7 @@ GenericCSVImport.propTypes = {
 };
 
 GenericCSVImport.defaultProps = {
+  isOpen: false,
   autoMapping: {},
   existingData: [],
   entityNamePlural: 'Registros',

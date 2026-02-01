@@ -211,6 +211,29 @@ export default function useClasses() {
     downloadCSV(csvContent, CSV_TEMPLATE.FILE_NAME);
   };
 
+  // Import from GenericCSVImport
+  const handleImport = async (classes, rolesList) => {
+    let created = 0;
+    let errors = 0;
+
+    for (const cls of classes) {
+      try {
+        await api.post('/classes', cls);
+        created++;
+      } catch (error) {
+        console.error(`Erro ao importar classe "${cls.name}":`, error);
+        errors++;
+      }
+    }
+
+    const message = `${created} classe(s) importada(s) com sucesso${errors > 0 ? ` (${errors} erro(s))` : ''}`;
+    enqueueSnackbar(message, { variant: created > 0 ? 'success' : 'error' });
+    
+    if (created > 0) {
+      fetchClasses();
+    }
+  };
+
   return {
     classesList,
     rolesList,
@@ -235,5 +258,6 @@ export default function useClasses() {
     handleCSVUpload,
     handleExportCSV,
     handleDownloadTemplate,
+    handleImport,
   };
 }

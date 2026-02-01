@@ -7,12 +7,14 @@ import Button from '../../../shared/components/Button';
 import Card from '../../../shared/components/Card';
 import EmptyState from '../../../shared/components/EmptyState';
 import Pagination from '../../../shared/components/Pagination';
+import GenericCSVImport from '../../../shared/components/GenericCSVImport';
 import ClassesHeader from './ClassesHeader';
 import ClassCard from './ClassCard';
 import LoadingState from './LoadingState';
 import { PAGE_TITLE, ITEMS_PER_PAGE, EMPTY_STATE } from '../constants';
 import { filterByName, paginateItems } from '../utils';
 import useClasses from '../hooks/useClasses';
+import useClassesImport from '../hooks/useClassesImport';
 
 export default function ClassesPage() {
   const {
@@ -39,7 +41,18 @@ export default function ClassesPage() {
     handleCSVUpload,
     handleExportCSV,
     handleDownloadTemplate,
+    handleImport,
   } = useClasses();
+
+  const {
+    fields: fieldDefinitions,
+    autoMapping,
+    transformDataForAPI,
+    isDuplicate,
+    entityNamePlural
+  } = useClassesImport();
+
+  const [importModalOpen, setImportModalOpen] = React.useState(false);
 
   // Lazy load ClassModal
   const ClassModal = React.lazy(() => import('./ClassModal'));
@@ -72,7 +85,7 @@ export default function ClassesPage() {
           setPage(0);
         }}
         onNew={handleNew}
-        onImport={handleCSVUpload}
+        onImport={() => setImportModalOpen(true)}
         onExport={handleExportCSV}
         onDownloadTemplate={handleDownloadTemplate}
         searchName={searchName}
@@ -139,6 +152,18 @@ export default function ClassesPage() {
           />
         </React.Suspense>
       )}
+
+      <GenericCSVImport
+        isOpen={importModalOpen}
+        onClose={() => setImportModalOpen(false)}
+        onImport={(items) => handleImport(items, rolesList)}
+        fields={fieldDefinitions}
+        autoMapping={autoMapping}
+        transformDataForAPI={(data) => transformDataForAPI(data, rolesList)}
+        isDuplicate={isDuplicate}
+        existingList={classesList}
+        entityNamePlural={entityNamePlural}
+      />
     </BaseLayout>
   );
 }

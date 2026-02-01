@@ -123,6 +123,7 @@ export function SkillsPage() {
 
           {importModalOpen && (
             <GenericCSVImport
+              isOpen={importModalOpen}
               fieldDefinitions={fieldDefinitions}
               autoMapping={autoMapping}
               onImport={(mappedData) => {

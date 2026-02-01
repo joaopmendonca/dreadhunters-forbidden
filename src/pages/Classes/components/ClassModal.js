@@ -103,31 +103,31 @@ export default function ClassModal({
 
     // initialize form from initialData
     setForm({
-      _id: initialData._id || '',
-      name: initialData.name || '',
-      description: initialData.description || '',
-      role: initialData.role?._id || '',
-      baseStats: initialData.baseStats 
+      _id: initialData?._id || '',
+      name: initialData?.name || '',
+      description: initialData?.description || '',
+      role: initialData?.role?._id || '',
+      baseStats: initialData?.baseStats
         ? normalizeStatsLocal(initialData.baseStats)
         : initStats(),
-      artworkUrl: initialData.artworkUrl || '',
-      skillTreeRoots: (initialData.skillTree?.roots || []).map(root => ({
+      artworkUrl: initialData?.artworkUrl || '',
+      skillTreeRoots: (initialData?.skillTree?.roots || []).map(root => ({
         skill: root.skill?._id || root.skill,
         requiredLevel: root.requiredLevel || 1,
         unlocked: root.unlocked || false
       })),
-      iconUrl: initialData.iconUrl || '',
-      resourceType: initialData.resourceType || 'none',
-      resourceBase: initialData.resourceBase || 0,
-      resourceRegen: initialData.resourceRegen || 0,
-      skillSlots: initialData.skillSlots || 3,
-      colorTheme: initialData.colorTheme || '#ffffff'
+      iconUrl: initialData?.iconUrl || '',
+      resourceType: initialData?.resourceType || 'none',
+      resourceBase: initialData?.resourceBase || 0,
+      resourceRegen: initialData?.resourceRegen || 0,
+      skillSlots: initialData?.skillSlots || 3,
+      colorTheme: initialData?.colorTheme || '#ffffff'
     });
     setIconFile(null);
-    setPreviewUrl(normalizePreviewUrl(initialData.iconUrl || ''));
+    setPreviewUrl(normalizePreviewUrl(initialData?.iconUrl || ''));
     setArtworkFile(null);
-    setPreviewArtworkUrl(normalizePreviewUrl(initialData.artworkUrl || ''));
-  }, [initialData._id, isOpen, baseStatus]);
+    setPreviewArtworkUrl(normalizePreviewUrl(initialData?.artworkUrl || ''));
+  }, [initialData?._id, isOpen, baseStatus]);
 
   if (!isOpen) return null;
 

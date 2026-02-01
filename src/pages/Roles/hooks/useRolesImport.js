@@ -6,13 +6,13 @@ import { useMemo } from 'react';
 export default function useRolesImport() {
   const fields = useMemo(() => [
     {
-      name: 'name',
+      name: 'nome',
       label: 'Nome',
       required: true,
       example: 'Tank'
     },
     {
-      name: 'description',
+      name: 'descricao',
       label: 'Descrição',
       required: false,
       example: 'Role focada em defesa e proteção do grupo'
@@ -20,24 +20,24 @@ export default function useRolesImport() {
   ], []);
 
   const autoMapping = useMemo(() => ({
-    'nome': 'name',
-    'name': 'name',
-    'descrição': 'description',
-    'descricao': 'description',
-    'description': 'description',
-    'desc': 'description'
+    'nome': 'nome',
+    'name': 'nome',
+    'descrição': 'descricao',
+    'descricao': 'descricao',
+    'description': 'descricao',
+    'desc': 'descricao'
   }), []);
 
   const transformDataForAPI = (data) => {
     return {
-      name: data.name?.trim() || '',
-      description: data.description?.trim() || ''
+      name: data.nome?.trim() || '',
+      description: data.descricao?.trim() || ''
     };
   };
 
   const isDuplicate = (item, existingList) => {
     return existingList.some(existing => 
-      existing.name.toLowerCase() === item.name.toLowerCase()
+      existing.name.toLowerCase() === item.nome.toLowerCase()
     );
   };
 
