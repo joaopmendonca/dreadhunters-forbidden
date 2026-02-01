@@ -6,13 +6,13 @@ import { useMemo } from 'react';
 export default function useRolesImport() {
   const fields = useMemo(() => [
     {
-      name: 'nome',
+      key: 'nome',
       label: 'Nome',
       required: true,
       example: 'Tank'
     },
     {
-      name: 'descricao',
+      key: 'descricao',
       label: 'Descrição',
       required: false,
       example: 'Role focada em defesa e proteção do grupo'
