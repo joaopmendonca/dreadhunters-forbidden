@@ -10,20 +10,15 @@ export default function ChapterContent({ chapter, config, data }) {
   const [searchTerm, setSearchTerm] = useState('');
   const [gameDesignExpanded, setGameDesignExpanded] = useState(false);
 
-  if (!data || data.length === 0) {
-    return (
-      <div className={styles.empty}>
-        <span className={styles.emptyIcon}>📭</span>
-        <p className={styles.emptyText}>Nenhum registro encontrado neste capítulo.</p>
-        <p className={styles.emptyHint}>Os escribas ainda não documentaram este conhecimento.</p>
-      </div>
-    );
-  }
+  // Sempre renderiza a estrutura da página
+  const hasData = data && data.length > 0;
 
-  const filteredData = data.filter(item => {
-    const name = item.name || item.title || item.label || item.nome || '';
-    return name.toLowerCase().includes(searchTerm.toLowerCase());
-  });
+  const filteredData = hasData 
+    ? data.filter(item => {
+        const name = item.name || item.title || item.label || item.nome || '';
+        return name.toLowerCase().includes(searchTerm.toLowerCase());
+      })
+    : [];
 
   const openModal = (item) => {
     setSelectedItem(item);
@@ -396,37 +391,49 @@ export default function ChapterContent({ chapter, config, data }) {
         </div>
       )}
 
-      {/* Barra de pesquisa */}
-      <div className={styles.searchBar}>
-        <span className={styles.searchIcon}>🔍</span>
-        <input
-          type="text"
-          placeholder={`Buscar em ${config.title}...`}
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className={styles.searchInput}
-        />
-        <span className={styles.resultCount}>
-          {filteredData.length} registro{filteredData.length !== 1 ? 's' : ''}
-        </span>
-      </div>
+      {/* Barra de pesquisa - só mostra se houver dados */}
+      {hasData && (
+        <div className={styles.searchBar}>
+          <span className={styles.searchIcon}>🔍</span>
+          <input
+            type="text"
+            placeholder={`Buscar em ${config.title}...`}
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className={styles.searchInput}
+          />
+          <span className={styles.resultCount}>
+            {filteredData.length} registro{filteredData.length !== 1 ? 's' : ''}
+          </span>
+        </div>
+      )}
 
-      {/* Lista de itens */}
-      <div className={styles.itemsGrid}>
-        {filteredData.map(item => (
-          <div 
-            key={item._id} 
-            className={styles.cardWrapper}
-            onClick={() => openModal(item)}
-          >
-            {renderCard(item)}
+      {/* Lista de itens ou estado vazio */}
+      {hasData ? (
+        <>
+          <div className={styles.itemsGrid}>
+            {filteredData.map(item => (
+              <div 
+                key={item._id} 
+                className={styles.cardWrapper}
+                onClick={() => openModal(item)}
+              >
+                {renderCard(item)}
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
 
-      {filteredData.length === 0 && searchTerm && (
-        <div className={styles.noResults}>
-          <p>Nenhum resultado para "{searchTerm}"</p>
+          {filteredData.length === 0 && searchTerm && (
+            <div className={styles.noResults}>
+              <p>Nenhum resultado para "{searchTerm}"</p>
+            </div>
+          )}
+        </>
+      ) : (
+        <div className={styles.empty}>
+          <span className={styles.emptyIcon}>📭</span>
+          <p className={styles.emptyText}>Nenhum registro encontrado neste capítulo.</p>
+          <p className={styles.emptyHint}>Os escribas ainda não documentaram este conhecimento.</p>
         </div>
       )}
 
