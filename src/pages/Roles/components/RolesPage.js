@@ -139,6 +139,7 @@ export default function RolesPage() {
 
           {importModalOpen && (
             <GenericCSVImport
+              isOpen={importModalOpen}
               fieldDefinitions={rolesImportConfig.fields}
               autoMapping={rolesImportConfig.autoMapping}
               onImport={(mappedData) => {

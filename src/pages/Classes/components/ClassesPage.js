@@ -156,12 +156,15 @@ export default function ClassesPage() {
       <GenericCSVImport
         isOpen={importModalOpen}
         onClose={() => setImportModalOpen(false)}
-        onImport={(items) => handleImport(items, rolesList)}
-        fields={fieldDefinitions}
+        onImport={(mappedData) => {
+          const transformed = mappedData.map(item => transformDataForAPI(item, rolesList));
+          handleImport(transformed, rolesList);
+        }}
+        fieldDefinitions={fieldDefinitions}
         autoMapping={autoMapping}
         transformDataForAPI={(data) => transformDataForAPI(data, rolesList)}
         isDuplicate={isDuplicate}
-        existingList={classesList}
+        existingData={classesList}
         entityNamePlural={entityNamePlural}
       />
     </BaseLayout>

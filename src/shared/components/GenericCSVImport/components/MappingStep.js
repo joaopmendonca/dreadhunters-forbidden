@@ -30,7 +30,7 @@ export function MappingStep({ headers, mapping, fieldDefinitions, onMappingChang
               value={mapping[index] || ''}
               onChange={(e) => onMappingChange(index, e.target.value)}
             >
-              <option value="">Ignorar coluna</option>
+              <option key="_ignore" value="">Ignorar coluna</option>
               {fieldDefinitions.map(field => {
                 const isUsed = Object.values(mapping).includes(field.key) && mapping[index] !== field.key;
                 return (

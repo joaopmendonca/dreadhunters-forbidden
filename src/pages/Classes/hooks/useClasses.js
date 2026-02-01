@@ -218,6 +218,7 @@ export default function useClasses() {
 
     for (const cls of classes) {
       try {
+        console.log('Enviando classe para API:', cls);
         await api.post('/classes', cls);
         created++;
       } catch (error) {

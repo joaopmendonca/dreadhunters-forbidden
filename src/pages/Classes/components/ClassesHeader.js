@@ -47,23 +47,14 @@ export default function ClassesHeader({
             Nova Classe
           </Button>
 
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept=".csv"
-            onChange={onImport}
-            style={{ display: 'none' }}
-          />
-
           <Button
             backgroundColor="var(--dark-3)"
             textColor="var(--light)"
             hoverColor="var(--gold)"
-            onClick={() => fileInputRef.current?.click()}
-            disabled={uploading}
+            onClick={onImport}
             icon={<FaFileUpload />}
           >
-            {uploading ? 'Importando...' : 'Importar CSV'}
+            Importar CSV
           </Button>
 
           <Button

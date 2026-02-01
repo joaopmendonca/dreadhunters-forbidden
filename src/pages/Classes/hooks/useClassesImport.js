@@ -10,55 +10,55 @@ import { useMemo } from 'react';
 export function useClassesImport() {
   const fields = useMemo(() => [
     {
-      name: 'nome',
+      key: 'nome',
       label: 'Nome',
       required: true,
       example: 'Observador'
     },
     {
-      name: 'descricao',
+      key: 'descricao',
       label: 'Descrição',
       required: false,
       example: 'Investigador atento que percebe o que outros ignoram'
     },
     {
-      name: 'role',
+      key: 'role',
       label: 'Role',
       required: true,
       example: 'Híbrido'
     },
     {
-      name: 'str',
+      key: 'str',
       label: 'STR',
       required: true,
       example: '2'
     },
     {
-      name: 'dex',
+      key: 'dex',
       label: 'DEX',
       required: true,
       example: '3'
     },
     {
-      name: 'con',
+      key: 'con',
       label: 'CON',
       required: true,
       example: '3'
     },
     {
-      name: 'int',
+      key: 'int',
       label: 'INT',
       required: true,
       example: '5'
     },
     {
-      name: 'wis',
+      key: 'wis',
       label: 'WIS',
       required: true,
       example: '5'
     },
     {
-      name: 'luk',
+      key: 'luk',
       label: 'LUK',
       required: true,
       example: '2'
@@ -82,6 +82,9 @@ export function useClassesImport() {
   }), []);
 
   const transformDataForAPI = (data, rolesList) => {
+    console.log('transformDataForAPI - data recebido:', data);
+    console.log('transformDataForAPI - rolesList:', rolesList);
+    
     // Encontra a role pelo nome
     const role = rolesList.find(r => 
       r.name.toLowerCase() === data.role?.toLowerCase()
@@ -91,7 +94,7 @@ export function useClassesImport() {
       throw new Error(`Role "${data.role}" não encontrada`);
     }
 
-    return {
+    const transformed = {
       name: data.nome?.trim() || '',
       description: data.descricao?.trim() || '',
       role: role._id,
@@ -104,6 +107,9 @@ export function useClassesImport() {
         luk: parseInt(data.luk) || 0
       }
     };
+    
+    console.log('transformDataForAPI - resultado:', transformed);
+    return transformed;
   };
 
   const isDuplicate = (item, existingList) => {

@@ -772,3 +772,74 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* === BASE STATS GRID (estilo modal) === */
+.baseStatsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+}
+
+.statItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 0.75rem;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(212, 175, 55, 0.2);
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.statItem:hover {
+  background: rgba(0, 0, 0, 0.4);
+  border-color: rgba(212, 175, 55, 0.4);
+}
+
+.statLabel {
+  font-size: 0.85rem;
+  color: var(--light-2);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.statValue {
+  font-size: 1.1rem;
+  color: var(--gold);
+  font-weight: 700;
+}
+
+/* === DERIVED STATS GRID (estilo modal) === */
+.derivedStatsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.5rem;
+}
+
+.derivedItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.4rem 0.6rem;
+  background: rgba(0, 0, 0, 0.2);
+  border-left: 2px solid rgba(212, 175, 55, 0.3);
+  font-size: 0.8rem;
+  transition: all 0.2s ease;
+}
+
+.derivedItem:hover {
+  background: rgba(0, 0, 0, 0.35);
+  border-left-color: var(--gold);
+}
+
+.derivedLabel {
+  color: var(--light-2);
+  font-size: 0.75rem;
+}
+
+.derivedValue {
+  color: var(--gold);
+  font-weight: 600;
+  font-size: 0.85rem;
+}
