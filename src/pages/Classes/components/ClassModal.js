@@ -2,7 +2,7 @@
 
 import { useSnackbar } from 'notistack';
 import { useEffect, useState } from 'react';
-import { FaMinus, FaPlus, FaTrash } from 'react-icons/fa';
+import { FaMinus, FaPlus, FaTrash, FaChartBar } from 'react-icons/fa';
 
 import Modal, { MODAL_SIZES, COLUMN_LAYOUTS } from '../../../shared/components/Modal';
 import Button from '../../../shared/components/Button';
@@ -11,11 +11,21 @@ import PhotoInput from '../../../shared/components/PhotoInput';
 import Select from '../../../shared/components/Select';
 import TextArea from '../../../shared/components/TextArea';
 import TextInput from '../../../shared/components/TextInput';
+import Tooltip from '../../../shared/components/Tooltip';
+import StatsRadarChart from '../../../shared/components/StatsRadarChart';
 import useStatus from '../../../shared/hooks/useStatus';
 import useServerConfig from '../../../shared/hooks/useServerConfig';
 
 import api from '../../../config/api';
 import styles from '../styles/ClassModal.module.css';
+
+// Helper para normalizar URLs de ícones
+const buildIconSrc = url => {
+  if (!url) return '';
+  if (/^https?:\/\//i.test(url)) return url;
+  const base = api.defaults.baseURL.replace(/\/api\/?$/, '');
+  return `${base}${url}`;
+};
 
 export default function ClassModal({
   isOpen,
@@ -27,7 +37,7 @@ export default function ClassModal({
   skillsList = []
 }) {
   const { enqueueSnackbar } = useSnackbar();
-  const { baseStatus, loading: loadingStatus, normalizeStats } = useStatus();
+  const { baseStatus, derivedStatus, loading: loadingStatus, normalizeStats } = useStatus();
   const { config: serverConfig, loading: loadingConfig } = useServerConfig();
 
   const [form, setForm] = useState({
@@ -513,6 +523,17 @@ export default function ClassModal({
 
             {/* Coluna Direita - Atributos */}
             <div className={styles.column}>
+              {/* Gráfico Radar de Atributos */}
+              <div className={styles.radarChartContainer}>
+                <StatsRadarChart
+                  statsDistribution={form.baseStats}
+                  baseStatus={baseStatus}
+                  isPercentage={false}
+                  height={220}
+                  color="#800020"
+                />
+              </div>
+
               {/* Pontos Restantes */}
               <div className={styles.pointsInfo}>
                 ⚔ Pontos Restantes: <strong>{remaining}</strong> / {serverConfig.maxStatPointsPerClass}
@@ -524,25 +545,43 @@ export default function ClassModal({
                 <div className={styles.statsGrid}>
                   {baseStatus.map(status => {
                     const value = Number(form.baseStats[status.nome]) || 0;
+                    const tooltipContent = (
+                      <div className={styles.tooltipContent}>
+                        <div className={styles.tooltipTitle}>{status.label}</div>
+                        {status.descricao && (
+                          <div className={styles.tooltipDescription}>{status.descricao}</div>
+                        )}
+                        <div className={styles.tooltipMeta}>
+                          <span>Tipo: {status.tipo === 'base' ? 'Base' : 'Derivado'}</span>
+                          {status.unidade && <span>Unidade: {status.unidade}</span>}
+                        </div>
+                      </div>
+                    );
                     return (
                       <div key={status.nome} className={styles.statControl}>
                         <div className={styles.statHeader}>
-                          <span className={styles.statLabel}>
-                            {status.iconeUrl && (
-                              <img src={status.iconeUrl} alt={status.label} className={styles.statIcon} />
-                            )}
-                            {status.label}
-                          </span>
+                          <Tooltip content={tooltipContent} position="top">
+                            <span className={styles.statLabel}>
+                              {status.iconeUrl ? (
+                                <img src={buildIconSrc(status.iconeUrl)} alt={status.label} className={styles.statIcon} />
+                              ) : (
+                                <FaChartBar className={styles.statIconFallback} />
+                              )}
+                              {status.label}
+                            </span>
+                          </Tooltip>
                           <span className={styles.statValue}>{value}</span>
                         </div>
                         <div className={styles.statButtons}>
                           <Button
+                            type="button"
                             icon={<FaMinus />}
                             onClick={() => handleStatDelta(status.nome, -1)}
                             disabled={saving || value <= serverConfig.minStatValue}
                             style={{ minWidth: '32px', padding: '0.25rem' }}
                           />
                           <Button
+                            type="button"
                             icon={<FaPlus />}
                             onClick={() => handleStatDelta(status.nome, +1)}
                             disabled={saving || remaining <= 0 || value >= serverConfig.maxStatValue}
@@ -561,12 +600,42 @@ export default function ClassModal({
                 <div className={styles.derivedGrid}>
                   {Object.entries(derivedStats)
                     .filter(([key]) => derivedLabels[key]) // Apenas stats que têm label definido
-                    .map(([key, value]) => (
-                      <div key={key} className={styles.derivedStat}>
-                        <span className={styles.derivedLabel}>{derivedLabels[key]}</span>
-                        <span className={styles.derivedValue}>{value}</span>
-                      </div>
-                    ))}
+                    .map(([key, value]) => {
+                      const statusInfo = derivedStatus.find(s => s.nome === key);
+                      const tooltipContent = (
+                        <div className={styles.tooltipContent}>
+                          <div className={styles.tooltipTitle}>{derivedLabels[key]}</div>
+                          {statusInfo?.descricao && (
+                            <div className={styles.tooltipDescription}>{statusInfo.descricao}</div>
+                          )}
+                          {statusInfo?.formula && (
+                            <div className={styles.tooltipFormulaSection}>
+                              <span className={styles.tooltipFormulaLabel}>Fórmula:</span>
+                              <code className={styles.tooltipFormula}>{statusInfo.formula}</code>
+                            </div>
+                          )}
+                          <div className={styles.tooltipMeta}>
+                            <span>Tipo: Derivado</span>
+                            {statusInfo?.unidade && <span>Unidade: {statusInfo.unidade}</span>}
+                          </div>
+                        </div>
+                      );
+                      return (
+                        <div key={key} className={styles.derivedStat}>
+                          <Tooltip content={tooltipContent} position="top" maxWidth={320}>
+                            <span className={styles.derivedLabel}>
+                              {statusInfo?.iconeUrl ? (
+                                <img src={buildIconSrc(statusInfo.iconeUrl)} alt={derivedLabels[key]} className={styles.statIcon} />
+                              ) : (
+                                <FaChartBar className={styles.statIconFallback} />
+                              )}
+                              {derivedLabels[key]}
+                            </span>
+                          </Tooltip>
+                          <span className={styles.derivedValue}>{value}</span>
+                        </div>
+                      );
+                    })}
                 </div>
               </fieldset>
 

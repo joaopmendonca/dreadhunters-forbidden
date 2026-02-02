@@ -1,212 +1,146 @@
 // src/pages/Classes/components/ClassCard.js
 
-import React, { useState } from 'react';
-import { FaSitemap } from 'react-icons/fa';
-import Card from '../../../shared/components/Card';
-import IconButton from '../../../shared/components/IconButton';
+import React, { useState, Suspense, lazy } from 'react';
+import { FaSitemap, FaEdit, FaTrash } from 'react-icons/fa';
+import StatsRadarChart from '../../../shared/components/StatsRadarChart';
 import { buildIconSrc } from '../utils';
 import api from '../../../config/api';
-import styles from '../styles/Classes.module.css';
+import styles from '../styles/ClassCard.module.css';
 
-const SkillTreeModal = React.lazy(() => import('./SkillTreeModal'));
+const SkillTreeModal = lazy(() => import('./SkillTreeModal'));
 
 export default function ClassCard({ cls, statsList, onEdit, onDelete }) {
   const baseURL = api.defaults.baseURL;
   const [skillTreeOpen, setSkillTreeOpen] = useState(false);
 
-  // Usar stats calculados da API
-  const derivedStats = cls.calculatedStats || {};
+  const unlockedSkills = cls.skillTree?.roots?.filter(r => r.unlocked) || [];
+  const allSkills = cls.skillTree?.roots || [];
 
   return (
-    <Card variant="maroon">
-      <Card.TopBar
-        badge={
-          <Card.Badge variant="maroon">
-            {cls.iconUrl
-              ? <img src={buildIconSrc(cls.iconUrl, baseURL)} alt="" style={{ width: 16, height: 16, marginRight: 6 }} />
-              : '⚔️ '}
-            {cls.name}
-          </Card.Badge>
-        }
-      >
-        <Card.Actions 
-          onEdit={() => onEdit(cls)}
-          onDelete={() => onDelete(cls._id)}
-        />
-      </Card.TopBar>
-
-      <Card.Header
-        image={cls.artworkUrl ? buildIconSrc(cls.artworkUrl, baseURL) : null}
-        title={cls.name}
-        subtitle={cls.role?.name || ''}
-      />
-
-      <Card.Body>
-        {cls.description && (
-          <Card.Section title="Descrição">
-            <p>{cls.description}</p>
-          </Card.Section>
+    <div className={styles.card}>
+      {/* Artwork Hero */}
+      <div className={styles.hero}>
+        {cls.artworkUrl ? (
+          <>
+            <div 
+              className={styles.heroBg} 
+              style={{ backgroundImage: `url(${buildIconSrc(cls.artworkUrl, baseURL)})` }}
+            />
+            <img 
+              src={buildIconSrc(cls.artworkUrl, baseURL)} 
+              alt={cls.name} 
+              className={styles.heroImg}
+            />
+          </>
+        ) : (
+          <div className={styles.heroPlaceholder}>
+            {cls.iconUrl ? (
+              <img src={buildIconSrc(cls.iconUrl, baseURL)} alt="" className={styles.heroIcon} />
+            ) : (
+              <span className={styles.heroEmoji}>⚔️</span>
+            )}
+          </div>
         )}
-
-        {/* Atributos Base dinâmicos */}
-        {statsList.length > 0 && (
-          <Card.Section title="Atributos Base">
-            <div className={styles.baseStatsGrid}>
-              {statsList.slice(0, 6).map(stat => (
-                <div key={stat._id} className={styles.statItem}>
-                  <span className={styles.statLabel}>{stat.label || stat.nome}</span>
-                  <span className={styles.statValue}>{cls.baseStats?.[stat.nome] || 0}</span>
-                </div>
-              ))}
-            </div>
-          </Card.Section>
-        )}
-
-        {/* Atributos Derivados */}
-        <Card.Section title="Atributos Derivados">
-          <div className={styles.derivedStatsGrid}>
-            <div className={styles.derivedItem}>
-              <span className={styles.derivedLabel}>HP Máximo</span>
-              <span className={styles.derivedValue}>{Math.floor(derivedStats.hp_max || 0)}</span>
-            </div>
-            <div className={styles.derivedItem}>
-              <span className={styles.derivedLabel}>SP Máximo</span>
-              <span className={styles.derivedValue}>{Math.floor(derivedStats.sp_max || 0)}</span>
-            </div>
-            <div className={styles.derivedItem}>
-              <span className={styles.derivedLabel}>Stamina Máx</span>
-              <span className={styles.derivedValue}>{Math.floor(derivedStats.stamina_max || 0)}</span>
-            </div>
-            <div className={styles.derivedItem}>
-              <span className={styles.derivedLabel}>Regen HP</span>
-              <span className={styles.derivedValue}>{(derivedStats.hp_regen || 0).toFixed(2)}</span>
-            </div>
-            <div className={styles.derivedItem}>
-              <span className={styles.derivedLabel}>Regen SP</span>
-              <span className={styles.derivedValue}>{(derivedStats.sp_regen || 0).toFixed(2)}</span>
-            </div>
-            <div className={styles.derivedItem}>
-              <span className={styles.derivedLabel}>Regen Stamina</span>
-              <span className={styles.derivedValue}>{(derivedStats.stamina_regen || 0).toFixed(2)}</span>
-            </div>
-            <div className={styles.derivedItem}>
-              <span className={styles.derivedLabel}>Ataque Físico</span>
-              <span className={styles.derivedValue}>{Math.floor(derivedStats.p_atk || 0)}</span>
-            </div>
-            <div className={styles.derivedItem}>
-              <span className={styles.derivedLabel}>Ataque Oculto</span>
-              <span className={styles.derivedValue}>{Math.floor(derivedStats.o_atk || 0)}</span>
-            </div>
-            <div className={styles.derivedItem}>
-              <span className={styles.derivedLabel}>Taxa Crítico</span>
-              <span className={styles.derivedValue}>{(derivedStats.crit_chance || 0).toFixed(1)}%</span>
-            </div>
-            <div className={styles.derivedItem}>
-              <span className={styles.derivedLabel}>Dano Crítico</span>
-              <span className={styles.derivedValue}>{Math.floor(derivedStats.crit_dmg || 0)}</span>
-            </div>
-            <div className={styles.derivedItem}>
-              <span className={styles.derivedLabel}>Defesa Física</span>
-              <span className={styles.derivedValue}>{Math.floor(derivedStats.p_def || 0)}</span>
-            </div>
-            <div className={styles.derivedItem}>
-              <span className={styles.derivedLabel}>Resist. Oculta</span>
-              <span className={styles.derivedValue}>{Math.floor(derivedStats.o_res || 0)}</span>
-            </div>
-            <div className={styles.derivedItem}>
-              <span className={styles.derivedLabel}>Precisão</span>
-              <span className={styles.derivedValue}>{Math.floor(derivedStats.acc || 0)}%</span>
-            </div>
-            <div className={styles.derivedItem}>
-              <span className={styles.derivedLabel}>Esquiva</span>
-              <span className={styles.derivedValue}>{(derivedStats.eva || 0).toFixed(1)}%</span>
+        
+        {/* Overlay com nome */}
+        <div className={styles.heroOverlay}>
+          <div className={styles.heroInfo}>
+            {cls.iconUrl && (
+              <img src={buildIconSrc(cls.iconUrl, baseURL)} alt="" className={styles.classIcon} />
+            )}
+            <div className={styles.heroText}>
+              <h3 className={styles.className}>{cls.name}</h3>
+              {cls.role?.name && <span className={styles.roleBadge}>{cls.role.name}</span>}
             </div>
           </div>
-        </Card.Section>
+        </div>
 
-        {/* Skills Desbloqueadas (Skill Tree) */}
-        {cls.skillTree?.roots && cls.skillTree.roots.filter(r => r.unlocked).length > 0 && (
-          <Card.Section title="✨ Skills Iniciais">
-            <div className={styles.skillsList}>
-              {cls.skillTree.roots.filter(r => r.unlocked).map((root, idx) => {
-                const skill = root.skill;
-                const skillName = typeof skill === 'string' ? skill : (skill?.name || skill?._id || 'Sem nome');
-                const skillIcon = typeof skill === 'string' ? null : skill?.iconUrl;
-                
-                return (
-                  <div key={idx} className={styles.skillItem} title={skillName}>
-                    {skillIcon && (
-                      <img 
-                        src={buildIconSrc(skillIcon, baseURL)} 
-                        alt={skillName} 
-                        className={styles.skillIconImg}
-                      />
-                    )}
-                    <span className={styles.skillName}>{skillName}</span>
-                    <span className={styles.skillLevel} style={{ background: 'var(--gold)', color: 'var(--dark)' }}>
-                      Lv.{root.requiredLevel || 1}
-                    </span>
-                  </div>
-                );
-              })}
-            </div>
-          </Card.Section>
+        {/* Ações */}
+        <div className={styles.actions}>
+          <button className={styles.actionBtn} onClick={() => onEdit(cls)} title="Editar">
+            <FaEdit />
+          </button>
+          <button className={styles.actionBtn} onClick={() => setSkillTreeOpen(true)} title="Skill Tree">
+            <FaSitemap />
+          </button>
+          <button className={`${styles.actionBtn} ${styles.deleteBtn}`} onClick={() => onDelete(cls._id)} title="Excluir">
+            <FaTrash />
+          </button>
+        </div>
+      </div>
+
+      {/* Conteúdo */}
+      <div className={styles.content}>
+        {/* Descrição */}
+        {cls.description && (
+          <p className={styles.description}>{cls.description}</p>
         )}
 
-        {/* Skill Tree - Nós Raiz */}
-        {cls.skillTree?.roots && cls.skillTree.roots.length > 0 && (
-          <Card.Section title="Skill Tree - Disponíveis">
-            <div className={styles.skillsList}>
-              {cls.skillTree.roots.map((root, idx) => {
-                const skill = root.skill;
-                const skillName = typeof skill === 'string' ? skill : (skill.name || skill._id || 'Sem nome');
-                const skillIcon = typeof skill === 'string' ? null : skill.iconUrl;
-                
-                return (
-                  <div key={idx} className={styles.skillItem} title={skillName}>
-                    {skillIcon && (
-                      <img 
-                        src={buildIconSrc(skillIcon, baseURL)} 
-                        alt={skillName} 
-                        className={styles.skillIconImg}
-                      />
-                    )}
-                    <span className={styles.skillName}>{skillName}</span>
-                    <span className={styles.skillLevel} style={{ background: 'var(--maroon)', color: 'var(--light)' }}>
-                      Nv. {root.requiredLevel || 1}
-                    </span>
-                  </div>
-                );
-              })}
-            </div>
-          </Card.Section>
+        {/* Gráfico Radar */}
+        {statsList?.length > 0 && cls.baseStats && (
+          <div className={styles.chartSection}>
+            <StatsRadarChart
+              statsDistribution={cls.baseStats}
+              baseStatus={statsList}
+              isPercentage={false}
+              height={180}
+              color="#c5893a"
+            />
+          </div>
         )}
 
-        {cls.specials && cls.specials.length > 0 && (
-          <Card.Section title="Especiais">
-            <span>{cls.specials.map(s => s.name).join(', ')}</span>
-          </Card.Section>
+        {/* Skills */}
+        {(unlockedSkills.length > 0 || allSkills.length > 0) && (
+          <div className={styles.skillsSection}>
+            {unlockedSkills.length > 0 && (
+              <div className={styles.skillGroup}>
+                <span className={styles.skillGroupTitle}>✨ Iniciais</span>
+                <div className={styles.skillTags}>
+                  {unlockedSkills.slice(0, 3).map((root, idx) => {
+                    const skill = root.skill;
+                    const name = typeof skill === 'string' ? skill : (skill?.name || 'Skill');
+                    return (
+                      <span key={idx} className={`${styles.skillTag} ${styles.unlocked}`}>
+                        {name}
+                      </span>
+                    );
+                  })}
+                  {unlockedSkills.length > 3 && (
+                    <span className={styles.skillMore}>+{unlockedSkills.length - 3}</span>
+                  )}
+                </div>
+              </div>
+            )}
+            
+            {allSkills.length > 0 && (
+              <div className={styles.skillGroup}>
+                <span className={styles.skillGroupTitle}>🌳 Skill Tree</span>
+                <span className={styles.skillCount}>{allSkills.length} skills</span>
+              </div>
+            )}
+          </div>
         )}
-      </Card.Body>
 
-      <Card.Footer>
-        <IconButton
-          icon={<FaSitemap />}
-          onClick={() => setSkillTreeOpen(true)}
-          hoverColor="var(--gold)"
-          title="Skill Tree"
-        />
-      </Card.Footer>
+        {/* Especiais */}
+        {cls.specials?.length > 0 && (
+          <div className={styles.specialsSection}>
+            {cls.specials.map((s, i) => (
+              <span key={i} className={styles.specialBadge}>⭐ {s.name}</span>
+            ))}
+          </div>
+        )}
+      </div>
 
+      {/* Modal */}
       {skillTreeOpen && (
-        <React.Suspense fallback={<div>Carregando...</div>}>
+        <Suspense fallback={null}>
           <SkillTreeModal
             isOpen={skillTreeOpen}
             onClose={() => setSkillTreeOpen(false)}
             cls={cls}
           />
-        </React.Suspense>
+        </Suspense>
       )}
-    </Card>
+    </div>
   );
 }

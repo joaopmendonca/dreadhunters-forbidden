@@ -29,6 +29,13 @@ export default function LocationsPage() {
   } = useLocations();
 
   const locationsImportConfig = useLocationsImport();
+  const { 
+    fields: fieldDefinitions, 
+    autoMapping, 
+    transformDataForAPI, 
+    isDuplicate, 
+    entityNamePlural 
+  } = locationsImportConfig;
 
   const [searchName, setSearchName] = useState('');
   const [page, setPage] = useState(0);
@@ -37,7 +44,7 @@ export default function LocationsPage() {
 
   useEffect(() => {
     fetchLocations();
-  }, []);
+  }, [fetchLocations]);
 
   const handleNew = () => {
     setEditing(null);
@@ -123,24 +130,29 @@ export default function LocationsPage() {
                   />
                 ))}
               </Card.Grid>
-
-              {pageCount > 1 && (
-                <Pagination
-                  currentPage={page}
-                  totalPages={pageCount}
-                  onPageChange={setPage}
-                />
-              )}
             </>
           )}
+
+          <Pagination
+            pageCount={pageCount}
+            currentPage={page}
+            onPageChange={setPage}
+          />
 
           {importModalOpen && (
             <GenericCSVImport
               isOpen={importModalOpen}
+              fieldDefinitions={fieldDefinitions}
+              autoMapping={autoMapping}
+              onImport={(mappedData) => {
+                const transformedData = mappedData.map(row => transformDataForAPI(row));
+                handleImport(transformedData);
+                setImportModalOpen(false);
+              }}
               onClose={() => setImportModalOpen(false)}
-              onImport={handleImport}
-              existingItems={locationsList}
-              config={locationsImportConfig}
+              existingData={locationsList}
+              isDuplicate={isDuplicate}
+              entityNamePlural={entityNamePlural}
             />
           )}
 

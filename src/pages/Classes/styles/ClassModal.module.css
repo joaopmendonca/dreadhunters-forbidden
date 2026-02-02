@@ -23,6 +23,14 @@
   flex-wrap: wrap;
 }
 
+/* === RADAR CHART CONTAINER === */
+.radarChartContainer {
+  background: linear-gradient(135deg, rgba(128, 0, 32, 0.1) 0%, rgba(0, 0, 0, 0.3) 100%);
+  border: 1px solid var(--dark-4);
+  border-radius: 12px;
+  padding: 0.5rem;
+}
+
 /* === SECTIONS === */
 .section {
   display: flex;
@@ -181,6 +189,14 @@
   object-fit: contain;
 }
 
+.statIconFallback {
+  width: 20px;
+  height: 20px;
+  color: var(--gold);
+  opacity: 0.7;
+  flex-shrink: 0;
+}
+
 .statValue {
   font-weight: 700;
   color: var(--gold);
@@ -279,12 +295,69 @@
 .derivedLabel {
   font-size: 0.8rem;
   color: var(--light-1);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .derivedValue {
   font-weight: 600;
   color: var(--gold);
   font-size: 0.9rem;
+}
+
+/* === TOOLTIP CONTENT === */
+.tooltipContent {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.tooltipTitle {
+  font-weight: 700;
+  color: var(--gold);
+  font-size: 0.95rem;
+}
+
+.tooltipDescription {
+  color: var(--light-1);
+  font-size: 0.85rem;
+  line-height: 1.4;
+}
+
+.tooltipFormulaSection {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-top: 0.25rem;
+}
+
+.tooltipFormulaLabel {
+  font-size: 0.75rem;
+  color: var(--dark-5);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.tooltipFormula {
+  display: block;
+  padding: 0.5rem;
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 4px;
+  font-family: 'Consolas', 'Monaco', monospace;
+  font-size: 0.8rem;
+  color: var(--gold);
+  word-break: break-all;
+}
+
+.tooltipMeta {
+  display: flex;
+  gap: 1rem;
+  margin-top: 0.25rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--dark-4);
+  font-size: 0.75rem;
+  color: var(--dark-5);
 }
 
 /* === SKILL CARD === */

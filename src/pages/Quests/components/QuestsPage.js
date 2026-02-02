@@ -46,7 +46,7 @@ export default function QuestsPage() {
   useEffect(() => {
     fetchQuests();
     fetchMeta();
-  }, []);
+  }, [fetchQuests, fetchMeta]);
 
   const handleNew = () => {
     setEditing(null);
@@ -180,10 +180,11 @@ export default function QuestsPage() {
 
           {importModalOpen && (
             <GenericCSVImport
+              isOpen={importModalOpen}
               fieldDefinitions={questsImportConfig.fields}
               autoMapping={questsImportConfig.autoMapping}
               onImport={(mappedData) => {
-                const transformedData = questsImportConfig.transformDataForAPI(mappedData);
+                const transformedData = mappedData.map(row => questsImportConfig.transformDataForAPI(row));
                 handleImport(transformedData);
                 setImportModalOpen(false);
               }}

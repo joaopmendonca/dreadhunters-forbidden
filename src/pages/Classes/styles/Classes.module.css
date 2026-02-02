@@ -94,6 +94,99 @@
   to { transform: rotate(360deg); }
 }
 
+/* === CARD ARTWORK FULL WIDTH === */
+.cardArtwork {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+}
+
+.cardArtworkBg {
+  position: absolute;
+  top: -10px;
+  left: -10px;
+  right: -10px;
+  bottom: -10px;
+  background-size: cover;
+  background-position: center;
+  filter: blur(15px) brightness(0.5);
+  transform: scale(1.1);
+}
+
+.cardArtworkImg {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  z-index: 1;
+  transition: transform 0.3s ease;
+}
+
+.cardArtwork:hover .cardArtworkImg {
+  transform: scale(1.05);
+}
+
+.cardArtworkOverlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 1rem;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.85));
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  z-index: 2;
+}
+
+.cardArtworkTitle {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--gold);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.cardArtworkRole {
+  font-size: 0.85rem;
+  color: var(--light-1);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* === BADGE ICON === */
+.badgeIcon {
+  width: 16px;
+  height: 16px;
+  margin-right: 6px;
+  object-fit: contain;
+}
+
+/* === DESCRIPTION === */
+.description {
+  font-size: 0.9rem;
+  color: var(--light-1);
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* === SPECIALS LIST === */
+.specialsList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.specialBadge {
+  padding: 0.35rem 0.75rem;
+  background: linear-gradient(135deg, var(--maroon) 0%, rgba(128, 0, 32, 0.6) 100%);
+  border: 1px solid var(--gold);
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--gold);
+}
+
 /* === CARDS GRID === */
 .cardsGrid {
   display: grid;
@@ -784,11 +877,13 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 0.5rem;
   padding: 0.5rem 0.75rem;
   background: rgba(0, 0, 0, 0.3);
   border: 1px solid rgba(212, 175, 55, 0.2);
   border-radius: 6px;
   transition: all 0.2s ease;
+  cursor: help;
 }
 
 .statItem:hover {
@@ -802,6 +897,7 @@
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  flex: 1;
 }
 
 .statValue {
@@ -821,11 +917,13 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 0.4rem;
   padding: 0.4rem 0.6rem;
   background: rgba(0, 0, 0, 0.2);
   border-left: 2px solid rgba(212, 175, 55, 0.3);
   font-size: 0.8rem;
   transition: all 0.2s ease;
+  cursor: help;
 }
 
 .derivedItem:hover {
@@ -836,10 +934,83 @@
 .derivedLabel {
   color: var(--light-2);
   font-size: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
 }
 
 .derivedValue {
   color: var(--gold);
   font-weight: 600;
   font-size: 0.85rem;
+}
+
+/* === STAT ICONS (Card) === */
+.statIconImg {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.statIconFallback {
+  width: 16px;
+  height: 16px;
+  color: var(--gold);
+  opacity: 0.7;
+  flex-shrink: 0;
+}
+
+/* === TOOLTIP CONTENT (Card) === */
+.tooltipContent {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.tooltipTitle {
+  font-weight: 700;
+  color: var(--gold);
+  font-size: 0.95rem;
+}
+
+.tooltipDescription {
+  color: var(--light-1);
+  font-size: 0.85rem;
+  line-height: 1.4;
+}
+
+.tooltipFormulaSection {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-top: 0.25rem;
+}
+
+.tooltipFormulaLabel {
+  font-size: 0.75rem;
+  color: var(--dark-5);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.tooltipFormula {
+  display: block;
+  padding: 0.5rem;
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 4px;
+  font-family: 'Consolas', 'Monaco', monospace;
+  font-size: 0.8rem;
+  color: var(--gold);
+  word-break: break-all;
+}
+
+.tooltipMeta {
+  display: flex;
+  gap: 1rem;
+  margin-top: 0.25rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--dark-4);
+  font-size: 0.75rem;
+  color: var(--dark-5);
 }

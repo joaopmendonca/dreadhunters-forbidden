@@ -1,0 +1,109 @@
+@import '../../styles/theme.css';
+
+.trigger {
+  display: inline-flex;
+  align-items: center;
+  cursor: help;
+}
+
+.tooltip {
+  position: fixed;
+  z-index: 10000;
+  padding: 0.75rem 1rem;
+  background: var(--dark-2);
+  border: 1px solid var(--dark-4);
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  color: var(--light);
+  font-size: 0.85rem;
+  line-height: 1.5;
+  pointer-events: none;
+  animation: fadeIn 0.15s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Tooltip Arrow styles */
+.tooltip::before {
+  content: '';
+  position: absolute;
+  border: 6px solid transparent;
+}
+
+.top::before {
+  bottom: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-top-color: var(--dark-4);
+}
+
+.bottom::before {
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-bottom-color: var(--dark-4);
+}
+
+.left::before {
+  right: -12px;
+  top: 50%;
+  transform: translateY(-50%);
+  border-left-color: var(--dark-4);
+}
+
+.right::before {
+  left: -12px;
+  top: 50%;
+  transform: translateY(-50%);
+  border-right-color: var(--dark-4);
+}
+
+/* Tooltip content styles */
+.tooltipTitle {
+  font-weight: 700;
+  color: var(--gold);
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.tooltipDescription {
+  color: var(--light-1);
+  margin-bottom: 0.5rem;
+}
+
+.tooltipFormula {
+  display: block;
+  padding: 0.5rem;
+  margin-top: 0.5rem;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 4px;
+  font-family: 'Consolas', 'Monaco', monospace;
+  font-size: 0.8rem;
+  color: var(--gold);
+  word-break: break-all;
+}
+
+.tooltipMeta {
+  display: flex;
+  gap: 1rem;
+  margin-top: 0.5rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--dark-4);
+  font-size: 0.75rem;
+  color: var(--dark-5);
+}
+
+.tooltipMeta span {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}

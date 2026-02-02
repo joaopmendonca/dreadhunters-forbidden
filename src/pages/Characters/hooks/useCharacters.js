@@ -123,23 +123,40 @@ export function useCharacters() {
     let created = 0;
     let errors = 0;
 
+    console.log('Classes disponíveis:', classes.map(c => c.name));
+
     for (const npc of npcs) {
       try {
-        const classObj = classes.find(c => c.name.toLowerCase() === npc.class?.toLowerCase());
-        if (!classObj) {
-          console.error(`Classe "${npc.class}" não encontrada para NPC "${npc.name}"`);
-          errors++;
-          continue;
+        let classId = null;
+        
+        // Só procura a classe se ela foi fornecida
+        if (npc.class && npc.class.trim()) {
+          console.log(`Procurando classe "${npc.class}" para NPC "${npc.name}"`);
+          const classObj = classes.find(c => c.name.toLowerCase() === npc.class?.toLowerCase());
+          if (!classObj) {
+            console.error(`Classe "${npc.class}" não encontrada para NPC "${npc.name}"`);
+            console.error('Classes disponíveis:', classes.map(c => ({ id: c._id, name: c.name })));
+            errors++;
+            continue;
+          }
+          classId = classObj._id;
+        } else {
+          console.log(`NPC "${npc.name}" será criado sem classe`);
         }
 
         const payload = {
           name: npc.name,
           description: npc.description || '',
-          class: classObj._id,
+          type: 'npc',
           gender: npc.gender || 'male',
           hp: npc.hp || 100,
           mp: npc.mp || 50
         };
+        
+        // Só adiciona a classe se ela existir
+        if (classId) {
+          payload.class = classId;
+        }
 
         await api.post('/characters', payload);
         created++;

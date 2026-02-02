@@ -1,0 +1,290 @@
+/* ============================================================================
+   EnemyCard - Estilo moderno similar ao ClassCard
+   ============================================================================ */
+
+.card {
+  background: linear-gradient(145deg, #1a1a1a 0%, #0f0f0f 100%);
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid rgba(196, 30, 58, 0.2);
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(196, 30, 58, 0.5);
+  box-shadow: 0 8px 24px rgba(196, 30, 58, 0.15);
+}
+
+/* ============================================================================
+   Hero Section (Artwork)
+   ============================================================================ */
+
+.hero {
+  position: relative;
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+  background: linear-gradient(180deg, #2a1a1a 0%, #1a1010 100%);
+}
+
+.heroBg {
+  position: absolute;
+  top: -20px;
+  left: -20px;
+  right: -20px;
+  bottom: -20px;
+  background-size: cover;
+  background-position: center;
+  filter: blur(20px) brightness(0.4);
+  transform: scale(1.1);
+}
+
+.heroImg {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  z-index: 1;
+}
+
+.heroPlaceholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  background: linear-gradient(135deg, rgba(196, 30, 58, 0.1) 0%, rgba(60, 10, 20, 0.2) 100%);
+}
+
+.heroIcon {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.5));
+}
+
+.heroIconFallback {
+  width: 64px;
+  height: 64px;
+  color: white;
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.5));
+}
+
+.heroEmoji {
+  font-size: 64px;
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.5));
+}
+
+.heroOverlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.95) 0%, rgba(0, 0, 0, 0.7) 60%, transparent 100%);
+  padding: 16px;
+  z-index: 2;
+}
+
+.heroInfo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.enemyIcon {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 6px;
+  border: 2px solid rgba(196, 30, 58, 0.3);
+}
+
+.heroText {
+  flex: 1;
+  min-width: 0;
+}
+
+.enemyName {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--maroon);
+  margin: 0 0 6px 0;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.badges {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.typeBadge,
+.levelBadge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.typeBadge {
+  background: var(--maroon);
+  color: white;
+}
+
+.levelBadge {
+  background: rgba(255, 153, 51, 0.9);
+  color: white;
+}
+
+/* ============================================================================
+   Actions
+   ============================================================================ */
+
+.actions {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  display: flex;
+  gap: 8px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 3;
+}
+
+.card:hover .actions {
+  opacity: 1;
+}
+
+.actionBtn {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  border: none;
+  background: rgba(0, 0, 0, 0.8);
+  color: var(--gold);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(8px);
+}
+
+.actionBtn:hover {
+  background: rgba(0, 0, 0, 0.95);
+  transform: scale(1.1);
+  color: var(--light);
+}
+
+.deleteBtn:hover {
+  background: var(--maroon);
+  color: white;
+}
+
+/* ============================================================================
+   Content
+   ============================================================================ */
+
+.content {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  flex: 1;
+}
+
+.description {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.chartSection {
+  margin: 8px 0;
+}
+
+.rewardSection {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.xpReward {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.1) 0%, rgba(255, 153, 0, 0.05) 100%);
+  border-radius: 8px;
+  border: 1px solid rgba(255, 215, 0, 0.2);
+}
+
+.xpLabel {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: rgba(255, 215, 0, 0.9);
+}
+
+.xpValue {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--gold);
+}
+
+.dropsSection {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.dropTitle {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.6);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.cardRewards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.rewardEntry {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.8);
+  transition: all 0.2s ease;
+}
+
+.rewardEntry:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: var(--gold);
+  transform: translateY(-1px);
+}
+
+.rewardIcon {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+}

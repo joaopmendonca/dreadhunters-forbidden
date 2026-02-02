@@ -10,6 +10,7 @@ import ReactFlow, {
   useEdgesState
 } from 'reactflow';
 import 'reactflow/dist/style.css';
+import { TbHierarchy3 } from 'react-icons/tb';
 import Modal from '../../../shared/components/Modal';
 import { buildIconSrc } from '../utils';
 import api from '../../../config/api';
@@ -92,8 +93,8 @@ export default function SkillTreeModal({ isOpen, onClose, cls }) {
     return { nodes, edges };
   }, [cls, baseURL]);
 
-  const [nodes, setNodes, onNodesChange] = useNodesState(initialData.nodes);
-  const [edges, setEdges, onEdgesChange] = useEdgesState(initialData.edges);
+  const [nodes, , onNodesChange] = useNodesState(initialData.nodes);
+  const [edges, , onEdgesChange] = useEdgesState(initialData.edges);
 
   // Componente customizado para os nodes
   const nodeTypes = useMemo(() => ({
@@ -145,7 +146,7 @@ export default function SkillTreeModal({ isOpen, onClose, cls }) {
         <div className={styles.skillTreeContainer}>
           {initialData.nodes.length === 0 ? (
             <div className={styles.emptyState}>
-              <span className={styles.emptyIcon}>🌳</span>
+              <TbHierarchy3 className={styles.emptyIcon} />
               <h3>Nenhuma Skill Tree configurada</h3>
               <p>Esta classe ainda não possui uma árvore de habilidades.</p>
             </div>

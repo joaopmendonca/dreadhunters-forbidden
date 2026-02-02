@@ -1,85 +1,80 @@
 // src/pages/Characters/hooks/useCharactersImport.js
 
-import { useCallback } from 'react';
+import { useFieldDefinitions } from '../../../shared/components/GenericCSVImport/hooks';
 
 export function useCharactersImport() {
+  const { createField } = useFieldDefinitions();
+
   const fieldDefinitions = [
-    { 
-      name: 'name', 
-      label: 'Nome', 
-      required: true, 
-      type: 'text',
-      description: 'Nome do NPC'
-    },
-    { 
-      name: 'class', 
-      label: 'Classe', 
-      required: true, 
-      type: 'text',
-      description: 'Nome da classe do NPC'
-    },
-    { 
-      name: 'gender', 
-      label: 'Gênero', 
-      required: false, 
-      type: 'select',
-      description: 'Gênero do NPC',
-      options: ['male', 'female', 'other']
-    },
-    { 
-      name: 'description', 
-      label: 'Descrição', 
-      required: false, 
-      type: 'text',
-      description: 'Descrição do NPC'
-    },
-    { 
-      name: 'hp', 
-      label: 'HP', 
-      required: false, 
-      type: 'number',
-      description: 'Pontos de vida'
-    },
-    { 
-      name: 'mp', 
-      label: 'MP', 
-      required: false, 
-      type: 'number',
-      description: 'Pontos de mana'
-    }
+    createField('name', 'Nome', 'string', {
+      required: true,
+      unique: true,
+      example: 'Mestre Alaric'
+    }),
+    createField('class', 'Classe', 'string', {
+      required: false,
+      example: 'Hermenêuta'
+    }),
+    createField('gender', 'Gênero', 'string', {
+      required: false,
+      example: 'male'
+    }),
+    createField('description', 'Descrição', 'string', {
+      required: false,
+      example: 'Sábio ancião que domina os segredos do conhecimento arcano'
+    }),
+    createField('hp', 'HP', 'number', {
+      required: false,
+      example: '150'
+    }),
+    createField('mp', 'MP', 'number', {
+      required: false,
+      example: '200'
+    })
   ];
 
   const autoMapping = {
-    'name': ['name', 'nome', 'Name', 'Nome'],
-    'class': ['class', 'classe', 'Class', 'Classe'],
-    'gender': ['gender', 'genero', 'gênero', 'Gender', 'Gênero'],
-    'description': ['description', 'descricao', 'descrição', 'Description', 'Descrição'],
-    'hp': ['hp', 'HP', 'vida', 'health'],
-    'mp': ['mp', 'MP', 'mana']
+    'name': 'name',
+    'nome': 'name',
+    'class': 'class',
+    'classe': 'class',
+    'gender': 'gender',
+    'genero': 'gender',
+    'gênero': 'gender',
+    'description': 'description',
+    'descricao': 'description',
+    'descrição': 'description',
+    'hp': 'hp',
+    'vida': 'hp',
+    'health': 'hp',
+    'mp': 'mp',
+    'mana': 'mp'
   };
 
-  const transformDataForAPI = useCallback((npc) => {
+  const transformDataForAPI = (npc) => {
     return {
       name: npc.name?.trim(),
       class: npc.class?.trim(),
       gender: npc.gender?.trim() || 'male',
       description: npc.description?.trim() || '',
+      type: 'npc',
       hp: parseInt(npc.hp) || 100,
       mp: parseInt(npc.mp) || 50
     };
-  }, []);
+  };
 
-  const isDuplicate = useCallback((npc, existingData) => {
+  const isDuplicate = (npc, existingData) => {
     return existingData.some(existing => 
       existing.name?.toLowerCase() === npc.name?.toLowerCase()
     );
-  }, []);
+  };
 
   return {
     fieldDefinitions,
     autoMapping,
     transformDataForAPI,
     isDuplicate,
+    entityName: 'NPC',
     entityNamePlural: 'NPCs'
   };
 }

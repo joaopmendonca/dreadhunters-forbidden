@@ -127,7 +127,8 @@ export default function LocationModal({ isOpen, onClose, onSave, onIconDeleted, 
         <form onSubmit={handleSubmit}>
           <Modal.Body columns={COLUMN_LAYOUTS.SINGLE}>
             <div className={styles.section}>
-              <h3 className={styles.sectionTitle}>Informações</h3>
+              <span className={styles.sectionTitle}>Informações</span>
+
               <div className={styles.field}>
                 <label>Nome</label>
                 <TextInput
@@ -138,6 +139,7 @@ export default function LocationModal({ isOpen, onClose, onSave, onIconDeleted, 
                   disabled={saving}
                 />
               </div>
+
               <div className={styles.field}>
                 <label>Descrição</label>
                 <TextArea
@@ -151,7 +153,8 @@ export default function LocationModal({ isOpen, onClose, onSave, onIconDeleted, 
             </div>
 
             <div className={styles.section}>
-              <h3 className={styles.sectionTitle}>Posição</h3>
+              <span className={styles.sectionTitle}>Posição</span>
+
               <div className={styles.row}>
                 <div className={styles.field}>
                   <label>Posição X</label>
@@ -175,7 +178,8 @@ export default function LocationModal({ isOpen, onClose, onSave, onIconDeleted, 
             </div>
 
             <div className={styles.section}>
-              <h3 className={styles.sectionTitle}>Ícone</h3>
+              <span className={styles.sectionTitle}>Ícone</span>
+
               <div className={styles.field}>
                 <PhotoInput
                   file={iconFile}

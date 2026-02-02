@@ -4,7 +4,7 @@ import TextInput from '../../../shared/components/TextInput';
 import TextArea from '../../../shared/components/TextArea';
 import Button from '../../../shared/components/Button';
 import { useStatus } from '../../../shared/hooks/useStatus';
-import StatsRadarChart from './StatsRadarChart';
+import StatsRadarChart from '../../../shared/components/StatsRadarChart';
 import styles from '../styles/RoleModal.module.css';
 
 export default function RoleModal({ isOpen, onClose, onSave, initialData = {} }) {

@@ -1,4 +1,5 @@
 import React from 'react';
+import { GiCrossedSwords } from 'react-icons/gi';
 import Card from '../../../shared/components/Card';
 import { buildIconSrc } from '../utils';
 
@@ -38,7 +39,7 @@ export function SkillCard({ skill, onEdit, onDelete }) {
         type="SKILL"
         title={skill.name}
       >
-        {!skill.iconUrl && <span style={{ fontSize: '2rem' }}>✨</span>}
+        {!skill.iconUrl && <GiCrossedSwords style={{ fontSize: '2rem', color: 'var(--gold)' }} />}
       </Card.Header>
 
       <Card.Body>

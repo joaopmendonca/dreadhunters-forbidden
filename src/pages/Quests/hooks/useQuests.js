@@ -89,13 +89,33 @@ export default function useQuests() {
     }
   };
 
-  const handleImport = async (data) => {
+  const handleImport = async (questsData) => {
     try {
-      await api.post('/quests', data);
+      let successCount = 0;
+      let errorCount = 0;
+      
+      for (const quest of questsData) {
+        try {
+          await api.post('/quests', quest);
+          successCount++;
+        } catch (err) {
+          errorCount++;
+          console.error('Erro ao importar quest:', quest.title, err);
+        }
+      }
+      
+      if (successCount > 0) {
+        enqueueSnackbar(`${successCount} quest(s) importada(s) com sucesso`, { variant: 'success' });
+      }
+      if (errorCount > 0) {
+        enqueueSnackbar(`${errorCount} quest(s) falharam na importação`, { variant: 'error' });
+      }
+      
       await fetchQuests();
-      return true;
+      return successCount > 0;
     } catch (err) {
-      throw err;
+      enqueueSnackbar(err.response?.data?.message || MESSAGES.SAVE_ERROR, { variant: 'error' });
+      return false;
     }
   };
 

@@ -7,10 +7,10 @@ export default function ItemCard({ item, onEdit, onDelete }) {
     <Card key={item._id} variant="orange">
       <Card.TopBar 
         badge={
-          <>
+          <div style={{ display: 'flex', gap: '0.5rem' }}>
             <Card.Badge variant="orange">{item.type}</Card.Badge>
             <Card.Badge variant="gold">{item.rarity}</Card.Badge>
-          </>
+          </div>
         }
       >
         <Card.Actions

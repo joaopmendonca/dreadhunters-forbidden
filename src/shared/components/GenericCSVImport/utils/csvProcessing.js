@@ -2,7 +2,7 @@
 // CSV Processing - Funções de processamento de CSV
 // ============================================================================
 
-import { parseNumber, parseBoolean, parseDate, parseArray, parseJSON } from './parsers';
+import { parseArray, parseBoolean, parseDate, parseJSON, parseNumber } from './parsers';
 
 /**
  * Auto-detecta mapeamento baseado nos headers do CSV

@@ -1,10 +1,11 @@
+import React from 'react';
 import styles from '../styles/Afflictions.module.css';
 
 export default function LoadingState() {
   return (
     <div className={styles.loading}>
       <div className={styles.loadingSpinner}></div>
-      <p>Carregando aflições…</p>
+      <span>Carregando aflições…</span>
     </div>
   );
 }

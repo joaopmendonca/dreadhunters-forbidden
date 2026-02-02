@@ -2,8 +2,17 @@
 
 import { useState } from 'react';
 import { CHAPTERS, RARITY_COLORS } from '../constants';
+import api from '../../../config/api';
 import styles from '../styles/ChapterContent.module.css';
 import EntityModal from './EntityModal';
+
+// Função para construir URL completa do ícone
+const buildIconSrc = url => {
+  if (!url) return '';
+  if (/^https?:\/\//i.test(url)) return url;
+  const base = api.defaults.baseURL.replace(/\/api\/?$/, '');
+  return `${base}${url}`;
+};
 
 export default function ChapterContent({ chapter, config, data }) {
   const [selectedItem, setSelectedItem] = useState(null);
@@ -33,7 +42,7 @@ export default function ChapterContent({ chapter, config, data }) {
     <div className={styles.classCard}>
       <div className={styles.classHeader}>
         {item.iconUrl ? (
-          <img src={item.iconUrl} alt={item.name} className={styles.classImage} />
+          <img src={buildIconSrc(item.iconUrl)} alt={item.name} className={styles.classImage} />
         ) : (
           <span className={styles.classIcon}>⚔️</span>
         )}
@@ -53,7 +62,7 @@ export default function ChapterContent({ chapter, config, data }) {
     <div className={styles.afflictionCard}>
       <div className={styles.afflictionHeader}>
         {item.imagemUrl ? (
-          <img src={item.imagemUrl} alt={item.nome} className={styles.afflictionIcon} />
+          <img src={buildIconSrc(item.imagemUrl)} alt={item.nome} className={styles.afflictionIcon} />
         ) : (
           <span className={styles.afflictionPlaceholder}>☠️</span>
         )}
@@ -85,7 +94,7 @@ export default function ChapterContent({ chapter, config, data }) {
           style={{ backgroundColor: item.cor || 'var(--maroon)' }}
         >
           {item.iconeUrl ? (
-            <img src={item.iconeUrl} alt={item.label} className={styles.damageTypeImg} />
+            <img src={buildIconSrc(item.iconeUrl)} alt={item.label} className={styles.damageTypeImg} />
           ) : (
             '🔥'
           )}
@@ -110,7 +119,7 @@ export default function ChapterContent({ chapter, config, data }) {
     <div className={styles.skillCard}>
       <div className={styles.skillHeader}>
         {item.iconUrl ? (
-          <img src={item.iconUrl} alt={item.name} className={styles.skillImage} />
+          <img src={buildIconSrc(item.iconUrl)} alt={item.name} className={styles.skillImage} />
         ) : (
           <span className={styles.skillType} data-type={item.type}>
             {item.type === 'active' ? '⚡' : item.type === 'passive' ? '🔮' : '💀'}
@@ -137,7 +146,7 @@ export default function ChapterContent({ chapter, config, data }) {
     <div className={styles.itemCard}>
       <div className={styles.itemHeader}>
         {item.iconUrl ? (
-          <img src={item.iconUrl} alt={item.name} className={styles.itemImage} />
+          <img src={buildIconSrc(item.iconUrl)} alt={item.name} className={styles.itemImage} />
         ) : (
           <span className={styles.itemPlaceholder}>🎒</span>
         )}
@@ -168,7 +177,7 @@ export default function ChapterContent({ chapter, config, data }) {
     <div className={styles.enemyCard}>
       <div className={styles.enemyHeader}>
         {item.iconUrl ? (
-          <img src={item.iconUrl} alt={item.name} className={styles.enemyImage} />
+          <img src={buildIconSrc(item.iconUrl)} alt={item.name} className={styles.enemyImage} />
         ) : (
           <span className={styles.enemyIcon}>👹</span>
         )}
@@ -187,7 +196,7 @@ export default function ChapterContent({ chapter, config, data }) {
     <div className={styles.questCard}>
       <div className={styles.questHeader}>
         {item.iconUrl ? (
-          <img src={item.iconUrl} alt={item.title || item.name} className={styles.questImage} />
+          <img src={buildIconSrc(item.iconUrl)} alt={item.title || item.name} className={styles.questImage} />
         ) : (
           <span className={styles.questIcon}>📋</span>
         )}
@@ -206,7 +215,7 @@ export default function ChapterContent({ chapter, config, data }) {
     <div className={styles.locationCard}>
       <div className={styles.locationHeader}>
         {item.iconUrl ? (
-          <img src={item.iconUrl} alt={item.name} className={styles.locationImage} />
+          <img src={buildIconSrc(item.iconUrl)} alt={item.name} className={styles.locationImage} />
         ) : (
           <span className={styles.locationIcon}>🗺️</span>
         )}
@@ -225,7 +234,7 @@ export default function ChapterContent({ chapter, config, data }) {
     <div className={styles.attributeCard}>
       <div className={styles.attributeHeader}>
         {item.iconeUrl ? (
-          <img src={item.iconeUrl} alt={item.label} className={styles.attributeIcon} />
+          <img src={buildIconSrc(item.iconeUrl)} alt={item.label} className={styles.attributeIcon} />
         ) : (
           <span className={styles.attributePlaceholder}>📊</span>
         )}

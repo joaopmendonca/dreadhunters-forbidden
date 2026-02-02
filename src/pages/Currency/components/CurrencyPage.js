@@ -136,6 +136,7 @@ export default function CurrencyPage() {
 
           {importModalOpen && (
             <GenericCSVImport
+              isOpen={importModalOpen}
               fieldDefinitions={fields}
               autoMapping={autoMapping}
               onImport={async (currencies) => {

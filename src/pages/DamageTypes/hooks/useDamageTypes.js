@@ -73,6 +73,7 @@ const useDamageTypes = () => {
         `${results.success} tipo(s) de dano importado(s) com sucesso!`,
         { variant: 'success' }
       );
+      await fetchData();
     }
 
     if (results.error > 0) {

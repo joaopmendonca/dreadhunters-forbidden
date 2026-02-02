@@ -1,73 +1,76 @@
 // src/pages/DamageTypes/hooks/useDamageTypesImport.js
 
+import { useFieldDefinitions } from '../../../shared/components/GenericCSVImport/hooks';
+
 /**
  * Hook para gerenciar importação CSV de Tipos de Dano
  */
 export function useDamageTypesImport() {
+  const { createField } = useFieldDefinitions();
+
   const fields = [
-    { 
-      name: 'nome', 
-      label: 'Nome (Slug)', 
-      required: true, 
-      type: 'text',
-      description: 'Identificador único em minúsculas (ex: physical, magical)'
-    },
-    { 
-      name: 'label', 
-      label: 'Label', 
-      required: true, 
-      type: 'text',
-      description: 'Nome exibido ao usuário (ex: Físico, Mágico)'
-    },
-    { 
-      name: 'descricao', 
-      label: 'Descrição', 
-      required: false, 
-      type: 'text',
-      description: 'Descrição do tipo de dano'
-    },
-    { 
-      name: 'cor', 
-      label: 'Cor', 
-      required: false, 
-      type: 'text',
-      description: 'Cor em hexadecimal (ex: #ff6b35)'
-    },
-    { 
-      name: 'formula', 
-      label: 'Fórmula', 
-      required: false, 
-      type: 'text',
-      description: 'Fórmula completa de cálculo (ex: p_atk - target.p_def)'
-    },
-    { 
-      name: 'ordem', 
-      label: 'Ordem', 
-      required: false, 
-      type: 'number',
-      description: 'Ordem de exibição (número)'
-    },
-    { 
-      name: 'ativo', 
-      label: 'Ativo', 
-      required: false, 
-      type: 'boolean',
-      description: 'Se o tipo está ativo (true/false)'
-    }
+    createField('nome', 'Nome (Slug)', 'string', {
+      required: true,
+      unique: true,
+      example: 'physical'
+    }),
+    createField('label', 'Label', 'string', {
+      required: true,
+      example: 'Físico'
+    }),
+    createField('descricao', 'Descrição', 'string', {
+      required: false,
+      example: 'Dano causado por armas e golpes físicos'
+    }),
+    createField('cor', 'Cor', 'string', {
+      required: false,
+      example: '#C41E3A'
+    }),
+    createField('formula', 'Fórmula', 'string', {
+      required: false,
+      example: 'p_atk * 1.0'
+    }),
+    createField('ordem', 'Ordem', 'number', {
+      required: false,
+      example: '0'
+    }),
+    createField('ativo', 'Ativo', 'boolean', {
+      required: false,
+      example: 'true'
+    })
   ];
 
   const autoMapping = {
-    'nome': ['nome', 'name', 'slug', 'id'],
-    'label': ['label', 'nome_exibicao', 'display_name', 'titulo', 'title'],
-    'descricao': ['descricao', 'description', 'desc'],
-    'cor': ['cor', 'color', 'colour'],
-    'formula': ['formula', 'formula_dano', 'damage_formula'],
-    'ordem': ['ordem', 'order', 'position', 'sort'],
-    'ativo': ['ativo', 'active', 'enabled', 'habilitado']
+    'nome': 'nome',
+    'name': 'nome',
+    'slug': 'nome',
+    'id': 'nome',
+    'label': 'label',
+    'nome_exibicao': 'label',
+    'display_name': 'label',
+    'titulo': 'label',
+    'title': 'label',
+    'descricao': 'descricao',
+    'description': 'descricao',
+    'desc': 'descricao',
+    'cor': 'cor',
+    'color': 'cor',
+    'colour': 'cor',
+    'formula': 'formula',
+    'formula_dano': 'formula',
+    'damage_formula': 'formula',
+    'ordem': 'ordem',
+    'order': 'ordem',
+    'position': 'ordem',
+    'sort': 'ordem',
+    'ativo': 'ativo',
+    'active': 'ativo',
+    'enabled': 'ativo',
+    'habilitado': 'ativo'
   };
 
-  const transformDataForAPI = (damageType) => {
-    return {
+  const transformDataForAPI = (mappedData) => {
+    return mappedData.map(damageType => ({
       nome: damageType.nome?.toLowerCase().trim(),
       label: damageType.label?.trim(),
       descricao: damageType.descricao?.trim() || '',
@@ -75,7 +78,7 @@ export function useDamageTypesImport() {
       formula: damageType.formula?.trim() || '',
       ordem: parseInt(damageType.ordem) || 0,
       ativo: damageType.ativo === true || damageType.ativo === 'true' || damageType.ativo === '1'
-    };
+    }));
   };
 
   const isDuplicate = (damageType, existingData) => {

@@ -156,6 +156,7 @@ export default function ItemsPage() {
 
           {importModalOpen && (
             <GenericCSVImport
+              isOpen={importModalOpen}
               fieldDefinitions={fields}
               autoMapping={autoMapping}
               onImport={async (items) => {

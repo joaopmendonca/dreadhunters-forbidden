@@ -1,6 +1,7 @@
 import React from 'react';
+import { IoStatsChart } from 'react-icons/io5';
 import Card from '../../../shared/components/Card';
-import { buildIconSrc, getAttributeEmoji } from '../utils';
+import { buildIconSrc } from '../utils';
 
 export function AttributeCard({ attribute, onEdit, onDelete }) {
   return (
@@ -24,7 +25,7 @@ export function AttributeCard({ attribute, onEdit, onDelete }) {
         title={attribute.label || attribute.nome}
       >
         {!attribute.iconeUrl && (
-          <span style={{ fontSize: '2rem' }}>{getAttributeEmoji(attribute.nome)}</span>
+          <IoStatsChart style={{ fontSize: '2rem', color: 'var(--gold)' }} />
         )}
       </Card.Header>
 

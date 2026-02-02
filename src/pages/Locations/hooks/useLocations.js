@@ -61,10 +61,28 @@ export default function useLocations() {
 
   const handleImport = async (locationsData) => {
     try {
-      await api.post('/locations', locationsData);
-      enqueueSnackbar(MESSAGES.SAVE_SUCCESS_CREATE, { variant: 'success' });
+      let successCount = 0;
+      let errorCount = 0;
+      
+      for (const location of locationsData) {
+        try {
+          await api.post('/locations', location);
+          successCount++;
+        } catch (err) {
+          errorCount++;
+          console.error('Erro ao importar location:', location.name, err);
+        }
+      }
+      
+      if (successCount > 0) {
+        enqueueSnackbar(`${successCount} local(is) importado(s) com sucesso`, { variant: 'success' });
+      }
+      if (errorCount > 0) {
+        enqueueSnackbar(`${errorCount} local(is) falharam na importação`, { variant: 'error' });
+      }
+      
       fetchLocations();
-      return true;
+      return successCount > 0;
     } catch (err) {
       enqueueSnackbar(err.response?.data?.message || MESSAGES.SAVE_ERROR, { variant: 'error' });
       return false;

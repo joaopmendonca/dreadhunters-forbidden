@@ -1,37 +1,32 @@
-import { useMemo } from 'react';
+import { useFieldDefinitions } from '../../../shared/components/GenericCSVImport/hooks';
 
 /**
  * Hook para configuração de importação CSV de Quests
  */
 export default function useQuestsImport() {
-  const fields = useMemo(() => [
-    {
-      name: 'title',
-      label: 'Título',
+  const { createField } = useFieldDefinitions();
+
+  const fields = [
+    createField('title', 'Título', 'string', {
       required: true,
+      unique: true,
       example: 'A Primeira Missão'
-    },
-    {
-      name: 'type',
-      label: 'Tipo',
+    }),
+    createField('type', 'Tipo', 'string', {
       required: true,
-      example: 'main (main, side ou daily)'
-    },
-    {
-      name: 'description',
-      label: 'Descrição',
+      example: 'main'
+    }),
+    createField('description', 'Descrição', 'string', {
       required: false,
       example: 'Colete 10 ervas medicinais'
-    },
-    {
-      name: 'levelRequirement',
-      label: 'Nível Mínimo',
+    }),
+    createField('levelRequirement', 'Nível Mínimo', 'number', {
       required: false,
       example: '5'
-    }
-  ], []);
+    })
+  ];
 
-  const autoMapping = useMemo(() => ({
+  const autoMapping = {
     'titulo': 'title',
     'título': 'title',
     'title': 'title',
@@ -44,7 +39,7 @@ export default function useQuestsImport() {
     'nível': 'levelRequirement',
     'level': 'levelRequirement',
     'levelrequirement': 'levelRequirement'
-  }), []);
+  };
 
   const transformDataForAPI = (data) => {
     return {
@@ -66,7 +61,7 @@ export default function useQuestsImport() {
     autoMapping,
     transformDataForAPI,
     isDuplicate,
-    entityName: 'quest',
+    entityName: 'Quest',
     entityNamePlural: 'quests'
   };
 }

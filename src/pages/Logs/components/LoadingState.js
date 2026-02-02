@@ -1,11 +1,11 @@
-import { FaSpinner, FaHistory } from 'react-icons/fa';
+import React from 'react';
 import styles from '../styles/Logs.module.css';
 
 export default function LoadingState() {
   return (
     <div className={styles.loading}>
-      <FaSpinner className={styles.loadingSpinner} />
-      <p>Carregando logs…</p>
+      <div className={styles.loadingSpinner}></div>
+      <span>Carregando logs…</span>
     </div>
   );
 }

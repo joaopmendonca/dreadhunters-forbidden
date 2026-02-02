@@ -151,12 +151,13 @@ export default function DamageTypesPage() {
 
           {importModalOpen && (
             <GenericCSVImport
+              isOpen={importModalOpen}
               fieldDefinitions={fields}
               autoMapping={autoMapping}
-              onImport={async (items) => {
-                await handleImport(items.map(transformDataForAPI));
+              onImport={(mappedData) => {
+                const transformedData = transformDataForAPI(mappedData);
+                handleImport(transformedData);
                 setImportModalOpen(false);
-                fetchData();
               }}
               onClose={() => setImportModalOpen(false)}
               existingData={damageTypes}

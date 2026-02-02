@@ -1,10 +1,21 @@
-import Card from '../../../shared/components/Card';
-import useStatus from '../../../shared/hooks/useStatus';
+import React from 'react';
+import { FaEdit, FaTrash, FaSkull } from 'react-icons/fa';
+import StatsRadarChart from '../../../shared/components/StatsRadarChart';
 import { buildIconSrc } from '../utils';
-import styles from '../styles/Enemies.module.css';
+import api from '../../../config/api';
+import styles from '../styles/EnemyCard.module.css';
 
 export default function EnemyCard({ enemy, items, currencies, onEdit, onDelete }) {
-  const { baseStatus } = useStatus();
+  const baseURL = api.defaults.baseURL;
+
+  const baseStatus = [
+    { nome: 'str', label: 'STR', iconeUrl: null },
+    { nome: 'dex', label: 'DEX', iconeUrl: null },
+    { nome: 'con', label: 'CON', iconeUrl: null },
+    { nome: 'int', label: 'INT', iconeUrl: null },
+    { nome: 'wit', label: 'WIT', iconeUrl: null },
+    { nome: 'men', label: 'MEN', iconeUrl: null }
+  ];
 
   const renderDrops = (loot, currencyLoot) => (
     <>
@@ -39,67 +50,107 @@ export default function EnemyCard({ enemy, items, currencies, onEdit, onDelete }
     </>
   );
 
+  const getTypeBadgeColor = () => {
+    switch(enemy.type) {
+      case 'boss': return '#ff4444';
+      case 'elite': return '#ff9933';
+      default: return '#888';
+    }
+  };
+
   return (
-    <Card key={enemy._id} variant="maroon">
-      <Card.TopBar 
-        badge={
+    <div className={styles.card}>
+      {/* Artwork Hero */}
+      <div className={styles.hero}>
+        {enemy.artworkUrl ? (
           <>
-            <Card.Badge variant="maroon">{enemy.type}</Card.Badge>
-            <Card.Badge variant="orange">Lvl {enemy.level}</Card.Badge>
-          </>
-        }
-      >
-        <Card.Actions
-          onEdit={() => onEdit(enemy)}
-          onDelete={() => onDelete(enemy._id)}
-        />
-      </Card.TopBar>
-
-      <Card.Header
-        image={enemy.iconUrl ? buildIconSrc(enemy.iconUrl) : null}
-        title={enemy.name}
-      />
-
-      <Card.Body>
-        {enemy.description && (
-          <Card.Section title="Descrição">
-            <p>{enemy.description}</p>
-          </Card.Section>
-        )}
-
-        {/* Stats dinâmicos */}
-        <Card.Section title="Atributos">
-          <div className={styles.statsGroup}>
-            {baseStatus.map(status => {
-              const value = enemy.stats?.[status.nome] || 0;
-              return (
-                <div key={status.nome}>
-                  {status.iconeUrl && (
-                    <img src={status.iconeUrl} alt={status.label} className={styles.statIcon} />
-                  )}
-                  <span>{value}</span>
-                </div>
-              );
-            })}
-          </div>
-        </Card.Section>
-
-        {enemy.experienceReward > 0 && (
-          <Card.Section title="Recompensa">
-            <Card.StatList
-              stats={[{ label: 'XP', value: enemy.experienceReward }]}
+            <div 
+              className={styles.heroBg} 
+              style={{ backgroundImage: `url(${buildIconSrc(enemy.artworkUrl, baseURL)})` }}
             />
-          </Card.Section>
+            <img 
+              src={buildIconSrc(enemy.artworkUrl, baseURL)} 
+              alt={enemy.name} 
+              className={styles.heroImg}
+            />
+          </>
+        ) : (
+          <div className={styles.heroPlaceholder}>
+            {enemy.iconUrl && (
+              <img src={buildIconSrc(enemy.iconUrl, baseURL)} alt="" className={styles.heroIcon} />
+            )}
+          </div>
+        )}
+        
+        {/* Overlay com nome */}
+        <div className={styles.heroOverlay}>
+          <div className={styles.heroInfo}>
+            {enemy.iconUrl && (
+              <img src={buildIconSrc(enemy.iconUrl, baseURL)} alt="" className={styles.enemyIcon} />
+            )}
+            <div className={styles.heroText}>
+              <h3 className={styles.enemyName}>{enemy.name}</h3>
+              <div className={styles.badges}>
+                <span className={styles.typeBadge} style={{ backgroundColor: getTypeBadgeColor() }}>
+                  {enemy.type}
+                </span>
+                <span className={styles.levelBadge}>Lvl {enemy.level}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Ações */}
+        <div className={styles.actions}>
+          <button className={styles.actionBtn} onClick={() => onEdit(enemy)} title="Editar">
+            <FaEdit />
+          </button>
+          <button className={`${styles.actionBtn} ${styles.deleteBtn}`} onClick={() => onDelete(enemy._id)} title="Excluir">
+            <FaTrash />
+          </button>
+        </div>
+      </div>
+
+      {/* Conteúdo */}
+      <div className={styles.content}>
+        {/* Descrição */}
+        {enemy.description && (
+          <p className={styles.description}>{enemy.description}</p>
         )}
 
+        {/* Gráfico Radar */}
+        {baseStatus?.length > 0 && enemy.stats && (
+          <div className={styles.chartSection}>
+            <StatsRadarChart
+              statsDistribution={enemy.stats}
+              baseStatus={baseStatus}
+              isPercentage={false}
+              height={180}
+              color="#c41e3a"
+            />
+          </div>
+        )}
+
+        {/* Recompensas */}
+        {enemy.experienceReward > 0 && (
+          <div className={styles.rewardSection}>
+            <div className={styles.xpReward}>
+              <span className={styles.xpLabel}>⭐ XP</span>
+              <span className={styles.xpValue}>{enemy.experienceReward}</span>
+            </div>
+          </div>
+        )}
+
+        {/* Drops */}
         {(enemy.loot?.length > 0 || enemy.currencyLoot?.length > 0) && (
-          <Card.Section title="Drops">
+          <div className={styles.dropsSection}>
+            <span className={styles.dropTitle}>💰 Drops</span>
             <div className={styles.cardRewards}>
               {renderDrops(enemy.loot || [], enemy.currencyLoot || [])}
             </div>
-          </Card.Section>
+          </div>
         )}
-      </Card.Body>
-    </Card>
+      </div>
+    </div>
   );
 }

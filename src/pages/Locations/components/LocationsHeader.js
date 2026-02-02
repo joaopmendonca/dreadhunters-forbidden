@@ -18,7 +18,7 @@ export default function LocationsHeader({
       statsCounters={[
         { icon: '📍', value: totalCount, label: 'Total' }
       ]}
-      controls={[
+      controls={
         <>
           <Button
             backgroundColor="var(--maroon)"
@@ -67,7 +67,7 @@ export default function LocationsHeader({
             onChange={e => onSearchChange(e.target.value)}
           />
         </>
-      ]}
+      }
     />
   );
 }
