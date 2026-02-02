@@ -53,6 +53,7 @@ export default function ClassModal({
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [confirmArtworkOpen, setConfirmArtworkOpen] = useState(false);
   const [deleting, setDeleting] = useState(false);
+  const [derivedStats, setDerivedStats] = useState({});
 
   useEffect(() => {
     if (!isOpen) return;
@@ -130,6 +131,26 @@ export default function ClassModal({
     setPreviewArtworkUrl(normalizePreviewUrl(initialData?.artworkUrl || ''));
   }, [initialData?._id, isOpen, baseStatus]);
 
+  // Buscar stats calculados da API sempre que baseStats mudar
+  useEffect(() => {
+    const fetchDerivedStats = async () => {
+      try {
+        const response = await api.post('/stats/calculate', {
+          stats: form.baseStats,
+          level: 1
+        });
+        setDerivedStats(response.data || {});
+      } catch (err) {
+        console.error('Erro ao calcular stats:', err);
+        setDerivedStats({});
+      }
+    };
+
+    if (Object.keys(form.baseStats).length > 0) {
+      fetchDerivedStats();
+    }
+  }, [form.baseStats]);
+
   if (!isOpen) return null;
 
   if (loadingStatus || loadingConfig) {
@@ -171,58 +192,21 @@ export default function ClassModal({
   const usedPoints = Object.values(form.baseStats).reduce((sum, val) => sum + (Number(val) || 0), 0);
   const remaining = serverConfig.maxStatPointsPerClass - usedPoints;
 
-  // Calcula os stats derivados baseado nos stats base (level 1)
-  const calculateDerivedStats = () => {
-    const stats = form.baseStats;
-    const level = 1; // Classes sempre usam level 1 como base
-    
-    const str = Number(stats.STR) || 0;
-    const dex = Number(stats.DEX) || 0;
-    const con = Number(stats.CON) || 0;
-    const int = Number(stats.INT) || 0;
-    const wis = Number(stats.WIS) || 0;
-    const luk = Number(stats.LUK) || 0;
-
-    return {
-      // Recursos
-      HP_MAX: Math.floor(100 + (con * 18) + (str * 4) + (level * 10)),
-      SP_MAX: Math.floor(80 + (wis * 16) + (int * 8) + (level * 8)),
-      STAMINA_MAX: Math.floor(60 + (con * 10) + (str * 6) + (level * 6)),
-      // Regeneração
-      HP_REGEN: (con * 0.12).toFixed(2),
-      SP_REGEN: (wis * 0.10).toFixed(2),
-      STAMINA_REGEN: (dex * 0.15).toFixed(2),
-      // Combate Físico
-      'P.ATK': Math.floor((str * 2.5) + (dex * 1.2) + (level * 1.5)),
-      'P.DEF': Math.floor((con * 2.2) + (str * 0.8) + (level * 1.2)),
-      ACC: Math.min(95, Math.floor(75 + (dex * 0.35))),
-      EVA: Math.min(40, ((dex * 0.25) + (luk * 0.15)).toFixed(1)),
-      // Combate Oculto
-      'O.ATK': Math.floor((int * 3.0) + (wis * 1.5) + (level * 1.4)),
-      'O.RES': Math.floor((wis * 2.5) + (con * 1.0) + (level * 1.1)),
-      // Crítico
-      'CRIT%': ((dex * 0.20) + (luk * 0.15) + 5).toFixed(1),
-      CRIT_DMG: Math.floor(150 + (str * 0.6) + (luk * 0.4))
-    };
-  };
-
-  const derivedStats = calculateDerivedStats();
-
   const derivedLabels = {
-    HP_MAX: 'HP Máximo',
-    SP_MAX: 'SP Máximo',
-    STAMINA_MAX: 'Stamina Máximo',
-    HP_REGEN: 'Regen HP',
-    SP_REGEN: 'Regen SP',
-    STAMINA_REGEN: 'Regen Stamina',
-    'P.ATK': 'Ataque Físico',
-    'P.DEF': 'Defesa Física',
-    ACC: 'Precisão',
-    EVA: 'Esquiva',
-    'O.ATK': 'Ataque Oculto',
-    'O.RES': 'Resistência Oculta',
-    'CRIT%': 'Taxa Crítico',
-    CRIT_DMG: 'Dano Crítico'
+    hp_max: 'HP Máximo',
+    sp_max: 'SP Máximo',
+    stamina_max: 'Stamina Máximo',
+    hp_regen: 'Regen HP',
+    sp_regen: 'Regen SP',
+    stamina_regen: 'Regen Stamina',
+    p_atk: 'Ataque Físico',
+    p_def: 'Defesa Física',
+    acc: 'Precisão',
+    eva: 'Esquiva',
+    o_atk: 'Ataque Oculto',
+    o_res: 'Resistência Oculta',
+    crit_chance: 'Taxa Crítico',
+    crit_dmg: 'Dano Crítico'
   };
 
   const handleFileChange = e => {
@@ -575,12 +559,14 @@ export default function ClassModal({
               <fieldset className={styles.fieldset}>
                 <legend>Atributos Derivados</legend>
                 <div className={styles.derivedGrid}>
-                  {Object.entries(derivedStats).map(([key, value]) => (
-                    <div key={key} className={styles.derivedStat}>
-                      <span className={styles.derivedLabel}>{derivedLabels[key]}</span>
-                      <span className={styles.derivedValue}>{value}</span>
-                    </div>
-                  ))}
+                  {Object.entries(derivedStats)
+                    .filter(([key]) => derivedLabels[key]) // Apenas stats que têm label definido
+                    .map(([key, value]) => (
+                      <div key={key} className={styles.derivedStat}>
+                        <span className={styles.derivedLabel}>{derivedLabels[key]}</span>
+                        <span className={styles.derivedValue}>{value}</span>
+                      </div>
+                    ))}
                 </div>
               </fieldset>
 

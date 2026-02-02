@@ -113,21 +113,20 @@ export default function CharactersPage() {
         </>
       )}
 
-      {showImportModal && (
-        <GenericCSVImport
-          fieldDefinitions={fieldDefinitions}
-          autoMapping={autoMapping}
-          onImport={async (npcs) => {
-            await importNPCs(npcs.map(transformDataForAPI));
-            setShowImportModal(false);
-            await fetchData();
-          }}
-          onClose={() => setShowImportModal(false)}
-          existingData={filtered}
-          isDuplicate={isDuplicate}
-          entityNamePlural={entityNamePlural}
-        />
-      )}
+      <GenericCSVImport
+        isOpen={showImportModal}
+        fieldDefinitions={fieldDefinitions}
+        autoMapping={autoMapping}
+        onImport={async (npcs) => {
+          await importNPCs(npcs.map(transformDataForAPI));
+          setShowImportModal(false);
+          await fetchData();
+        }}
+        onClose={() => setShowImportModal(false)}
+        existingData={filtered}
+        isDuplicate={isDuplicate}
+        entityNamePlural={entityNamePlural}
+      />
     </BaseLayout>
   );
 }

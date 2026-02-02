@@ -225,8 +225,15 @@
 /* === CHARTS GRID === */
 .chartsGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   gap: 1.5rem;
+}
+
+/* Force 2x2 layout on larger screens */
+@media (min-width: 1200px) {
+  .chartsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 /* === CHART CARD === */

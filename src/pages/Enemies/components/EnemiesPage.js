@@ -176,21 +176,20 @@ export default function EnemiesPage() {
         currencies={currenciesList}
       />
 
-      {importModalOpen && (
-        <GenericCSVImport
-          fieldDefinitions={fieldDefinitions}
-          autoMapping={autoMapping}
-          onImport={async (enemies) => {
-            await handleImportEnemies(enemies.map(transformDataForAPI));
-            setImportModalOpen(false);
-            await fetchEnemies();
-          }}
-          onClose={() => setImportModalOpen(false)}
-          existingData={enemiesList}
-          isDuplicate={isDuplicate}
-          entityNamePlural={entityNamePlural}
-        />
-      )}
+      <GenericCSVImport
+        isOpen={importModalOpen}
+        fieldDefinitions={fieldDefinitions}
+        autoMapping={autoMapping}
+        onImport={async (enemies) => {
+          await handleImportEnemies(enemies.map(transformDataForAPI));
+          setImportModalOpen(false);
+          await fetchEnemies();
+        }}
+        onClose={() => setImportModalOpen(false)}
+        existingData={enemiesList}
+        isDuplicate={isDuplicate}
+        entityNamePlural={entityNamePlural}
+      />
     </BaseLayout>
   );
 }

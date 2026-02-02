@@ -84,19 +84,18 @@ export default function UsersPage() {
         </>
       )}
 
-      {showImportModal && (
-        <GenericCSVImport
-          fieldDefinitions={fieldDefinitions}
-          autoMapping={autoMapping}
-          onImport={async (users) => {
-            await importUsers(users.map(transformDataForAPI));
-            setShowImportModal(false);
-            await fetchUsers();
-          }}
-          onClose={() => setShowImportModal(false)}
-          entityNamePlural="usuários"
-        />
-      )}
+      <GenericCSVImport
+        isOpen={showImportModal}
+        fieldDefinitions={fieldDefinitions}
+        autoMapping={autoMapping}
+        onImport={async (users) => {
+          await importUsers(users.map(transformDataForAPI));
+          setShowImportModal(false);
+          await fetchUsers();
+        }}
+        onClose={() => setShowImportModal(false)}
+        entityNamePlural="usuários"
+      />
     </BaseLayout>
   );
 }
