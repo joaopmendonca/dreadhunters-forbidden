@@ -100,6 +100,7 @@ export const useAttributes = () => {
           formData.append('descricao', attribute.descricao || '');
           formData.append('unidade', attribute.unidade || 'pontos');
           formData.append('formula', attribute.formula || '');
+          formData.append('corHex', (attribute.corHex || '#BCBCBC').toUpperCase());
           formData.append('visivel', attribute.visivel === 'true' || attribute.visivel === true);
           formData.append('ordem', parseInt(attribute.ordem) || 0);
 
@@ -123,9 +124,9 @@ export const useAttributes = () => {
 
   // Download template CSV
   const handleDownloadTemplate = () => {
-    const csv = `nome,label,tipo,descricao,unidade,formula,visivel,ordem
-str,STR,base,Força - Aumenta dano físico e capacidade de carga,pontos,,true,1
-dex,DEX,base,Destreza - Aumenta velocidade de ataque e evasão,pontos,,true,2`;
+    const csv = `nome,label,tipo,descricao,unidade,formula,corHex,visivel,ordem
+  str,STR,base,Força - Aumenta dano físico e capacidade de carga,pontos,,#BCBCBC,true,1
+  dex,DEX,base,Destreza - Aumenta velocidade de ataque e evasão,pontos,,#BCBCBC,true,2`;
     exportToCSV(csv, 'template-attributes.csv');
   };
 
@@ -136,7 +137,7 @@ dex,DEX,base,Destreza - Aumenta velocidade de ataque e evasão,pontos,,true,2`;
       return;
     }
 
-    const lines = ['nome,label,tipo,descricao,unidade,formula,visivel,ordem'];
+    const lines = ['nome,label,tipo,descricao,unidade,formula,corHex,visivel,ordem'];
     for (const attr of attributes) {
       lines.push([
         attr.nome,
@@ -145,6 +146,7 @@ dex,DEX,base,Destreza - Aumenta velocidade de ataque e evasão,pontos,,true,2`;
         `"${(attr.descricao || '').replace(/"/g, '""')}"`,
         attr.unidade || 'pontos',
         `"${(attr.formula || '').replace(/"/g, '""')}"`,
+        (attr.corHex || '#BCBCBC').toUpperCase(),
         attr.visivel !== false ? 'true' : 'false',
         attr.ordem || 0
       ].join(','));

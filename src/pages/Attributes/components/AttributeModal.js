@@ -24,6 +24,7 @@ export function AttributeModal({
     descricao: '',
     unidade: 'pontos',
     formula: '',
+    corHex: '#BCBCBC',
     iconeUrl: '',
     visivel: true,
     ordem: 0
@@ -40,6 +41,7 @@ export function AttributeModal({
       descricao: initialData.descricao || '',
       unidade: initialData.unidade || 'pontos',
       formula: initialData.formula || '',
+      corHex: initialData.corHex || '#BCBCBC',
       iconeUrl: initialData.iconeUrl || '',
       visivel: initialData.visivel !== undefined ? initialData.visivel : true,
       ordem: initialData.ordem || 0
@@ -85,6 +87,7 @@ export function AttributeModal({
       fd.append('descricao', form.descricao.trim());
       fd.append('unidade', form.unidade);
       fd.append('formula', form.formula);
+      fd.append('corHex', (form.corHex || '#BCBCBC').toUpperCase());
       fd.append('visivel', form.visivel);
       fd.append('ordem', form.ordem);
       if (iconFile) fd.append('icone', iconFile);
@@ -179,6 +182,28 @@ export function AttributeModal({
                     min={0}
                     value={form.ordem}
                     onChange={e => handleChange('ordem', +e.target.value)}
+                    disabled={saving}
+                  />
+                </div>
+              </div>
+
+              <div className={styles.row}>
+                <div className={styles.field}>
+                  <label>Cor (picker)</label>
+                  <input
+                    type="color"
+                    value={form.corHex || '#BCBCBC'}
+                    onChange={e => handleChange('corHex', (e.target.value || '#BCBCBC').toUpperCase())}
+                    disabled={saving}
+                  />
+                </div>
+
+                <div className={styles.field}>
+                  <label>Cor HEX</label>
+                  <TextInput
+                    value={form.corHex || ''}
+                    onChange={e => handleChange('corHex', e.target.value.toUpperCase())}
+                    placeholder="#BCBCBC"
                     disabled={saving}
                   />
                 </div>
