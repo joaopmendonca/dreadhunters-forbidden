@@ -59,12 +59,16 @@ export default function ItemsPage() {
 
   const filtered = itemsList.filter(i => {
     const matchName = i.name?.toLowerCase().includes(searchName.toLowerCase());
-    const matchType = filterType === 'all' || i.type === filterType;
+    const isWeapon = i.type === 'equipment' && i.equipment?.slot === 'weapon';
+    const matchType =
+      filterType === 'all' ||
+      (filterType === 'weapon' ? isWeapon : i.type === filterType);
     return matchName && matchType;
   });
 
   const totalCount = itemsList.length;
   const consumableCount = itemsList.filter(i => i.type === 'consumable').length;
+  const weaponCount = itemsList.filter(i => i.type === 'equipment' && i.equipment?.slot === 'weapon').length;
   const equipmentCount = itemsList.filter(i => i.type === 'equipment').length;
   const materialCount = itemsList.filter(i => i.type === 'material').length;
   const keyCount = itemsList.filter(i => i.type === 'key').length;
@@ -80,6 +84,7 @@ export default function ItemsPage() {
       <ItemsHeader
         totalCount={totalCount}
         consumableCount={consumableCount}
+        weaponCount={weaponCount}
         equipmentCount={equipmentCount}
         materialCount={materialCount}
         keyCount={keyCount}

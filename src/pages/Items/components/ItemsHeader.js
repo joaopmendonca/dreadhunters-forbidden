@@ -7,6 +7,7 @@ import styles from '../styles/Items.module.css';
 export default function ItemsHeader({
   totalCount,
   consumableCount,
+  weaponCount,
   equipmentCount,
   materialCount,
   keyCount,
@@ -25,6 +26,7 @@ export default function ItemsHeader({
       statsCounters={[
         { icon: '🎒', value: totalCount, label: 'Total' },
         { icon: <FaFlask />, value: consumableCount, label: 'Consumível', variant: 'counterGreen' },
+        { icon: '🔫', value: weaponCount, label: 'Arma', variant: 'counterMaroon' },
         { icon: <FaShieldAlt />, value: equipmentCount, label: 'Equipamento', variant: 'counterMaroon' },
         { icon: <FaCube />, value: materialCount, label: 'Material', variant: 'counterBlue' }
       ]}
@@ -95,6 +97,15 @@ export default function ItemsHeader({
           active: filterType === 'consumable',
           onClick: () => onFilterChange('consumable'),
           variant: 'filterTabGreen'
+        },
+        {
+          id: 'weapon',
+          icon: '🔫',
+          label: 'Arma',
+          count: weaponCount,
+          active: filterType === 'weapon',
+          onClick: () => onFilterChange('weapon'),
+          variant: 'filterTabMaroon'
         },
         {
           id: 'equipment',

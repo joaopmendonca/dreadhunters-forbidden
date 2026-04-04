@@ -15,6 +15,7 @@ export const MESSAGES = {
 export const TYPE_OPTIONS = [
   { value: '', label: 'Selecione' },
   { value: 'consumable', label: 'Consumível' },
+  { value: 'weapon', label: 'Arma' },
   { value: 'equipment', label: 'Equipamento' },
   { value: 'material', label: 'Material' },
   { value: 'key', label: 'Chave' },

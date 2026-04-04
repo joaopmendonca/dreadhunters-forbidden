@@ -61,6 +61,8 @@ export default function ItemModal({ isOpen, onClose, onSave, onIconDeleted, init
   const [consumableAfflictions, setConsumableAfflictions] = useState([]);
   const [consumableRemoves, setConsumableRemoves] = useState([]);
 
+  const isEquipmentType = (type) => type === 'equipment' || type === 'weapon';
+
   useEffect(() => {
     if (!isOpen) return;
 
@@ -84,7 +86,9 @@ export default function ItemModal({ isOpen, onClose, onSave, onIconDeleted, init
       _id: initialData._id || '',
       name: initialData.name || '',
       description: initialData.description || '',
-      type: initialData.type || '',
+      type: initialData.type === 'equipment' && initialData.equipment?.slot === 'weapon'
+        ? 'weapon'
+        : (initialData.type || ''),
       rarity: initialData.rarity || '',
       buyPrice: initialData.buyPrice ?? 0,
       sellPrice: initialData.sellPrice ?? 0,
@@ -265,15 +269,27 @@ export default function ItemModal({ isOpen, onClose, onSave, onIconDeleted, init
         };
         fd.append('consumable', JSON.stringify(consumableData));
       }
-      if (form.type === 'equipment') {
-        fd.append('equipment', JSON.stringify({
-          slot: form.equipment.slot,
+      if (isEquipmentType(form.type)) {
+        const normalizedEquipment = {
+          slot: form.type === 'weapon' ? 'weapon' : form.equipment.slot,
           durability: form.equipment.durability,
           isPrimary: form.equipment.isPrimary,
           hands: form.equipment.hands,
           ammoCurrent: form.equipment.ammoCurrent,
           ammoMax: form.equipment.ammoMax,
           combatStats: form.equipment.combatStats
+        };
+
+        // Weapon é um subtipo visual; backend persiste como equipment.
+        fd.set('type', 'equipment');
+        fd.append('equipment', JSON.stringify({
+          slot: normalizedEquipment.slot,
+          durability: normalizedEquipment.durability,
+          isPrimary: normalizedEquipment.isPrimary,
+          hands: normalizedEquipment.hands,
+          ammoCurrent: normalizedEquipment.ammoCurrent,
+          ammoMax: normalizedEquipment.ammoMax,
+          combatStats: normalizedEquipment.combatStats
         }));
       }
       if (form.type === 'material' && form.tags.length) {
@@ -498,13 +514,17 @@ export default function ItemModal({ isOpen, onClose, onSave, onIconDeleted, init
               )}
 
               {/* Equipamento */}
-              {form.type === 'equipment' && (
+              {isEquipmentType(form.type) && (
                 <div className={styles.section}>
                   <span className={styles.sectionTitle}>Equipamento</span>
                   <div className={styles.row}>
                     <div className={styles.field}>
                       <label>Slot</label>
-                      <Select options={equipmentSlotOptions} value={form.equipment.slot} onChange={val => changeEquipField('slot', val)} disabled={saving} />
+                      {form.type === 'weapon' ? (
+                        <TextInput value="weapon" disabled />
+                      ) : (
+                        <Select options={equipmentSlotOptions} value={form.equipment.slot} onChange={val => changeEquipField('slot', val)} disabled={saving} />
+                      )}
                     </div>
                     <div className={styles.field}>
                       <label>Durabilidade atual</label>
@@ -516,7 +536,7 @@ export default function ItemModal({ isOpen, onClose, onSave, onIconDeleted, init
                     </div>
                   </div>
 
-                  {form.equipment.slot === 'weapon' && (
+                  {(form.type === 'weapon' || form.equipment.slot === 'weapon') && (
                     <>
                       <div className={styles.row}>
                         <div className={styles.field}>
