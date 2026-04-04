@@ -13,7 +13,8 @@ import ConsumableAfflictionsEditor from './ConsumableAfflictionsEditor';
 import ConsumableRemovesAfflictionsEditor from './ConsumableRemovesAfflictionsEditor';
 import useStatus from '../../../shared/hooks/useStatus';
 import api from '../../../config/api';
-import { TYPE_OPTIONS, RARITY_OPTIONS, SLOT_OPTIONS, MESSAGES } from '../constants';
+import { buildIconSrc } from '../utils';
+import { TYPE_OPTIONS, RARITY_OPTIONS, MESSAGES } from '../constants';
 import styles from '../styles/ItemModal.module.css';
 
 export default function ItemModal({ isOpen, onClose, onSave, onIconDeleted, initialData = {} }) {
@@ -48,6 +49,7 @@ export default function ItemModal({ isOpen, onClose, onSave, onIconDeleted, init
 
   const [allClasses, setAllClasses] = useState([]);
   const [statusList, setStatusList] = useState([]);
+  const [equipmentSlotOptions, setEquipmentSlotOptions] = useState([{ value: '', label: 'Selecione' }]);
   const [iconFile, setIconFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState('');
   const [saving, setSaving] = useState(false);
@@ -129,13 +131,24 @@ export default function ItemModal({ isOpen, onClose, onSave, onIconDeleted, init
       setConsumableRemoves([]);
     }
 
-    api.get('/classes')
-      .then(r => setAllClasses(r.data))
-      .catch(() => setAllClasses([]));
-    
-    api.get('/status')
-      .then(r => setStatusList(r.data))
-      .catch(() => setStatusList([]));
+    Promise.all([
+      api.get('/classes').catch(() => ({ data: [] })),
+      api.get('/status').catch(() => ({ data: [] })),
+      api.get('/equipment-slots').catch(() => ({ data: [] }))
+    ]).then(([classesRes, statusRes, slotsRes]) => {
+      setAllClasses(classesRes.data || []);
+      setStatusList(statusRes.data || []);
+
+      const options = (slotsRes.data || [])
+        .filter(slot => slot?.active !== false)
+        .sort((a, b) => (a.order || 0) - (b.order || 0))
+        .map(slot => ({
+          value: slot.key,
+          label: slot.name || slot.key
+        }));
+
+      setEquipmentSlotOptions([{ value: '', label: 'Selecione' }, ...options]);
+    });
   }, [initialData, isOpen, baseStatus, derivedStatus]);
 
   const changeField = (field, value) => setForm(f => ({ ...f, [field]: value }));
@@ -491,7 +504,7 @@ export default function ItemModal({ isOpen, onClose, onSave, onIconDeleted, init
                   <div className={styles.row}>
                     <div className={styles.field}>
                       <label>Slot</label>
-                      <Select options={SLOT_OPTIONS} value={form.equipment.slot} onChange={val => changeEquipField('slot', val)} disabled={saving} />
+                      <Select options={equipmentSlotOptions} value={form.equipment.slot} onChange={val => changeEquipField('slot', val)} disabled={saving} />
                     </div>
                     <div className={styles.field}>
                       <label>Durabilidade atual</label>
@@ -538,7 +551,7 @@ export default function ItemModal({ isOpen, onClose, onSave, onIconDeleted, init
                           <div key={status.nome} className={styles.statControl}>
                             <label>
                               {status.iconeUrl && (
-                                <img src={status.iconeUrl} alt={status.label} className={styles.statIcon} />
+                                <img src={buildIconSrc(status.iconeUrl)} alt={status.label} className={styles.statIcon} />
                               )}
                               {status.label}
                             </label>
@@ -566,7 +579,7 @@ export default function ItemModal({ isOpen, onClose, onSave, onIconDeleted, init
                             <div key={status.nome} className={styles.statControl}>
                               <label>
                                 {status.iconeUrl && (
-                                  <img src={status.iconeUrl} alt={status.label} className={styles.statIcon} />
+                                  <img src={buildIconSrc(status.iconeUrl)} alt={status.label} className={styles.statIcon} />
                                 )}
                                 {status.label}
                               </label>
@@ -575,9 +588,10 @@ export default function ItemModal({ isOpen, onClose, onSave, onIconDeleted, init
                                 value={value}
                                 disabled
                                 readOnly
-                                className={styles.smallInput}
+                                className={`${styles.smallInput} ${styles.derivedInput}`}
                                 style={{
-                                  color: value > 0 ? '#ff9800' : value < 0 ? '#f44336' : 'inherit',
+                                  color: value > 0 ? '#ff9800' : value < 0 ? '#f44336' : 'var(--light)',
+                                  WebkitTextFillColor: value > 0 ? '#ff9800' : value < 0 ? '#f44336' : 'var(--light)',
                                   fontWeight: value !== 0 ? 600 : 'normal'
                                 }}
                               />
@@ -594,7 +608,6 @@ export default function ItemModal({ isOpen, onClose, onSave, onIconDeleted, init
               )}
 
               {/* Tags (material) */}
-              {form.type === 'material' && (
                 <div className={styles.section}>
                   <h3 className={styles.sectionTitle}>Material</h3>
                   <div className={styles.field}>

@@ -30,10 +30,3 @@ export const RARITY_OPTIONS = [
   { value: 'legendary', label: 'Lendário' },
 ];
 
-export const SLOT_OPTIONS = [
-  { value: '', label: 'Selecione' },
-  { value: 'head', label: 'Cabeça' },
-  { value: 'body', label: 'Corpo' },
-  { value: 'legs', label: 'Pernas' },
-  { value: 'weapon', label: 'Arma' },
-];

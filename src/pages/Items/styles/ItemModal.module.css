@@ -208,6 +208,13 @@
   opacity: 0.6;
 }
 
+.derivedInput,
+.derivedInput:disabled {
+  background: rgba(0, 0, 0, 0.35);
+  color: var(--light);
+  -webkit-text-fill-color: var(--light);
+}
+
 /* === HINTS === */
 .derivedNote {
   font-size: 0.8rem;

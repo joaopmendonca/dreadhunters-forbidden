@@ -31,15 +31,15 @@ export function useItemsImport() {
       required: true,
       example: 'equipment',
       validate: (value) => {
-        const validTypes = ['equipment', 'consumable', 'relic', 'key', 'quest'];
-        return isInEnum(value, validTypes) || 'Tipo deve ser: equipment, consumable, relic, key, quest';
+        const validTypes = ['equipment', 'consumable', 'material', 'key', 'quest'];
+        return isInEnum(value, validTypes) || 'Tipo deve ser: equipment, consumable, material, key, quest';
       }
     }),
     createField('rarity', 'Raridade', 'string', {
       required: true,
       example: 'common',
       validate: (value) => {
-        const validRarities = ['common', 'uncommon', 'rare', 'epic', 'legendary', 'mythic'];
+        const validRarities = ['common', 'uncommon', 'rare', 'epic', 'legendary'];
         return isInEnum(value, validRarities) || 'Raridade inválida';
       }
     }),
@@ -50,11 +50,10 @@ export function useItemsImport() {
     
     // Campos de equipamento
     createField('equipmentSlot', 'Slot Equipamento', 'string', {
-      example: 'weapon',
+      example: 'cabeca',
       validate: (value) => {
         if (!value) return true;
-        const validSlots = ['weapon', 'head', 'body', 'legs', 'feet', 'hands', 'accessory', 'chest'];
-        return isInEnum(value, validSlots) || 'Slot inválido';
+        return true;
       }
     }),
     createField('durabilityCurrent', 'Durabilidade Atual', 'number', { example: '100' }),
