@@ -21,6 +21,8 @@ export const CONFIG_DEFAULTS = {
   maxLevel: 99,
   maxStatPointsPerClass: 18,
   minutesPerUnit: 1,
+  questQueueSize: 3,
+  movementSpeedStatKey: 'dex'
 };
 
 export const SETTINGS_SECTIONS = [
@@ -121,6 +123,19 @@ export const SETTINGS_SECTIONS = [
         min: 0.01,
         step: 0.01,
         helpText: 'Minutos necessários para percorrer 1 unidade de distância',
+      },
+      {
+        key: 'questQueueSize',
+        label: 'Tamanho da Fila de Quests',
+        type: 'number',
+        min: 1,
+        helpText: 'Número máximo de quests na fila por personagem',
+      },
+      {
+        key: 'movementSpeedStatKey',
+        label: 'Stat de Velocidade de Movimento',
+        type: 'text',
+        helpText: 'Chave do stat usado para calcular velocidade de deslocamento (ex: dex)',
       },
     ],
   },

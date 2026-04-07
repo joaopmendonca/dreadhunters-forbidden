@@ -26,6 +26,7 @@ import Items from './pages/Items';
 import Locations from './pages/Locations';
 import Login from './pages/Login';
 import Logs from './pages/Logs';
+import QuestActionTypes from './pages/QuestActionTypes';
 import Quests from './pages/Quests';
 import Roles from './pages/Roles';
 import Servers from './pages/Servers';
@@ -115,6 +116,7 @@ export default function AppRoutes() {
             <Route path="/currency"    element={<Currency />} />
             <Route path="/enemies"     element={<Enemies />} />
             <Route path="/quests"      element={<Quests />} />
+            <Route path="/quest-action-types" element={<QuestActionTypes />} />
             <Route path="/locations"   element={<Locations />} />
             <Route path="/logs"        element={<Logs />} />
             <Route path="/servers"     element={<Servers />} />

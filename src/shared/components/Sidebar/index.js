@@ -48,6 +48,7 @@ export default function Sidebar({ isOpen = true, onClose }) {
     { to: '/currency',    label: 'Moedas',       icon: <FaCoins /> },
     { to: '/enemies',     label: 'Inimigos',     icon: <FaSkull /> },
     { to: '/quests',      label: 'Quests',       icon: <FaMapMarkedAlt /> },
+    { to: '/quest-action-types', label: 'Tipos de Ação', icon: <FaBolt /> },
     { to: '/locations',   label: 'Locais',       icon: <FaMapMarkerAlt /> },
     { to: '/logs',        label: 'Logs',         icon: <FaClipboardList /> },
     { to: '/servers',     label: 'Servidores',   icon: <FaServer /> },

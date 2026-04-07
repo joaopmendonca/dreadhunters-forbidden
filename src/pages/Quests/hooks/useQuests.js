@@ -12,6 +12,7 @@ export default function useQuests() {
   const [npcsList, setNpcsList] = useState([]);
   const [locationsList, setLocationsList] = useState([]);
   const [currenciesList, setCurrenciesList] = useState([]);
+  const [actionTypesList, setActionTypesList] = useState([]);
   
   const [loading, setLoading] = useState(true);
   const [loadingMeta, setLoadingMeta] = useState(true);
@@ -32,12 +33,13 @@ export default function useQuests() {
   const fetchMeta = useCallback(async () => {
     setLoadingMeta(true);
     try {
-      const [itRes, crRes, enRes, chRes, loRes] = await Promise.allSettled([
+      const [itRes, crRes, enRes, chRes, loRes, atRes] = await Promise.allSettled([
         api.get('/items'),
         api.get('/currency'),
         api.get('/enemies'),
         api.get('/characters'),
         api.get('/locations'),
+        api.get('/quest-action-types'),
       ]);
 
       if (itRes.status === 'fulfilled') setItemsList(itRes.value.data);
@@ -45,6 +47,7 @@ export default function useQuests() {
       if (enRes.status === 'fulfilled') setEnemiesList(enRes.value.data);
       if (chRes.status === 'fulfilled') setNpcsList(chRes.value.data.filter(c => c.type === 'npc'));
       if (loRes.status === 'fulfilled') setLocationsList(loRes.value.data);
+      if (atRes.status === 'fulfilled') setActionTypesList(atRes.value.data);
     } catch {
       enqueueSnackbar(MESSAGES.FETCH_META_ERROR, { variant: 'error' });
     } finally {
@@ -161,6 +164,7 @@ export default function useQuests() {
     npcsList,
     locationsList,
     currenciesList,
+    actionTypesList,
     loading,
     loadingMeta,
     fetchQuests,

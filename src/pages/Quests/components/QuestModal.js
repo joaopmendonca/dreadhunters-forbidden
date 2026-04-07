@@ -27,7 +27,8 @@ export default function QuestModal({
   enemies = [],
   npcs = [],
   locations = [],
-  currencies = []
+  currencies = [],
+  actionTypes = []
 }) {
   const { enqueueSnackbar } = useSnackbar();
 
@@ -37,6 +38,7 @@ export default function QuestModal({
     description: '',
     type: 'side',
     locationId: '',
+    actionTypeId: '',
     prerequisites: [],
     objectives: [],
     rewards: { xp: 0, items: [], currencies: [] },
@@ -58,6 +60,7 @@ export default function QuestModal({
       description: initialData.description || '',
       type: initialData.type || 'side',
       locationId: initialData.location?._id || initialData.locationId || '',
+      actionTypeId: initialData.actionTypeId?._id || initialData.actionTypeId || '',
       prerequisites: (initialData.prerequisites || []).map(p =>
         typeof p === 'object' ? p._id : p
       ),
@@ -178,6 +181,7 @@ export default function QuestModal({
       fd.append('description', form.description);
       fd.append('type', form.type);
       if (form.locationId) fd.append('locationId', form.locationId);
+      if (form.actionTypeId) fd.append('actionTypeId', form.actionTypeId);
       fd.append('prerequisites', JSON.stringify(form.prerequisites));
       fd.append(
         'objectives',
@@ -200,6 +204,7 @@ export default function QuestModal({
   const enemyOptions = [{ value: '', label: 'Selecione…' }, ...enemies.map(e => ({ value: e._id, label: e.name }))];
   const npcOptions = [{ value: '', label: 'Selecione…' }, ...npcs.map(n => ({ value: n._id, label: n.name }))];
   const locationOptions = [{ value: '', label: 'Selecione…' }, ...locations.map(l => ({ value: l._id, label: l.name }))];
+  const actionTypeOptions = [{ value: '', label: 'Nenhum' }, ...actionTypes.map(at => ({ value: at._id, label: at.name }))];
   const currencyOptions = [{ value: '', label: 'Selecione…' }, ...currencies.map(c => ({ value: c._id, label: `${c.name} (${c.symbol || ''})` }))];
 
   const getTargetOptions = type => {
@@ -275,6 +280,17 @@ export default function QuestModal({
                       options={locationOptions}
                       value={form.locationId}
                       onChange={val => changeField('locationId', val)}
+                      disabled={saving}
+                    />
+                  </div>
+                </div>
+                <div className={styles.row}>
+                  <div className={styles.field}>
+                    <label>Tipo de Ação</label>
+                    <Select
+                      options={actionTypeOptions}
+                      value={form.actionTypeId}
+                      onChange={val => changeField('actionTypeId', val)}
                       disabled={saving}
                     />
                   </div>

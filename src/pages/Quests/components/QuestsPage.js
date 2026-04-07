@@ -21,6 +21,7 @@ export default function QuestsPage() {
     npcsList,
     locationsList,
     currenciesList,
+    actionTypesList,
     loading,
     loadingMeta,
     fetchQuests,
@@ -176,6 +177,7 @@ export default function QuestsPage() {
             npcs={npcsList}
             locations={locationsList}
             currencies={currenciesList}
+            actionTypes={actionTypesList}
           />
 
           {importModalOpen && (

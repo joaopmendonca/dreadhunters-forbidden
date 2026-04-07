@@ -20,7 +20,8 @@ export default function LocationModal({ isOpen, onClose, onSave, onIconDeleted, 
     description: '',
     positionX: 0,
     positionY: 0,
-    iconUrl: ''
+    iconUrl: '',
+    isSafePoint: false
   });
 
   const [iconFile, setIconFile] = useState(null);
@@ -38,7 +39,8 @@ export default function LocationModal({ isOpen, onClose, onSave, onIconDeleted, 
       description: initialData.description || '',
       positionX: initialData.position?.x || 0,
       positionY: initialData.position?.y || 0,
-      iconUrl: initialData.iconUrl || ''
+      iconUrl: initialData.iconUrl || '',
+      isSafePoint: initialData.isSafePoint || false
     });
     setIconFile(null);
     setPreviewUrl(initialData.iconUrl || '');
@@ -93,6 +95,7 @@ export default function LocationModal({ isOpen, onClose, onSave, onIconDeleted, 
       fd.append('description', form.description);
       fd.append('position.x', String(form.positionX));
       fd.append('position.y', String(form.positionY));
+      fd.append('isSafePoint', String(form.isSafePoint));
       if (iconFile) fd.append('icon', iconFile);
 
       await onSave(fd, form._id);
@@ -174,6 +177,18 @@ export default function LocationModal({ isOpen, onClose, onSave, onIconDeleted, 
                     disabled={saving}
                   />
                 </div>
+              </div>
+
+              <div className={styles.field} style={{ marginTop: 12 }}>
+                <label style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer' }}>
+                  <input
+                    type="checkbox"
+                    checked={form.isSafePoint}
+                    onChange={e => changeField('isSafePoint', e.target.checked)}
+                    disabled={saving}
+                  />
+                  Safe Point (local seguro de partida para quests)
+                </label>
               </div>
             </div>
 
