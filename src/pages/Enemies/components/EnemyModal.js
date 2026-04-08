@@ -38,6 +38,7 @@ export default function EnemyModal({
     loot: [],
     currencyLoot: [],
     iconUrl: '',
+    artworkUrl: '',
     experienceReward: 0
   });
 
@@ -74,27 +75,27 @@ export default function EnemyModal({
     const dex = Number(stats.dex) || 0;
     const con = Number(stats.con) || 0;
     const int = Number(stats.int) || 0;
-    const wit = Number(stats.wit) || 0;
-    const men = Number(stats.men) || 0;
+    const wis = Number(stats.wis) || 0;
+    const luk = Number(stats.luk) || 0;
 
     return {
       // Pontos de Vida e Energia
       max_hp: Math.floor((con * 8) + (level * 4.5)),
-      max_sp: Math.floor((men * 5) + (level * 2)),
+      max_sp: Math.floor((wis * 5) + (level * 2)),
       max_cp: Math.floor((con * 6) + (level * 3.5)),
       hp_regen: ((con * 0.1) + (level * 0.05)).toFixed(2),
-      sp_regen: ((men * 0.15) + (level * 0.03)).toFixed(2),
+      sp_regen: ((wis * 0.15) + (level * 0.03)).toFixed(2),
       cp_regen: (con * 0.08).toFixed(2),
       // Poder Ofensivo
       p_atk: Math.floor((str * 1.2) + (level * 0.8)),
-      m_atk: Math.floor((int * 1.5) + (wit * 0.5) + (level * 0.7)),
+      m_atk: Math.floor((int * 1.5) + (wis * 0.5) + (level * 0.7)),
       crit_rate: ((dex * 0.3) + 10).toFixed(1),
       crit_dmg: Math.floor((str * 0.2) + 100),
-      m_crit_rate: ((wit * 0.4) + 5).toFixed(1),
+      m_crit_rate: ((luk * 0.4) + 5).toFixed(1),
       // Poder Defensivo
       p_def: Math.floor((con * 1.5) + (dex * 0.3) + (level * 0.5)),
-      m_def: Math.floor((men * 1.3) + (int * 0.4) + (level * 0.4)),
-      evasion: ((dex * 0.5) + (level * 0.3)).toFixed(1)
+      m_def: Math.floor((wis * 1.3) + (int * 0.4) + (level * 0.4)),
+      evasion: ((dex * 0.5) + (luk * 0.3)).toFixed(1)
     };
   };
 
@@ -136,6 +137,7 @@ export default function EnemyModal({
       description: initialData.description || '',
       type: initialData.type || 'normal',
       level: initialData.level || 1,
+      artworkUrl: initialData.artworkUrl || '',
       stats: initStats(),
       loot: Array.isArray(initialData.lootTable) 
         ? initialData.lootTable.map(l => ({
@@ -232,6 +234,7 @@ export default function EnemyModal({
       fd.append('level', form.level);
       fd.append('stats', JSON.stringify(normalizeStats(form.stats)));
       fd.append('xpReward', form.experienceReward);
+      if (form.artworkUrl) fd.append('artworkUrl', form.artworkUrl);
 
       if (form.loot.length > 0) {
         // Mapear para os campos esperados pelo backend
