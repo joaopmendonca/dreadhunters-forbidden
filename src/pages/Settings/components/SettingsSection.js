@@ -1,5 +1,5 @@
 import React from 'react';
-import { FaUsers, FaGamepad, FaDice, FaMap } from 'react-icons/fa';
+import { FaUsers, FaGamepad, FaDice, FaMap, FaSkull } from 'react-icons/fa';
 import styles from '../styles/SettingsSection.module.css';
 
 const SECTION_ICONS = {
@@ -7,6 +7,7 @@ const SECTION_ICONS = {
   FaGamepad: <FaGamepad className={styles.sectionIcon} />,
   FaDice: <FaDice className={styles.sectionIcon} />,
   FaMap: <FaMap className={styles.sectionIcon} />,
+  FaSkull: <FaSkull className={styles.sectionIcon} />,
 };
 
 export const SettingsSection = ({ section, config, onConfigChange, disabled }) => {

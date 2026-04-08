@@ -47,9 +47,15 @@ export default function EnemyModal({
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [deleting, setDeleting] = useState(false);
 
-  // Calcula pontos máximos baseado no tipo
-  const maxPoints = serverConfig 
-    ? Math.floor(serverConfig.initialStatPoints * TYPE_MULTIPLIERS[form.type || 'normal'])
+  // Calcula pontos máximos baseado no tipo e nível
+  const enemyType = form.type || 'normal';
+  const enemyLevel = form.level || 1;
+  const typeKey = `enemyTypeMultiplier${enemyType.charAt(0).toUpperCase()}${enemyType.slice(1)}`;
+  const maxPoints = serverConfig
+    ? Math.floor(
+        (serverConfig.enemyInitialStatPoints + serverConfig.enemyStatPointsPerLevel * (enemyLevel - 1))
+        * (serverConfig[typeKey] ?? TYPE_MULTIPLIERS[enemyType])
+      )
     : 6;
 
   const usedPoints = baseStatus.reduce((sum, status) => {

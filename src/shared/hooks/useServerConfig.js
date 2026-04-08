@@ -14,7 +14,12 @@ export default function useServerConfig() {
     maxStatValue: 24,
     minStatValue: 1,
     maxLevel: 99,
-    maxStatPointsPerClass: 20
+    maxStatPointsPerClass: 20,
+    enemyInitialStatPoints: 6,
+    enemyStatPointsPerLevel: 1,
+    enemyTypeMultiplierNormal: 1,
+    enemyTypeMultiplierElite: 1.67,
+    enemyTypeMultiplierBoss: 3.33
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -37,7 +42,12 @@ export default function useServerConfig() {
             maxStatValue: res.data.maxStatValue ?? 24,
             minStatValue: res.data.minStatValue ?? 1,
             maxLevel: res.data.maxLevel ?? 99,
-            maxStatPointsPerClass: res.data.maxStatPointsPerClass ?? 20
+            maxStatPointsPerClass: res.data.maxStatPointsPerClass ?? 20,
+            enemyInitialStatPoints: res.data.enemyInitialStatPoints ?? 6,
+            enemyStatPointsPerLevel: res.data.enemyStatPointsPerLevel ?? 1,
+            enemyTypeMultiplierNormal: res.data.enemyTypeMultiplierNormal ?? 1,
+            enemyTypeMultiplierElite: res.data.enemyTypeMultiplierElite ?? 1.67,
+            enemyTypeMultiplierBoss: res.data.enemyTypeMultiplierBoss ?? 3.33
           });
         }
       } catch (err) {
