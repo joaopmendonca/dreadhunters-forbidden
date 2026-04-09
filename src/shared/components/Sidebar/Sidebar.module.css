@@ -122,6 +122,63 @@
   font-size: 0.85rem;
 }
 
+/* === GROUPS (accordion) === */
+.group {
+  display: flex;
+  flex-direction: column;
+}
+
+.groupHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 0.85rem;
+  border-radius: 6px;
+  background: transparent;
+  border: none;
+  color: rgba(250, 245, 229, 0.45);
+  cursor: pointer;
+  font-family: var(--font-sans);
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  transition: color 0.15s ease;
+  width: 100%;
+  text-align: left;
+}
+
+.groupHeader:hover {
+  color: var(--light);
+}
+
+.groupHeaderActive {
+  color: var(--gold);
+}
+
+.groupLabel {
+  flex: 1;
+}
+
+.groupChevron {
+  font-size: 0.65rem;
+  opacity: 0.6;
+  transition: transform 0.2s ease;
+}
+
+.groupChevronOpen {
+  transform: rotate(180deg);
+  opacity: 1;
+}
+
+.groupLinks {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  padding-left: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
 /* === LOGOUT BUTTON === */
 .logoutButton {
   display: flex;

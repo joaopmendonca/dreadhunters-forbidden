@@ -1,5 +1,5 @@
 import React from 'react';
-import { FaEdit, FaTrash, FaSkull } from 'react-icons/fa';
+import { FaEdit, FaTrash } from 'react-icons/fa';
 import StatsRadarChart from '../../../shared/components/StatsRadarChart';
 import { buildIconSrc } from '../utils';
 import api from '../../../config/api';
@@ -13,8 +13,8 @@ export default function EnemyCard({ enemy, items, currencies, onEdit, onDelete }
     { nome: 'dex', label: 'DEX', iconeUrl: null },
     { nome: 'con', label: 'CON', iconeUrl: null },
     { nome: 'int', label: 'INT', iconeUrl: null },
-    { nome: 'wit', label: 'WIT', iconeUrl: null },
-    { nome: 'men', label: 'MEN', iconeUrl: null }
+    { nome: 'wis', label: 'WIS', iconeUrl: null },
+    { nome: 'luk', label: 'LUK', iconeUrl: null }
   ];
 
   const renderDrops = (loot, currencyLoot) => (
@@ -60,47 +60,39 @@ export default function EnemyCard({ enemy, items, currencies, onEdit, onDelete }
 
   return (
     <div className={styles.card}>
-      {/* Artwork Hero */}
       <div className={styles.hero}>
-        {enemy.artworkUrl ? (
+        {(enemy.artworkUrl || enemy.iconUrl) ? (
           <>
             <div 
               className={styles.heroBg} 
-              style={{ backgroundImage: `url(${buildIconSrc(enemy.artworkUrl, baseURL)})` }}
+              style={{ backgroundImage: `url(${buildIconSrc(enemy.artworkUrl || enemy.iconUrl, baseURL)})` }}
             />
             <img 
-              src={buildIconSrc(enemy.artworkUrl, baseURL)} 
+              src={buildIconSrc(enemy.artworkUrl || enemy.iconUrl, baseURL)} 
               alt={enemy.name} 
               className={styles.heroImg}
             />
           </>
         ) : (
           <div className={styles.heroPlaceholder}>
-            {enemy.iconUrl && (
-              <img src={buildIconSrc(enemy.iconUrl, baseURL)} alt="" className={styles.heroIcon} />
-            )}
+            <span className={styles.heroEmoji}>💀</span>
           </div>
         )}
         
-        {/* Overlay com nome */}
         <div className={styles.heroOverlay}>
           <div className={styles.heroInfo}>
-            {enemy.iconUrl && (
-              <img src={buildIconSrc(enemy.iconUrl, baseURL)} alt="" className={styles.enemyIcon} />
-            )}
             <div className={styles.heroText}>
               <h3 className={styles.enemyName}>{enemy.name}</h3>
               <div className={styles.badges}>
                 <span className={styles.typeBadge} style={{ backgroundColor: getTypeBadgeColor() }}>
                   {enemy.type}
                 </span>
-                <span className={styles.levelBadge}>Lvl {enemy.level}</span>
+                <span className={styles.levelBadge}>LVL {enemy.level}</span>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Ações */}
         <div className={styles.actions}>
           <button className={styles.actionBtn} onClick={() => onEdit(enemy)} title="Editar">
             <FaEdit />
@@ -111,14 +103,11 @@ export default function EnemyCard({ enemy, items, currencies, onEdit, onDelete }
         </div>
       </div>
 
-      {/* Conteúdo */}
       <div className={styles.content}>
-        {/* Descrição */}
         {enemy.description && (
           <p className={styles.description}>{enemy.description}</p>
         )}
 
-        {/* Gráfico Radar */}
         {baseStatus?.length > 0 && enemy.stats && (
           <div className={styles.chartSection}>
             <StatsRadarChart
@@ -131,7 +120,6 @@ export default function EnemyCard({ enemy, items, currencies, onEdit, onDelete }
           </div>
         )}
 
-        {/* Recompensas */}
         {enemy.experienceReward > 0 && (
           <div className={styles.rewardSection}>
             <div className={styles.xpReward}>
@@ -141,7 +129,6 @@ export default function EnemyCard({ enemy, items, currencies, onEdit, onDelete }
           </div>
         )}
 
-        {/* Drops */}
         {(enemy.loot?.length > 0 || enemy.currencyLoot?.length > 0) && (
           <div className={styles.dropsSection}>
             <span className={styles.dropTitle}>💰 Drops</span>

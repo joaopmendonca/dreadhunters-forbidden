@@ -10,6 +10,14 @@ const api = axios.create({
   timeout: 30000,
 });
 
+const APP_BASENAME = '/forbidden';
+const LOGIN_PATH = `${APP_BASENAME}/login`;
+
+const normalizePath = (path = '/') => {
+  const normalized = String(path || '/').replace(/\/+$/g, '');
+  return normalized || '/';
+};
+
 // ───────────── REQUEST INTERCEPTOR ─────────────────────────────────────────
 api.interceptors.request.use(
   config => {
@@ -52,8 +60,8 @@ const logout = () => {
   delete api.defaults.headers.Authorization;
   
   // Redireciona para login
-  if (window.location.pathname !== '/login') {
-    window.location.href = '/login';
+  if (normalizePath(window.location.pathname) !== normalizePath(LOGIN_PATH)) {
+    window.location.href = LOGIN_PATH;
   }
 };
 
