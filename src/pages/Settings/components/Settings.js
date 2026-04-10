@@ -57,6 +57,8 @@ export default function Settings() {
       statPointsLevelInterval: 2,
       maxLevel: 99,
       minutesPerUnit: 1,
+      questQueueSize: 3,
+      movementSpeedStatKey: 'dex',
     };
     functions.setConfig(defaultConfig);
     enqueueSnackbar('Valores resetados para os padrões recomendados. Clique em Salvar para aplicar.', { variant: 'info' });
