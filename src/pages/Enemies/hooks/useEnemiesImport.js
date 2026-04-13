@@ -4,12 +4,19 @@
 
 import { useFieldDefinitions } from '../../../shared/components/GenericCSVImport/hooks';
 import { isInEnum } from '../../../shared/components/GenericCSVImport/utils';
+import { useStatus } from '../../../shared/hooks/useStatus';
 
 /**
  * Hook que define a configuração de importação para Inimigos
  */
 export function useEnemiesImport() {
   const { createField } = useFieldDefinitions();
+  const { baseStatus } = useStatus();
+
+  const fallbackBaseStatusNames = ['str', 'dex', 'con', 'int', 'wis', 'luk'];
+  const resolvedBaseStatusNames = baseStatus.length
+    ? baseStatus.map(status => status.nome)
+    : fallbackBaseStatusNames;
 
   // Define os campos de acordo com o modelo Enemy
   const ENEMY_FIELDS = [
@@ -45,14 +52,11 @@ export function useEnemiesImport() {
       }
     }),
     createField('xpReward', 'XP Recompensa', 'number', { example: '10' }),
-    
-    // Stats base
-    createField('str', 'Força (STR)', 'number', { example: '5' }),
-    createField('dex', 'Destreza (DEX)', 'number', { example: '5' }),
-    createField('con', 'Constituição (CON)', 'number', { example: '5' }),
-    createField('int', 'Inteligência (INT)', 'number', { example: '5' }),
-    createField('wit', 'Sagacidade (WIT)', 'number', { example: '5' }),
-    createField('men', 'Mentalidade (MEN)', 'number', { example: '5' })
+
+    // Stats base dinâmicos
+    ...resolvedBaseStatusNames.map(statusName =>
+      createField(statusName, `Status Base (${String(statusName).toUpperCase()})`, 'number', { example: '5' })
+    )
   ];
 
   // Mapeamento automático
@@ -96,24 +100,46 @@ export function useEnemiesImport() {
     'wit': 'wit',
     'WIT': 'wit',
     'sagacidade': 'wit',
-    'men': 'men',
-    'MEN': 'men',
-    'mentalidade': 'men'
+    'men': 'luk',
+    'MEN': 'luk',
+    'mentalidade': 'luk'
   };
+
+  resolvedBaseStatusNames.forEach(statusName => {
+    ENEMY_AUTO_MAPPING[String(statusName)] = String(statusName);
+    ENEMY_AUTO_MAPPING[String(statusName).toLowerCase()] = String(statusName);
+    ENEMY_AUTO_MAPPING[String(statusName).toUpperCase()] = String(statusName);
+  });
+
+  if (resolvedBaseStatusNames.includes('wis')) {
+    ENEMY_AUTO_MAPPING.wit = 'wis';
+    ENEMY_AUTO_MAPPING.WIT = 'wis';
+  }
+
+  if (resolvedBaseStatusNames.includes('luk')) {
+    ENEMY_AUTO_MAPPING.men = 'luk';
+    ENEMY_AUTO_MAPPING.MEN = 'luk';
+  }
 
   /**
    * Transforma os dados do CSV para o formato esperado pela API
    */
   const transformDataForAPI = (enemy) => {
     // Monta stats base
-    const stats = {
-      str: parseInt(enemy.str) || 0,
-      dex: parseInt(enemy.dex) || 0,
-      con: parseInt(enemy.con) || 0,
-      int: parseInt(enemy.int) || 0,
-      wit: parseInt(enemy.wit) || 0,
-      men: parseInt(enemy.men) || 0
-    };
+    const stats = {};
+
+    resolvedBaseStatusNames.forEach(statusName => {
+      stats[statusName] = parseInt(enemy[statusName], 10) || 0;
+    });
+
+    // Compatibilidade para planilhas legadas
+    if (resolvedBaseStatusNames.includes('wis')) {
+      stats.wis = (parseInt(enemy.wis, 10) || 0) + (parseInt(enemy.wit, 10) || 0);
+    }
+
+    if (resolvedBaseStatusNames.includes('luk')) {
+      stats.luk = (parseInt(enemy.luk, 10) || 0) + (parseInt(enemy.men, 10) || 0);
+    }
 
     return {
       name: enemy.name,
