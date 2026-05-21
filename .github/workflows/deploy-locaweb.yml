@@ -1,0 +1,49 @@
+name: Deploy Forbidden Site
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'src/**'
+      - 'public/**'
+      - 'package.json'
+      - 'package-lock.json'
+      - '.github/workflows/deploy-locaweb.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: forbidden-site-deploy
+  cancel-in-progress: true
+
+jobs:
+  build-and-deploy:
+    name: Build and Deploy
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build frontend
+        run: npm run build
+
+      - name: Deploy to Locaweb FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.LOCAWEB_FTP_SERVER }}
+          username: ${{ secrets.LOCAWEB_FTP_USERNAME }}
+          password: ${{ secrets.LOCAWEB_FTP_PASSWORD }}
+          server-dir: /public_html/forbidden/
+          local-dir: build/
+          dangerous-clean-slate: true
