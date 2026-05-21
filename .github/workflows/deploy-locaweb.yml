@@ -36,6 +36,8 @@ jobs:
         run: npm ci
 
       - name: Build frontend
+        env:
+          CI: false
         run: npm run build
 
       - name: Deploy to Locaweb FTP
