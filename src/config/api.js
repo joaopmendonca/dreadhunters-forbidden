@@ -2,8 +2,8 @@
 
 import axios from 'axios';
 
-// Base URL da API
-const baseURL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:4000/api';
+// Base URL da API — sem trailing slash para evitar dupla barra em template strings
+const baseURL = (process.env.REACT_APP_API_BASE_URL || 'http://localhost:4000/api').replace(/\/+$/, '');
 
 const api = axios.create({ 
   baseURL,
