@@ -24,7 +24,7 @@ export function SkillCard({ skill, onEdit, onDelete }) {
       <Card.TopBar
         badge={
           <Card.Badge variant="blue">
-            ✨ {skill.type === 'active' ? 'Ativa' : skill.type === 'passive' ? 'Passiva' : skill.type}
+            {skill.type === 'active' ? 'Ativa' : skill.type === 'passive' ? 'Passiva' : skill.type}
           </Card.Badge>
         }
       >
@@ -68,14 +68,14 @@ export function SkillCard({ skill, onEdit, onDelete }) {
           <Card.Section title="Custo">
             {skill.cost.resources?.map((r, idx) => (
               <p key={`res-${idx}`} style={{ margin: '0.25rem 0', fontSize: '0.85rem', color: 'var(--light-1)' }}>
-                💎 {r.resource?.toUpperCase() || 'RECURSO'}: <strong style={{ color: '#f87171' }}>
+                {r.resource?.toUpperCase() || 'RECURSO'}: <strong style={{ color: '#f87171' }}>
                   -{r.value}{r.type === 'percent' ? '%' : ''}
                 </strong>
               </p>
             ))}
             {skill.cost.items?.map((item, idx) => (
               <p key={`item-${idx}`} style={{ margin: '0.25rem 0', fontSize: '0.85rem', color: 'var(--light-1)' }}>
-                📦 {item.item?.name || 'Item'}: <strong style={{ color: '#f87171' }}>
+                {item.item?.name || 'Item'}: <strong style={{ color: '#f87171' }}>
                   -{item.quantity}{item.type === 'percent' ? '%' : ''}
                 </strong>
               </p>
@@ -140,7 +140,7 @@ export function SkillCard({ skill, onEdit, onDelete }) {
               
               return (
                 <p key={idx} style={{ margin: '0.25rem 0', fontSize: '0.85rem', color: 'var(--light-1)' }}>
-                  🔄 {frequencyText}: <strong style={{ color: effect.value < 0 ? '#f87171' : '#4ade80' }}>
+                  {frequencyText}: <strong style={{ color: effect.value < 0 ? '#f87171' : '#4ade80' }}>
                     {valueText}
                   </strong> {effect.stat.toUpperCase()}
                 </p>

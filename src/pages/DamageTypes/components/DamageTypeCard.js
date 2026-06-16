@@ -11,7 +11,7 @@ export default function DamageTypeCard({ damageType, onEdit, onDelete }) {
         badge={
           <>
             {!damageType.ativo && <Card.Badge variant="gray">Inativo</Card.Badge>}
-            <Card.Badge variant="maroon">{damageType.nome}</Card.Badge>
+            <Card.Badge variant="maroon"><span>{damageType.nome}</span></Card.Badge>
           </>
         }
       >

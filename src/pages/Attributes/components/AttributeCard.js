@@ -9,7 +9,7 @@ export function AttributeCard({ attribute, onEdit, onDelete }) {
       <Card.TopBar
         badge={
           <Card.Badge variant={attribute.tipo === 'base' ? 'blue' : 'mental'}>
-            {attribute.tipo === 'base' ? '🎲 Base' : '🧮 Derivado'}
+            {attribute.tipo === 'base' ? 'Base' : 'Derivado'}
           </Card.Badge>
         }
       >
@@ -39,7 +39,7 @@ export function AttributeCard({ attribute, onEdit, onDelete }) {
         <Card.Section title="Propriedades">
           <Card.StatList 
             stats={[
-              { value: attribute.visivel ? '👁️' : '🙈', label: attribute.visivel ? 'Visível' : 'Oculto' },
+              { value: attribute.visivel ? 'Sim' : 'Não', label: 'Visível' },
               { value: `#${attribute.ordem || 0}`, label: 'Ordem' },
               ...(attribute.unidade ? [{ value: attribute.unidade, label: 'Unidade' }] : [])
             ]}
