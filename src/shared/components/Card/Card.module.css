@@ -110,8 +110,20 @@
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
+  white-space: nowrap;
   background: rgba(255, 255, 255, 0.1);
   color: var(--light);
+}
+
+.badge :global(.icon-label),
+.headerType :global(.icon-label),
+.sectionTitle :global(.icon-label),
+.sectionLabel :global(.icon-label) {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  white-space: nowrap;
+  vertical-align: middle;
 }
 
 .badgeMental {
