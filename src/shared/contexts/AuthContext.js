@@ -91,20 +91,27 @@ export function AuthProvider({ children }) {
         throw new Error('Acesso negado: apenas administradores podem entrar no painel.');
       }
 
+      const accessTimestamp = new Date().toISOString();
+      const sessionUser = {
+        ...userData,
+        lastLoginAt: accessTimestamp,
+        lastAccess: accessTimestamp,
+      };
+
       // Armazenar no localStorage
       localStorage.setItem('token', newToken);
       if (newRefresh) {
         localStorage.setItem('refreshToken', newRefresh);
       }
-      localStorage.setItem('user', JSON.stringify(userData));
+      localStorage.setItem('user', JSON.stringify(sessionUser));
 
       // Atualizar axios e estados
       api.defaults.headers.Authorization = `Bearer ${newToken}`;
       setToken(newToken);
       setRefreshToken(newRefresh);
-      setUser(userData);
+      setUser(sessionUser);
 
-      return userData;
+      return sessionUser;
     } catch (err) {
       const message =
         err.response?.data?.message ||

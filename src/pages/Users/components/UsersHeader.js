@@ -1,7 +1,5 @@
-// src/pages/Users/components/UsersHeader.js
-
 import React from 'react';
-import { FaBan, FaCheck, FaClock, FaDownload, FaUpload, FaFileAlt, FaUsers } from 'react-icons/fa';
+import { FaDownload, FaFileAlt, FaUpload } from 'react-icons/fa';
 import PageHeader from '../../../shared/components/PageHeader';
 import Button from '../../../shared/components/Button';
 import TextInput from '../../../shared/components/TextInput';
@@ -21,29 +19,29 @@ export default function UsersHeader({
   onDownloadTemplate,
   onOpenImport,
 }) {
-  const filterTabs = FILTER_TABS_CONFIG.map(tab => {
-    let count, icon;
-    
+  const filterTabs = FILTER_TABS_CONFIG.map((tab) => {
+    let count = 0;
+    let icon = 'empty';
+
     switch (tab.id) {
       case 'all':
         count = totalCount;
-        icon = <FaUsers />;
+        icon = 'users';
         break;
       case 'active':
         count = activeCount;
-        icon = <FaCheck />;
+        icon = 'check';
         break;
       case 'banned':
         count = bannedCount;
-        icon = <FaBan />;
+        icon = 'ban';
         break;
       case 'pending':
         count = pendingCount;
-        icon = <FaClock />;
+        icon = 'hourglass';
         break;
       default:
-        count = 0;
-        icon = null;
+        break;
     }
 
     return {
@@ -58,37 +56,37 @@ export default function UsersHeader({
   return (
     <PageHeader
       statsCounters={[
-        { icon: <FaUsers />, value: totalCount, label: 'Total' },
-        { icon: <FaCheck />, value: activeCount, label: 'Ativos', variant: 'counterActive' },
-        { icon: <FaBan />, value: bannedCount, label: 'Banidos', variant: 'counterBanned' }
+        { icon: 'users', value: totalCount, label: 'Total' },
+        { icon: 'check', value: activeCount, label: 'Ativos', variant: 'counterGreen' },
+        { icon: 'ban', value: bannedCount, label: 'Banidos', variant: 'counterRed' },
       ]}
       controls={
         <>
-          <Button 
-            backgroundColor="var(--dark-3)" 
-            textColor="var(--light)" 
-            hoverColor="var(--gold)" 
-            onClick={onExportCSV} 
+          <Button
+            backgroundColor="rgba(13, 17, 16, 0.96)"
+            textColor="var(--light)"
+            hoverColor="rgba(212, 175, 55, 0.16)"
+            onClick={onExportCSV}
             icon={<FaDownload />}
           >
             Exportar CSV
           </Button>
 
-          <Button 
-            backgroundColor="var(--dark-3)" 
-            textColor="var(--light)" 
-            hoverColor="var(--gold)" 
-            onClick={onOpenImport} 
+          <Button
+            backgroundColor="rgba(13, 17, 16, 0.96)"
+            textColor="var(--light)"
+            hoverColor="rgba(212, 175, 55, 0.16)"
+            onClick={onOpenImport}
             icon={<FaUpload />}
           >
             Importar CSV
           </Button>
 
-          <Button 
-            backgroundColor="var(--dark-4)" 
-            textColor="var(--light-1)" 
-            hoverColor="var(--gold)" 
-            onClick={onDownloadTemplate} 
+          <Button
+            backgroundColor="rgba(13, 17, 16, 0.96)"
+            textColor="var(--light-1)"
+            hoverColor="rgba(212, 175, 55, 0.16)"
+            onClick={onDownloadTemplate}
             icon={<FaFileAlt />}
           >
             Template
@@ -96,9 +94,9 @@ export default function UsersHeader({
 
           <TextInput
             className={styles.searchInput}
-            placeholder="🔍 Buscar usuário…"
+            placeholder="Buscar usuário..."
             value={searchName}
-            onChange={e => onSearchChange(e.target.value)}
+            onChange={(e) => onSearchChange(e.target.value)}
           />
         </>
       }

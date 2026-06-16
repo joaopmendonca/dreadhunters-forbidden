@@ -1,5 +1,3 @@
-// src/pages/Users/components/UserCard.js
-
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import Card from '../../../shared/components/Card';
@@ -25,7 +23,7 @@ export default function UserCard({ user, onDelete }) {
             </Card.Badge>
           }
         >
-          <Card.Actions onDelete={e => onDelete(e, user._id)} />
+          <Card.Actions onDelete={(e) => onDelete(e, user._id)} />
         </Card.TopBar>
 
         <Card.Header
@@ -37,12 +35,12 @@ export default function UserCard({ user, onDelete }) {
           <Card.Section title="País">
             <span>{user.country || '—'}</span>
           </Card.Section>
-          
+
           <Card.Section title="Funções">
             <div className={styles.rolesList}>
-              {user.roles.map(role => (
-                <span 
-                  key={role} 
+              {user.roles.map((role) => (
+                <span
+                  key={role}
                   className={`${styles.roleBadge} ${role === 'admin' ? styles.roleBadgeAdmin : ''}`}
                 >
                   {role}
@@ -50,11 +48,11 @@ export default function UserCard({ user, onDelete }) {
               ))}
             </div>
           </Card.Section>
-          
+
           <Card.Section title="Criado em">
             <span>{formatDate(user.createdAt)}</span>
           </Card.Section>
-          
+
           <Card.Section title="Último login">
             <span>{formatDate(user.lastLogin)}</span>
           </Card.Section>

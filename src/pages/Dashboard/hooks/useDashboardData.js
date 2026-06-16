@@ -32,10 +32,12 @@ export function useDashboardData() {
 
   const [itemsByType, setItemsByType] = useState([]);
   const [itemsByRarity, setItemsByRarity] = useState([]);
+  const [servers, setServers] = useState([]);
   const [recentUsers, setRecentUsers] = useState([]);
   
   const [days, setDays] = useState(buildLast7Days);
-  const [loginCounts, setLoginCounts] = useState(Array(7).fill(0));
+  const [loginShiftMatrix, setLoginShiftMatrix] = useState(() => buildEmptyShiftMatrix());
+  const [loginShiftLabels] = useState(() => SHIFT_LABELS);
   const [charCounts, setCharCounts] = useState(Array(7).fill(0));
   const [errorCounts, setErrorCounts] = useState(Array(7).fill(0));
   const [activityCounts, setActivityCounts] = useState(Array(7).fill(0));
@@ -104,35 +106,49 @@ export function useDashboardData() {
         { name: 'Epico', value: rarityMap.epic, color: ITEM_RARITY_COLORS.epic },
         { name: 'Lendario', value: rarityMap.legendary, color: ITEM_RARITY_COLORS.legendary }
       ]);
+      setServers(servers);
 
       // Usuarios recentes
       const sortedUsers = [...users]
-        .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+        .sort((a, b) => getUserAccessTime(b) - getUserAccessTime(a))
         .slice(0, 5);
       setRecentUsers(sortedUsers);
 
       // Processar logs
       const d7 = buildLast7Days();
-      const logins = Array(7).fill(0);
+      const loginMatrix = buildEmptyShiftMatrix();
       const chars = Array(7).fill(0);
       const errors = Array(7).fill(0);
       const activity = Array(7).fill(0);
 
       logs.forEach(l => {
-        const date = l.timestamp?.slice(0, 10);
+        const metadata = l.metadata || {};
+        const timestampValue = l.timestamp || l.createdAt || metadata.timestamp || metadata.createdAt;
+        const date = getLogDateKey(timestampValue);
         const idx = d7.indexOf(date);
         if (idx === -1) return;
 
-        const method = String(l.method || '').toUpperCase();
-        const route = String(l.route || '').toLowerCase();
-        const statusCode = l.statusCode || 0;
+        const eventDate = new Date(timestampValue);
+        if (Number.isNaN(eventDate.getTime())) return;
+
+        const method = String(l.method || metadata.method || '').toUpperCase();
+        const route = String(l.route || metadata.route || l.path || metadata.path || l.url || metadata.url || '').toLowerCase();
+        const action = String(l.action || metadata.action || '').toUpperCase();
+        const category = String(l.category || metadata.category || '').toUpperCase();
+        const statusCode = l.statusCode || metadata.statusCode || 0;
 
         activity[idx]++;
 
-        if (method === 'POST' && route.includes('/auth/login')) {
-          logins[idx]++;
+        const isLoginEvent =
+          (method === 'POST' && route.includes('/auth/login')) ||
+          action === 'LOGIN' ||
+          (category === 'AUTH' && (route.includes('/login') || route.includes('/auth')));
+
+        if (isLoginEvent) {
+          const shiftIdx = getShiftIndex(eventDate.getHours());
+          loginMatrix[shiftIdx][idx]++;
         }
-        if (method === 'POST' && route.includes('/characters')) {
+        if (method === 'POST' && (route.includes('/characters') || action === 'CREATE_CHARACTER')) {
           chars[idx]++;
         }
         if (statusCode >= 400) {
@@ -141,7 +157,7 @@ export function useDashboardData() {
       });
 
       setDays(d7);
-      setLoginCounts(logins);
+      setLoginShiftMatrix(loginMatrix);
       setCharCounts(chars);
       setErrorCounts(errors);
       setActivityCounts(activity);
@@ -187,11 +203,52 @@ export function useDashboardData() {
     counts,
     itemsByType,
     itemsByRarity,
+    servers,
     recentUsers,
     days,
-    loginCounts,
+    loginShiftMatrix,
+    loginShiftLabels,
     charCounts,
     errorCounts,
     activityCounts,
   };
+}
+
+function getLogDateKey(value) {
+  if (!value) return null;
+
+  const date = new Date(value);
+  if (!Number.isNaN(date.getTime())) {
+    return date.toISOString().slice(0, 10);
+  }
+
+  if (typeof value === 'string' && value.length >= 10) {
+    return value.slice(0, 10);
+  }
+
+  return null;
+}
+
+const SHIFT_LABELS = [
+  'Madrugada',
+  'Manhã',
+  'Tarde',
+  'Noite',
+];
+
+function buildEmptyShiftMatrix() {
+  return SHIFT_LABELS.map(() => Array(7).fill(0));
+}
+
+function getShiftIndex(hour) {
+  if (hour < 6) return 0;
+  if (hour < 12) return 1;
+  if (hour < 18) return 2;
+  return 3;
+}
+
+function getUserAccessTime(user) {
+  const value = user?.lastAccess || user?.lastLoginAt || user?.updatedAt || user?.createdAt;
+  const date = new Date(value);
+  return Number.isNaN(date.getTime()) ? 0 : date.getTime();
 }

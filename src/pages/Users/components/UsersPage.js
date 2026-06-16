@@ -1,5 +1,3 @@
-// src/pages/Users/components/UsersPage.js
-
 import React, { useState } from 'react';
 import BaseLayout from '../../../shared/components/BaseLayout';
 import Card from '../../../shared/components/Card';
@@ -14,7 +12,7 @@ import { useUsersImport } from '../hooks/useUsersImport';
 
 export default function UsersPage() {
   const [showImportModal, setShowImportModal] = useState(false);
-  
+
   const {
     loading,
     page,
@@ -60,7 +58,7 @@ export default function UsersPage() {
       ) : (
         <>
           <Card.Grid minWidth="320px">
-            {pageItems.map(user => (
+            {pageItems.map((user) => (
               <UserCard
                 key={user._id}
                 user={user}
@@ -71,7 +69,7 @@ export default function UsersPage() {
 
           {filtered.length === 0 && (
             <EmptyState
-              icon="👥"
+              icon="users"
               message="Nenhum usuário encontrado."
             />
           )}

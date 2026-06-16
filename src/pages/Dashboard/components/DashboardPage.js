@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useContext, useMemo } from 'react';
 import {
   FaBoxOpen,
   FaBookSkull,
@@ -8,17 +8,16 @@ import {
   FaHourglassHalf,
   FaScroll,
   FaSkullCrossbones,
-  FaTowerObservation,
   FaUserSecret,
   FaUsers,
 } from 'react-icons/fa6';
-import { FaChessKnight, FaMapMarkedAlt } from 'react-icons/fa';
+import { FaChessKnight, FaMapMarkedAlt, FaServer } from 'react-icons/fa';
 import BaseLayout from '../../../shared/components/BaseLayout';
+import { AuthContext } from '../../../shared/contexts/AuthContext';
 import { formatShortDate } from '../utils';
 import { useDashboardData } from '../hooks/useDashboardData';
 import styles from '../styles/Dashboard.module.css';
 
-import logoLabel from '../../../assets/game-logo-label.png';
 
 const iconTone = {
   gold: styles.toneGold,
@@ -35,15 +34,39 @@ function DashboardPage() {
     counts,
     itemsByType,
     itemsByRarity,
+    servers,
     recentUsers,
     days,
-    loginCounts,
+    loginShiftMatrix,
+    loginShiftLabels,
     charCounts,
     errorCounts,
     activityCounts,
   } = useDashboardData();
+  const { user } = useContext(AuthContext);
 
   const dayLabels = useMemo(() => days.map(formatShortDate), [days]);
+  const displayRecentUsers = useMemo(() => {
+    const normalizedCurrentUser = normalizeUser(user);
+
+    return recentUsers
+      .map((candidate) => {
+        const normalizedCandidate = normalizeUser(candidate);
+        if (!normalizedCurrentUser || !normalizedCandidate) {
+          return candidate;
+        }
+
+        if (!areUsersEquivalent(normalizedCandidate, normalizedCurrentUser)) {
+          return candidate;
+        }
+
+        return {
+          ...candidate,
+          ...pickAccessFields(normalizedCurrentUser),
+        };
+      })
+      .sort((a, b) => getUserAccessTime(b) - getUserAccessTime(a));
+  }, [recentUsers, user]);
 
   const topStats = useMemo(() => ([
     { Icon: FaUsers, tone: 'gold', label: 'Usuários', value: counts.users, detail: `${counts.usersActive} cadastrados` },
@@ -151,11 +174,23 @@ function DashboardPage() {
   }));
 
   const activityLegends = [
-    { label: 'Logins', value: sum(loginCounts), color: '#3ed0b1' },
+    { label: 'Logins', value: sum(loginShiftMatrix.flat()), color: '#3ed0b1' },
     { label: 'Novos personagens', value: sum(charCounts), color: '#7ae27d' },
     { label: 'Requisições', value: sum(activityCounts), color: '#ba82ff' },
     { label: 'Erros', value: sum(errorCounts), color: '#ea5a5a' },
   ];
+  const serverSummary = useMemo(() => buildServerSummary(servers), [servers]);
+  const serverCards = useMemo(() => (
+    [...servers]
+      .sort((a, b) => getServerSortScore(b) - getServerSortScore(a))
+      .map((server) => ({
+        ...server,
+        label: getServerStatusLabel(server.status),
+        statusKey: getServerStatusKey(server.status),
+        tone: getServerStatusTone(server.status),
+        occupancy: getServerOccupancy(server.currentPlayers, server.maxPlayers),
+      }))
+  ), [servers]);
 
   if (loading) {
     return (
@@ -175,11 +210,9 @@ function DashboardPage() {
       <div className={styles.shell}>
         <main className={styles.main}>
           <section className={styles.heroBlock}>
-            <img className={styles.heroLogo} src={logoLabel} alt="Dread Hunters" />
             <div className={styles.heroCopy}>
               <span className={styles.heroKicker}>Forbidden dashboard</span>
               <h1 className={styles.heroTitle}>Dread Hunters</h1>
-              <p className={styles.heroSubtitle}>Ordem dos caçadores</p>
             </div>
           </section>
 
@@ -208,8 +241,8 @@ function DashboardPage() {
             </div>
 
             <div className={styles.activityGrid}>
-              <ChartCard title="Logins" subtitle="Mapa de atividade" legend={activityLegends[0]}>
-                <HeatmapChart counts={loginCounts} labels={dayLabels} />
+              <ChartCard title="Logins" subtitle="Dia x turno" legend={activityLegends[0]}>
+                <HeatmapChart matrix={loginShiftMatrix} dayLabels={dayLabels} shiftLabels={loginShiftLabels} />
               </ChartCard>
               <ChartCard title="Novos personagens" subtitle="Criações por dia" legend={activityLegends[1]}>
                 <LineChart values={charCounts} labels={dayLabels} stroke="#56d7a6" fill="#2a7f5d" />
@@ -293,19 +326,22 @@ function DashboardPage() {
               <h2 className={styles.sectionTitle}>Registro dos recrutas</h2>
             </div>
             <div className={styles.userList}>
-              {recentUsers.map((user, index) => (
-                <article key={user.id || user.email || `${index}`} className={styles.userItem}>
-                  <div className={`${styles.userAvatar} ${styles.toneTeal}`}>
-                    <FaUserSecret className={styles.userAvatarIcon} aria-hidden="true" />
-                  </div>
-                  <div className={styles.userMeta}>
-                    <strong className={styles.userName}>{getUserName(user)}</strong>
+              {displayRecentUsers.map((user, index) => (
+                <article key={user.id || user._id || user.email || `${index}`} className={styles.userItem}>
+                  <div className={styles.userItemHeader}>
+                    <div className={`${styles.userAvatar} ${styles.toneTeal}`}>
+                      <FaUserSecret className={styles.userAvatarIcon} aria-hidden="true" />
+                    </div>
                     <span className={styles.userEmail}>{user.email || 'Sem e-mail'}</span>
+                    <span
+                      className={`${styles.statusDot} ${styles[`statusDot${getStatusLabel(user.status)}`] || ''}`}
+                      title={getStatusLabel(user.status)}
+                    />
+                  </div>
+                  <div className={styles.userItemBody}>
+                    <strong className={styles.userName}>{getUserName(user)}</strong>
                     <span className={styles.userAccess}>{formatAccess(user.lastAccess || user.lastLoginAt || user.updatedAt || user.createdAt)}</span>
                   </div>
-                  <span className={`${styles.statusPill} ${styles[`status${getStatusLabel(user.status)}`] || ''}`}>
-                    {getStatusLabel(user.status)}
-                  </span>
                 </article>
               ))}
             </div>
@@ -315,23 +351,56 @@ function DashboardPage() {
             <div className={styles.sectionHeaderCompact}>
               <h2 className={styles.sectionTitle}>Servidores</h2>
             </div>
-            <div className={styles.serverPanel}>
-              <div className={styles.serverVisual}>
-                <div className={`${styles.serverImage} ${styles.toneGold}`}>
-                  <FaTowerObservation className={styles.serverImageIcon} aria-hidden="true" />
-                </div>
-                <div className={styles.serverGlow} />
-              </div>
+            <article className={styles.serverOverview}>
               <div className={styles.serverBody}>
-                <h3 className={styles.serverTitle}>Torre de Observação</h3>
-                <div className={styles.serverMetrics}>
-                  <ServerMetric label="Total de servidores" value={counts.servers} />
-                  <ServerMetric label="Status" value={counts.serversOnline > 0 ? 'ONLINE' : 'OFFLINE'} highlight />
-                  <ServerMetric label="Jogadores online" value={counts.totalPlayers} />
-                  <ServerMetric label="Latência" value={`${20 + (counts.totalPlayers % 12)}ms`} />
-                  <ServerMetric label="Uptime" value={`${(99.2 + Math.min(0.7, counts.serversOnline * 0.15)).toFixed(1)}%`} />
+                <div className={styles.serverOverviewHeader}>
+                  <div>
+                    <h3 className={styles.serverTitle}>Panorama geral</h3>
+                    <p className={styles.serverSummaryText}>Leitura consolidada da malha de servidores</p>
+                  </div>
+                  <span className={styles.serverCountPill}>{serverSummary.total} servidores</span>
+                </div>
+                <div className={styles.serverSummaryGrid}>
+                  <ServerMetric label="Online" value={serverSummary.online} highlight />
+                  <ServerMetric label="Cheios" value={serverSummary.full} />
+                  <ServerMetric label="Manutenção" value={serverSummary.maintenance} />
+                  <ServerMetric label="Offline" value={serverSummary.offline} />
+                  <ServerMetric label="Jogadores online" value={serverSummary.players} />
+                  <ServerMetric label="Capacidade" value={`${serverSummary.players}/${serverSummary.capacity}`} />
+                  <ServerMetric label="Ocupação" value={`${serverSummary.occupancy}%`} />
+                  <ServerMetric label="Regiões" value={serverSummary.regions} />
                 </div>
               </div>
+            </article>
+
+            <div className={styles.serverList}>
+              {serverCards.length ? serverCards.map((server) => (
+                <article key={server.slug || server.name} className={styles.serverCard}>
+                  <div className={styles.serverCardHeader}>
+                    <div className={`${styles.serverMiniSeal} ${iconTone[server.tone] || styles.toneBlue}`}>
+                      <FaServer className={styles.serverMiniIcon} aria-hidden="true" />
+                    </div>
+                    <div className={styles.serverCardTitleBlock}>
+                    <h3 className={styles.serverCardTitle}>{server.name}</h3>
+                    <p className={styles.serverCardSubtitle}>
+                      {server.region || 'Região não informada'} {server.slug ? `• ${server.slug}` : ''}
+                    </p>
+                  </div>
+                    <span className={`${styles.serverStatusPill} ${styles[`serverStatus${server.statusKey}`] || ''}`}>
+                      {server.label}
+                    </span>
+                  </div>
+                  <div className={styles.serverCardMetrics}>
+                    <ServerMetric label="Jogadores" value={`${server.currentPlayers || 0}/${server.maxPlayers || 0}`} />
+                    <ServerMetric label="Ocupação" value={`${server.occupancy}%`} highlight />
+                  </div>
+                  <div className={styles.serverProgress}>
+                    <span style={{ width: `${Math.min(100, Math.max(0, server.occupancy))}%` }} />
+                  </div>
+                </article>
+              )) : (
+                <div className={styles.serverEmptyState}>Nenhum servidor cadastrado.</div>
+              )}
             </div>
           </section>
         </aside>
@@ -358,44 +427,77 @@ function ChartCard({ title, subtitle, legend, children }) {
   );
 }
 
-function HeatmapChart({ counts, labels }) {
-  const max = Math.max(...counts, 1);
-  const cells = [];
-
-  for (let row = 0; row < 6; row += 1) {
-    labels.forEach((label, index) => {
-      const dayCount = counts[index] || 0;
-      const intensity = Math.min(1, ((dayCount / max) * 0.32) + (row * 0.11));
-      cells.push(
-        <span
-          key={`${label}-${row}`}
-          className={styles.heatCell}
-          style={{ opacity: 0.2 + intensity }}
-          title={`${label} - ${dayCount}`}
-        />,
-      );
-    });
-  }
+function HeatmapChart({ matrix, dayLabels, shiftLabels }) {
+  const max = Math.max(...matrix.flat(), 1);
+  const steps = [0, 0.25, 0.45, 0.7, 1];
 
   return (
     <div className={styles.heatmapWrap}>
-      <div className={styles.heatmapAxes}>
-        <span>00</span>
-        <span>04</span>
-        <span>08</span>
-        <span>12</span>
-        <span>16</span>
-        <span>20</span>
-        <span>24</span>
+      <div className={styles.heatmapLegend}>
+        <span>Menos</span>
+        <div className={styles.heatmapLegendScale}>
+          {steps.map((step) => (
+            <span
+              key={step}
+              className={styles.heatLegendCell}
+              style={getHeatmapColor(step, step > 0, step)}
+            />
+          ))}
+        </div>
+        <span>Mais</span>
       </div>
-      <div className={styles.heatmapGrid}>{cells}</div>
-      <div className={styles.heatmapDays}>
-        {labels.map((label) => (
-          <span key={label}>{label}</span>
+      <div
+        className={styles.heatmapTable}
+        style={{ gridTemplateColumns: `88px repeat(${dayLabels.length}, minmax(0, 1fr))` }}
+      >
+        <span className={styles.heatmapCorner} />
+        {dayLabels.map((label) => (
+          <span key={label} className={styles.heatmapDayLabelCell}>{label}</span>
+        ))}
+
+        {shiftLabels.map((shiftLabel, shiftIndex) => (
+          <React.Fragment key={shiftLabel}>
+            <span className={styles.heatmapShiftLabel}>{shiftLabel}</span>
+            {dayLabels.map((dayLabel, dayIndex) => {
+              const count = matrix[shiftIndex]?.[dayIndex] || 0;
+              const normalized = count / max;
+              const color = getHeatmapColor(normalized, count > 0, normalized);
+              return (
+                <span
+                  key={`${shiftLabel}-${dayLabel}`}
+                  className={styles.heatCell}
+                  style={color}
+                />
+              );
+            })}
+          </React.Fragment>
         ))}
       </div>
     </div>
   );
+}
+
+function getHeatmapColor(intensity, hasValue, normalized) {
+  if (!hasValue) {
+    return {
+      backgroundColor: 'rgba(13, 39, 35, 0.92)',
+      boxShadow: 'inset 0 0 0 1px rgba(255, 255, 255, 0.03)',
+      opacity: 0.95,
+    };
+  }
+
+  const lightness = 16 + (normalized * 28) + (intensity * 10);
+  const saturation = 42 + (normalized * 32);
+  const alpha = 0.42 + (normalized * 0.48);
+
+  return {
+    backgroundColor: `hsla(170, ${saturation}%, ${lightness}%, ${alpha})`,
+    boxShadow: `
+      inset 0 0 0 1px rgba(255, 255, 255, 0.06),
+      0 0 ${6 + (normalized * 14)}px rgba(62, 208, 177, ${0.14 + (normalized * 0.36)})
+    `,
+    opacity: 1,
+  };
 }
 
 function LineChart({ values, labels, stroke, fill }) {
@@ -424,7 +526,22 @@ function LineChart({ values, labels, stroke, fill }) {
       <path d={area} fill={`url(#lineFill-${stroke.replace('#', '')})`} />
       <polyline points={polyline} fill="none" stroke={stroke} strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
       {points.map((point, index) => (
-        <circle key={labels[index] || index} cx={point.x} cy={point.y} r="3.5" fill={stroke} />
+        <g key={labels[index] || index}>
+          <circle
+            cx={point.x}
+            cy={point.y}
+            r="3.5"
+            fill={stroke}
+          />
+          <text
+            x={point.x}
+            y={Math.max(12, point.y - 8)}
+            textAnchor="middle"
+            className={styles.chartValueLabel}
+          >
+            {values[index]}
+          </text>
+        </g>
       ))}
     </svg>
   );
@@ -445,7 +562,23 @@ function BarChart({ values, labels, fill }) {
         const y = 108 - barHeight;
         return (
           <g key={labels[index] || index}>
-            <rect x={x} y={y} width={barWidth} height={barHeight} rx="6" fill={fill} opacity="0.85" />
+            <rect
+              x={x}
+              y={y}
+              width={barWidth}
+              height={barHeight}
+              rx="6"
+              fill={fill}
+              opacity="0.85"
+            />
+            <text
+              x={x + (barWidth / 2)}
+              y={Math.max(14, y - 4)}
+              textAnchor="middle"
+              className={styles.chartValueLabel}
+            >
+              {value}
+            </text>
             <text x={x + (barWidth / 2)} y="132" textAnchor="middle" className={styles.chartAxisLabel}>
               {labels[index]}
             </text>
@@ -501,6 +634,90 @@ function ServerMetric({ label, value, highlight }) {
   );
 }
 
+function buildServerSummary(servers) {
+  const list = Array.isArray(servers) ? servers : [];
+  const summary = list.reduce((acc, server) => {
+    const status = normalizeServerStatus(server.status);
+    const maxPlayers = Number(server.maxPlayers) || 0;
+    const currentPlayers = Number(server.currentPlayers) || 0;
+    const region = String(server.region || '').trim().toLowerCase();
+
+    acc.total += 1;
+    acc.players += currentPlayers;
+    acc.capacity += maxPlayers;
+    if (region) acc.regions.add(region);
+    if (status === 'online') acc.online += 1;
+    if (status === 'cheio') acc.full += 1;
+    if (status === 'manutencao') acc.maintenance += 1;
+    if (status === 'offline') acc.offline += 1;
+    return acc;
+  }, {
+    total: 0,
+    online: 0,
+    full: 0,
+    maintenance: 0,
+    offline: 0,
+    players: 0,
+    capacity: 0,
+    regions: new Set(),
+  });
+
+  return {
+    ...summary,
+    regions: summary.regions.size,
+    occupancy: summary.capacity > 0 ? Math.round((summary.players / summary.capacity) * 100) : 0,
+  };
+}
+
+function getServerSortScore(server) {
+  const statusScore = {
+    online: 4,
+    cheio: 3,
+    manutencao: 2,
+    offline: 1,
+  }[normalizeServerStatus(server.status)] || 0;
+
+  return (statusScore * 100000) + (Number(server.currentPlayers) || 0);
+}
+
+function normalizeServerStatus(status) {
+  const value = String(status || '').trim().toLowerCase();
+  if (value === 'online') return 'online';
+  if (value === 'cheio') return 'cheio';
+  if (value === 'manutencao' || value === 'manutenção') return 'manutencao';
+  return 'offline';
+}
+
+function getServerStatusLabel(status) {
+  const normalized = normalizeServerStatus(status);
+  if (normalized === 'online') return 'ONLINE';
+  if (normalized === 'cheio') return 'CHEIO';
+  if (normalized === 'manutencao') return 'MANUTENÇÃO';
+  return 'OFFLINE';
+}
+
+function getServerStatusKey(status) {
+  const normalized = normalizeServerStatus(status);
+  if (normalized === 'online') return 'Online';
+  if (normalized === 'cheio') return 'Cheio';
+  if (normalized === 'manutencao') return 'Manutencao';
+  return 'Offline';
+}
+
+function getServerStatusTone(status) {
+  const normalized = normalizeServerStatus(status);
+  if (normalized === 'online') return 'toneTeal';
+  if (normalized === 'cheio') return 'toneGold';
+  if (normalized === 'manutencao') return 'tonePurple';
+  return 'toneRed';
+}
+
+function getServerOccupancy(currentPlayers, maxPlayers) {
+  const max = Number(maxPlayers) || 0;
+  if (!max) return 0;
+  return Math.round(((Number(currentPlayers) || 0) / max) * 100);
+}
+
 function getUserName(user) {
   return user.name || user.username || user.displayName || user.email?.split('@')[0] || 'Usuário';
 }
@@ -541,8 +758,46 @@ function formatAccess(value) {
   return `Último acesso: há ${diffDays} dia${diffDays > 1 ? 's' : ''}`;
 }
 
+function normalizeUser(user) {
+  if (!user) return null;
+
+  return {
+    id: user.id || user._id || null,
+    email: user.email ? String(user.email).trim().toLowerCase() : null,
+    name: user.name || user.username || user.displayName || null,
+  };
+}
+
+function areUsersEquivalent(a, b) {
+  if (!a || !b) return false;
+
+  if (a.id && b.id && String(a.id) === String(b.id)) return true;
+  if (a.email && b.email && a.email === b.email) return true;
+  if (a.name && b.name && a.name.toLowerCase() === b.name.toLowerCase()) return true;
+
+  return false;
+}
+
+function pickAccessFields(user) {
+  return {
+    lastAccess: user.lastAccess,
+    lastLoginAt: user.lastLoginAt,
+    updatedAt: user.updatedAt,
+    createdAt: user.createdAt,
+  };
+}
+
+function getUserAccessTime(user) {
+  const value = user?.lastAccess || user?.lastLoginAt || user?.updatedAt || user?.createdAt;
+  const date = new Date(value);
+  return Number.isNaN(date.getTime()) ? 0 : date.getTime();
+}
+
 function sum(values) {
   return values.reduce((total, value) => total + value, 0);
 }
 
 export default DashboardPage;
+
+
+

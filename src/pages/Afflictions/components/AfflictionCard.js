@@ -1,7 +1,6 @@
 import { FaExclamationTriangle } from 'react-icons/fa';
 import Card from '../../../shared/components/Card';
-import { buildImageSrc, getSeveridadeConfig } from '../utils';
-import styles from '../styles/Afflictions.module.css';
+import { buildImageSrc } from '../utils';
 
 export default function AfflictionCard({ affliction, onEdit, onDelete }) {
   const isMental = affliction.tipo === 'mental';
@@ -11,7 +10,7 @@ export default function AfflictionCard({ affliction, onEdit, onDelete }) {
       <Card.TopBar
         badge={
           <Card.Badge variant={isMental ? 'mental' : 'fisica'}>
-            {isMental ? '🧠 Mental' : '💔 Física'}
+            {isMental ? '[[brain]] Mental' : '[[brokenHeart]] Física'}
           </Card.Badge>
         }
       >
@@ -23,7 +22,7 @@ export default function AfflictionCard({ affliction, onEdit, onDelete }) {
 
       <Card.Header
         image={affliction.imagemUrl ? buildImageSrc(affliction.imagemUrl) : null}
-        type={isMental ? 'AFLIÇÃO MENTAL' : 'AFLIÇÃO FÍSICA'}
+        type={isMental ? '[[brain]] Aflição Mental' : '[[brokenHeart]] Aflição Física'}
         title={affliction.nome}
       />
 
@@ -43,9 +42,9 @@ export default function AfflictionCard({ affliction, onEdit, onDelete }) {
                   <div style={{ marginTop: '0.5rem' }}>
                     <strong style={{ fontSize: '0.8rem', color: 'var(--light)' }}>Penalidade</strong>
                     <Card.StatList
-                      stats={nivel.penalidades?.map(pen => ({
+                      stats={nivel.penalidades?.map((pen) => ({
                         value: pen.modificador,
-                        label: pen.status?.label || pen.status?.nome || 'Status'
+                        label: pen.status?.label || pen.status?.nome || 'Status',
                       })) || []}
                       emptyMessage="Sem penalidades"
                     />

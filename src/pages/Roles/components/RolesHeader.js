@@ -1,5 +1,4 @@
-import { FaDownload, FaPlus, FaFileUpload } from 'react-icons/fa';
-import { GiShield } from 'react-icons/gi';
+import { FaDownload, FaFileUpload, FaPlus } from 'react-icons/fa';
 import Button from '../../../shared/components/Button';
 import PageHeader from '../../../shared/components/PageHeader';
 import TextInput from '../../../shared/components/TextInput';
@@ -14,26 +13,19 @@ export default function RolesHeader({
   onExportCSV,
   onDownloadTemplate,
   filterStatus,
-  onFilterChange
+  onFilterChange,
 }) {
-  const filterTabs = [
-    { value: 'all', label: 'Todas', icon: <GiShield />, variant: 'default' }
-  ];
-
   return (
     <PageHeader
       statsCounters={[
-        { icon: '🛡️', value: totalCount, label: 'Roles' }
+        { icon: 'shield', value: totalCount, label: 'Roles', variant: 'counterGold' },
       ]}
-      filterTabs={filterTabs}
-      currentFilter={filterStatus}
-      onFilterChange={onFilterChange}
       controls={
         <>
           <Button
             backgroundColor="var(--maroon)"
             textColor="var(--light)"
-            hoverColor="var(--gold)"
+            hoverColor="rgba(212, 175, 55, 0.18)"
             onClick={onNew}
             icon={<FaPlus />}
           >
@@ -41,9 +33,9 @@ export default function RolesHeader({
           </Button>
 
           <Button
-            backgroundColor="var(--dark-3)"
+            backgroundColor="rgba(13, 17, 16, 0.96)"
             textColor="var(--light)"
-            hoverColor="var(--gold)"
+            hoverColor="rgba(212, 175, 55, 0.16)"
             onClick={onImport}
             icon={<FaFileUpload />}
           >
@@ -51,9 +43,9 @@ export default function RolesHeader({
           </Button>
 
           <Button
-            backgroundColor="var(--dark-3)"
+            backgroundColor="rgba(13, 17, 16, 0.96)"
             textColor="var(--light)"
-            hoverColor="var(--gold)"
+            hoverColor="rgba(212, 175, 55, 0.16)"
             onClick={onExportCSV}
             icon={<FaDownload />}
           >
@@ -61,9 +53,9 @@ export default function RolesHeader({
           </Button>
 
           <Button
-            backgroundColor="var(--dark-4)"
+            backgroundColor="rgba(13, 17, 16, 0.96)"
             textColor="var(--light-1)"
-            hoverColor="var(--gold)"
+            hoverColor="rgba(212, 175, 55, 0.16)"
             onClick={onDownloadTemplate}
             icon={<FaDownload />}
           >
@@ -72,13 +64,22 @@ export default function RolesHeader({
 
           <TextInput
             className={styles.searchInput}
-            placeholder="🔍 Buscar por nome…"
+            placeholder="Buscar por nome..."
             value={searchName}
-            onChange={e => onSearchChange(e.target.value)}
+            onChange={(e) => onSearchChange(e.target.value)}
           />
         </>
       }
+      filterTabs={[
+        {
+          id: 'all',
+          label: 'Todas',
+          icon: 'shield',
+          count: totalCount,
+          active: filterStatus === 'all',
+          onClick: () => onFilterChange('all'),
+        },
+      ]}
     />
   );
 }
-

@@ -1,4 +1,4 @@
-import { FaBrain, FaDownload, FaFileUpload, FaHeartBroken, FaPlus, FaSkull } from 'react-icons/fa';
+import { FaDownload, FaFileUpload, FaPlus } from 'react-icons/fa';
 import Button from '../../../shared/components/Button';
 import PageHeader from '../../../shared/components/PageHeader';
 import TextInput from '../../../shared/components/TextInput';
@@ -18,21 +18,21 @@ export default function AfflictionsHeader({
   onExportCSV,
   onDownloadTemplate,
   uploading,
-  fileInputRef
+  fileInputRef,
 }) {
   return (
     <PageHeader
       statsCounters={[
-        { icon: <FaSkull />, value: totalCount, label: 'Total' },
-        { icon: <FaBrain />, value: mentalCount, label: 'Mental', variant: 'counterMental' },
-        { icon: <FaHeartBroken />, value: fisicaCount, label: 'Física', variant: 'counterFisica' }
+        { icon: 'skull', value: totalCount, label: 'Total', variant: 'counterOrange' },
+        { icon: 'brain', value: mentalCount, label: 'Mental', variant: 'counterPurple' },
+        { icon: 'brokenHeart', value: fisicaCount, label: 'Física', variant: 'counterRed' },
       ]}
       controls={
         <>
           <Button
             backgroundColor="var(--maroon)"
             textColor="var(--light)"
-            hoverColor="var(--gold)"
+            hoverColor="rgba(212, 175, 55, 0.18)"
             onClick={onNew}
             icon={<FaPlus />}
           >
@@ -40,9 +40,9 @@ export default function AfflictionsHeader({
           </Button>
 
           <Button
-            backgroundColor="var(--dark-3)"
+            backgroundColor="rgba(13, 17, 16, 0.96)"
             textColor="var(--light)"
-            hoverColor="var(--gold)"
+            hoverColor="rgba(212, 175, 55, 0.16)"
             onClick={onImport}
             icon={<FaFileUpload />}
           >
@@ -58,9 +58,9 @@ export default function AfflictionsHeader({
           />
 
           <Button
-            backgroundColor="var(--dark-3)"
+            backgroundColor="rgba(13, 17, 16, 0.96)"
             textColor="var(--light)"
-            hoverColor="var(--gold)"
+            hoverColor="rgba(212, 175, 55, 0.16)"
             onClick={onExportCSV}
             icon={<FaDownload />}
           >
@@ -68,50 +68,51 @@ export default function AfflictionsHeader({
           </Button>
 
           <Button
-            backgroundColor="var(--dark-4)"
+            backgroundColor="rgba(13, 17, 16, 0.96)"
             textColor="var(--light-1)"
-            hoverColor="var(--gold)"
+            hoverColor="rgba(212, 175, 55, 0.16)"
             onClick={onDownloadTemplate}
             icon={<FaDownload />}
+            disabled={uploading}
           >
             Template
           </Button>
 
           <TextInput
             className={styles.searchInput}
-            placeholder="🔍 Buscar aflição…"
+            placeholder="Buscar aflição..."
             value={searchName}
-            onChange={e => onSearchChange(e.target.value)}
+            onChange={(e) => onSearchChange(e.target.value)}
           />
         </>
       }
       filterTabs={[
         {
           id: 'all',
-          icon: <FaSkull />,
+          icon: 'skull',
           label: 'Todas',
           count: totalCount,
           active: filterTipo === 'all',
-          onClick: () => onFilterChange('all')
+          onClick: () => onFilterChange('all'),
         },
         {
           id: 'mental',
-          icon: <FaBrain />,
+          icon: 'brain',
           label: 'Mental',
           count: mentalCount,
           active: filterTipo === 'mental',
           onClick: () => onFilterChange('mental'),
-          variant: 'filterTabPurple'
+          variant: 'filterTabPurple',
         },
         {
           id: 'fisica',
-          icon: <FaHeartBroken />,
+          icon: 'brokenHeart',
           label: 'Física',
           count: fisicaCount,
           active: filterTipo === 'fisica',
           onClick: () => onFilterChange('fisica'),
-          variant: 'filterTabRed'
-        }
+          variant: 'filterTabRed',
+        },
       ]}
     />
   );

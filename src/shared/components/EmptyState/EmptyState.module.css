@@ -28,6 +28,11 @@
   animation: float 3s ease-in-out infinite;
 }
 
+.emptyIconGlyph {
+  width: 1em;
+  height: 1em;
+}
+
 @keyframes float {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-10px); }

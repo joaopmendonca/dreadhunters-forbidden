@@ -124,12 +124,12 @@ export default function Sidebar({ isOpen = true, onClose }) {
           </button>
         )}
 
-        <div className={styles.logoWrapper}>
-          <img src={gameLogo} alt="Logo do Jogo" className={styles.logo} />
+        <div className={styles.brandBlock}>
+          <img src={gameLogo} alt="Dread Hunters" className={styles.logo} />
         </div>
 
         <div className={styles.userInfo}>
-          <h2 className={styles.greeting}>Olá, {user.username}!</h2>
+          <p className={styles.greeting}>Olá, {user.username}!</p>
           <span className={styles.userRole}>{user.roles.join(', ')}</span>
         </div>
 

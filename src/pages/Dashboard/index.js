@@ -1,3 +1,5 @@
 // src/pages/Dashboard/index.js
 
-export { default } from './components/DashboardPage';
+import DashboardPage from './components/DashboardPage';
+
+export default DashboardPage;

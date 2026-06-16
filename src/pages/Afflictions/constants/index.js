@@ -1,5 +1,5 @@
 export const MESSAGES = {
-  loading: 'Carregando aflições…',
+  loading: 'Carregando aflições...',
   empty: 'Nenhuma aflição encontrada',
   emptyDesc: 'Tente ajustar sua busca ou crie uma nova aflição',
   deleteConfirm: 'Confirma exclusão?',
@@ -13,18 +13,18 @@ export const MESSAGES = {
   noAfflictions: 'Nenhuma aflição para exportar',
   invalidCSV: 'Selecione um arquivo CSV',
   noStatus: 'Carregue os status primeiro',
-  importError: 'Erro ao processar CSV'
+  importError: 'Erro ao processar CSV',
 };
 
 export const TIPO_OPTIONS = [
-  { value: 'mental', label: '🧠 Mental' },
-  { value: 'fisica', label: '💔 Física' }
+  { value: 'mental', label: 'Mental' },
+  { value: 'fisica', label: 'Física' },
 ];
 
 export const SEVERIDADE_OPTIONS = [
-  { value: 'leve', label: '🟢 Leve' },
-  { value: 'media', label: '🟡 Média' },
-  { value: 'grave', label: '🔴 Grave' }
+  { value: 'leve', label: 'Leve' },
+  { value: 'media', label: 'Média' },
+  { value: 'grave', label: 'Grave' },
 ];
 
 export const CSV_TEMPLATE = `nome,tipo,descricao,nivel_leve,nivel_medio,nivel_grave

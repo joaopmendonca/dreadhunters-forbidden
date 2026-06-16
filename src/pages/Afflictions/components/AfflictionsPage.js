@@ -10,7 +10,6 @@ import AfflictionCard from './AfflictionCard';
 import AfflictionModal from './AfflictionModal';
 import AfflictionsHeader from './AfflictionsHeader';
 import LoadingState from './LoadingState';
-import styles from '../styles/Afflictions.module.css';
 
 const ITEMS_PER_PAGE = 9;
 
@@ -25,7 +24,7 @@ export default function AfflictionsPage() {
     handleImport,
     handleCSVUpload,
     handleExportCSV,
-    downloadTemplate
+    downloadTemplate,
   } = useAfflictions();
 
   const {
@@ -33,7 +32,7 @@ export default function AfflictionsPage() {
     autoMapping,
     transformDataForAPI,
     isDuplicate,
-    entityNamePlural
+    entityNamePlural,
   } = useAfflictionsImport();
 
   const [uploading, setUploading] = useState(false);
@@ -46,6 +45,7 @@ export default function AfflictionsPage() {
 
   useEffect(() => {
     fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleNew = () => {
@@ -53,7 +53,7 @@ export default function AfflictionsPage() {
     setModalOpen(true);
   };
 
-  const handleEdit = affliction => {
+  const handleEdit = (affliction) => {
     setEditing(affliction);
     setModalOpen(true);
   };
@@ -71,15 +71,15 @@ export default function AfflictionsPage() {
     }
   };
 
-  const filtered = afflictions.filter(a => {
+  const filtered = afflictions.filter((a) => {
     const matchName = a.nome?.toLowerCase().includes(searchName.toLowerCase());
     const matchTipo = filterTipo === 'all' || a.tipo === filterTipo;
     return matchName && matchTipo;
   });
 
   const totalCount = afflictions.length;
-  const mentalCount = afflictions.filter(a => a.tipo === 'mental').length;
-  const fisicaCount = afflictions.filter(a => a.tipo === 'fisica').length;
+  const mentalCount = afflictions.filter((a) => a.tipo === 'mental').length;
+  const fisicaCount = afflictions.filter((a) => a.tipo === 'fisica').length;
 
   const pageCount = Math.ceil(filtered.length / ITEMS_PER_PAGE);
   const pageItems = filtered.slice(page * ITEMS_PER_PAGE, (page + 1) * ITEMS_PER_PAGE);
@@ -114,7 +114,7 @@ export default function AfflictionsPage() {
       ) : (
         <>
           <Card.Grid minWidth="380px">
-            {pageItems.map(affliction => (
+            {pageItems.map((affliction) => (
               <AfflictionCard
                 key={affliction._id}
                 affliction={affliction}
@@ -126,7 +126,7 @@ export default function AfflictionsPage() {
 
           {filtered.length === 0 && (
             <EmptyState
-              icon="💀"
+              icon="skull"
               title="Nenhuma aflição encontrada"
               message="Tente ajustar sua busca ou crie uma nova aflição"
             />

@@ -1,15 +1,10 @@
-/* ============================================
-   PageHeader Component - Design Ludico para RPG
-   Componente reutilizavel para cabecalho de paginas
-   ============================================ */
 @import '../../styles/theme.css';
 
-/* === PAGE HEADER === */
 .pageHeader {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-  margin-bottom: 2rem;
+  gap: 0.9rem;
+  margin-bottom: 1.75rem;
 }
 
 .headerTop {
@@ -20,7 +15,6 @@
   gap: 1rem;
 }
 
-/* === STATS COUNTER === */
 .statsCounter {
   display: flex;
   gap: 0.75rem;
@@ -31,16 +25,16 @@
 .counterItem {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem 1rem;
-  background: var(--dark-2);
+  gap: 0.55rem;
+  padding: 0.6rem 0.9rem;
+  background: linear-gradient(180deg, rgba(13, 17, 16, 0.98), rgba(9, 11, 10, 0.98));
   border-radius: 8px;
-  border: 1px solid var(--dark-4);
+  border: 1px solid rgba(140, 109, 42, 0.18);
   transition: all 0.2s ease;
 }
 
 .counterItem:hover {
-  border-color: var(--dark-5);
+  border-color: rgba(212, 175, 55, 0.42);
   transform: translateY(-2px);
 }
 
@@ -51,6 +45,11 @@
   align-items: center;
 }
 
+.counterIconGlyph {
+  width: 1em;
+  height: 1em;
+}
+
 .counterValue {
   font-size: 1.15rem;
   font-weight: 700;
@@ -59,14 +58,14 @@
 
 .counterLabel {
   color: var(--light-1);
-  font-size: 0.75rem;
+  font-size: 0.72rem;
 }
 
-/* === Counter Variants === */
 .counterActive {
   border-color: rgba(16, 185, 129, 0.3);
   background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), transparent);
 }
+
 .counterActive .counterIcon,
 .counterActive .counterValue {
   color: #34d399;
@@ -76,6 +75,7 @@
   border-color: rgba(239, 68, 68, 0.3);
   background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), transparent);
 }
+
 .counterBanned .counterIcon,
 .counterBanned .counterValue {
   color: #f87171;
@@ -85,6 +85,7 @@
   border-color: rgba(245, 158, 11, 0.3);
   background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), transparent);
 }
+
 .counterPending .counterIcon,
 .counterPending .counterValue {
   color: #fbbf24;
@@ -94,6 +95,7 @@
   border-color: rgba(139, 92, 246, 0.3);
   background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), transparent);
 }
+
 .counterMental .counterIcon,
 .counterMental .counterValue {
   color: #a78bfa;
@@ -103,6 +105,7 @@
   border-color: rgba(239, 68, 68, 0.3);
   background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), transparent);
 }
+
 .counterFisica .counterIcon,
 .counterFisica .counterValue {
   color: #f87171;
@@ -112,6 +115,7 @@
   border-color: rgba(59, 130, 246, 0.3);
   background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), transparent);
 }
+
 .counterBlue .counterIcon,
 .counterBlue .counterValue {
   color: #60a5fa;
@@ -121,6 +125,7 @@
   border-color: rgba(16, 185, 129, 0.3);
   background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), transparent);
 }
+
 .counterGreen .counterIcon,
 .counterGreen .counterValue {
   color: #34d399;
@@ -130,6 +135,7 @@
   border-color: rgba(139, 92, 246, 0.3);
   background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), transparent);
 }
+
 .counterPurple .counterIcon,
 .counterPurple .counterValue {
   color: #a78bfa;
@@ -139,6 +145,7 @@
   border-color: rgba(245, 158, 11, 0.3);
   background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), transparent);
 }
+
 .counterOrange .counterIcon,
 .counterOrange .counterValue {
   color: #fbbf24;
@@ -148,6 +155,7 @@
   border-color: rgba(239, 68, 68, 0.3);
   background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), transparent);
 }
+
 .counterRed .counterIcon,
 .counterRed .counterValue {
   color: #f87171;
@@ -157,12 +165,22 @@
   border-color: rgba(6, 182, 212, 0.3);
   background: linear-gradient(135deg, rgba(6, 182, 212, 0.1), transparent);
 }
+
 .counterCyan .counterIcon,
 .counterCyan .counterValue {
   color: #22d3ee;
 }
 
-/* === CONTROLS === */
+.counterGold {
+  border-color: rgba(212, 175, 55, 0.32);
+  background: linear-gradient(135deg, rgba(212, 175, 55, 0.12), transparent);
+}
+
+.counterGold .counterIcon,
+.counterGold .counterValue {
+  color: var(--gold);
+}
+
 .controls {
   display: flex;
   gap: 0.75rem;
@@ -170,19 +188,18 @@
   align-items: center;
 }
 
-/* === FILTER TABS === */
 .filterTabs {
   display: flex;
   gap: 0.5rem;
-  padding: 0.5rem;
-  background: var(--dark-2);
+  padding: 0.45rem;
+  background: linear-gradient(180deg, rgba(13, 17, 16, 0.96), rgba(8, 10, 9, 0.96));
   border-radius: 12px;
-  border: 1px solid var(--dark-4);
+  border: 1px solid rgba(140, 109, 42, 0.18);
   flex-wrap: wrap;
 }
 
 .filterTab {
-  padding: 0.6rem 1.25rem;
+  padding: 0.58rem 1rem;
   border-radius: 8px;
   border: none;
   background: transparent;
@@ -214,7 +231,25 @@
   font-size: 0.75rem;
 }
 
-/* Filter Tab Variants (hover states when not active) */
+.filterTabLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.filterTabIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1rem;
+  height: 1rem;
+}
+
+.filterTabIconGlyph {
+  width: 0.9rem;
+  height: 0.9rem;
+}
+
 .filterTabGreen:not(.filterTabActive):hover {
   background: rgba(16, 185, 129, 0.2);
 }
@@ -235,21 +270,20 @@
   background: rgba(59, 130, 246, 0.2);
 }
 
-/* === RESPONSIVE === */
 @media (max-width: 768px) {
   .headerTop {
     flex-direction: column;
     align-items: flex-start;
   }
-  
+
   .statsCounter {
     width: 100%;
   }
-  
+
   .controls {
     width: 100%;
   }
-  
+
   .filterTabs {
     width: 100%;
     overflow-x: auto;
@@ -260,11 +294,11 @@
   .counterItem {
     padding: 0.4rem 0.75rem;
   }
-  
+
   .counterValue {
     font-size: 1rem;
   }
-  
+
   .filterTab {
     padding: 0.5rem 0.75rem;
     font-size: 0.8rem;

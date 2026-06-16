@@ -1,20 +1,11 @@
-// src/components/EmptyState/index.js
 import PropTypes from 'prop-types';
+import { renderIcon } from '../IconRenderer';
 import styles from './EmptyState.module.css';
 
-/**
- * EmptyState - Componente para exibir estado vazio
- * 
- * Props:
- * - icon: Emoji ou ReactNode para o ícone
- * - title: Título da mensagem (opcional)
- * - message: Mensagem principal
- * - action: ReactNode com botão de ação (opcional)
- */
 export default function EmptyState({ icon, title, message, action }) {
   return (
     <div className={styles.emptyState}>
-      {icon && <span className={styles.emptyIcon}>{icon}</span>}
+      {icon && <span className={styles.emptyIcon}>{renderIcon(icon, { className: styles.emptyIconGlyph })}</span>}
       {title && <h3 className={styles.emptyTitle}>{title}</h3>}
       {message && <p className={styles.emptyMessage}>{message}</p>}
       {action && <div className={styles.emptyAction}>{action}</div>}
@@ -26,12 +17,12 @@ EmptyState.propTypes = {
   icon: PropTypes.node,
   title: PropTypes.string,
   message: PropTypes.string,
-  action: PropTypes.node
+  action: PropTypes.node,
 };
 
 EmptyState.defaultProps = {
-  icon: '📭',
+  icon: 'empty',
   title: null,
   message: 'Nenhum item encontrado.',
-  action: null
+  action: null,
 };

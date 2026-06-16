@@ -1,3 +1,3 @@
-// src/pages/Users/index.js
+import UsersPage from './components/UsersPage';
 
-export { default } from './components/UsersPage';
+export default UsersPage;

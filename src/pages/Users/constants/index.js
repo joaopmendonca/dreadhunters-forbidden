@@ -1,5 +1,3 @@
-// src/pages/Users/constants/index.js
-
 export const ITEMS_PER_PAGE = 10;
 
 export const USER_STATUS = {
@@ -10,9 +8,9 @@ export const USER_STATUS = {
 };
 
 export const USER_STATUS_LABELS = {
-  active: '✓ Ativo',
-  banned: '✗ Banido',
-  pending: '⏳ Pendente',
+  active: 'Ativo',
+  banned: 'Banido',
+  pending: 'Pendente',
 };
 
 export const USER_STATUS_VARIANTS = {

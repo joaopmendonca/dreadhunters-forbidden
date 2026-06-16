@@ -95,6 +95,84 @@
   to { transform: rotate(360deg); }
 }
 
+/* === SKILL CARD === */
+.skillHeader {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border-bottom: 1px solid rgba(140, 109, 42, 0.16);
+}
+
+.skillIconWrap {
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 8px;
+  border: 1px solid rgba(74, 158, 255, 0.18);
+  background:
+    radial-gradient(circle at 50% 35%, rgba(74, 158, 255, 0.1), transparent 60%),
+    rgba(74, 158, 255, 0.04);
+}
+
+.skillIconImg {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+}
+
+.skillIconGlyph {
+  width: 1.3rem;
+  height: 1.3rem;
+  color: var(--gold);
+}
+
+.skillMeta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.skillKicker {
+  font-size: 0.64rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: rgba(74, 158, 255, 0.65);
+}
+
+.skillName {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #93c5fd;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.skillLevel {
+  font-size: 0.7rem;
+  color: rgba(250, 245, 229, 0.44);
+}
+
+.skillTargets {
+  display: flex;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+}
+
+.skillTargetPill {
+  padding: 0.2rem 0.5rem;
+  background: rgba(74, 158, 255, 0.1);
+  border: 1px solid rgba(74, 158, 255, 0.28);
+  border-radius: 4px;
+  font-size: 0.72rem;
+  color: #4a9eff;
+}
+
 /* === RESPONSIVE === */
 @media (max-width: 1024px) {
 }

@@ -29,7 +29,7 @@ export default function RolesPage() {
     setFilterStatus,
     importModalOpen = false,
     setImportModalOpen,
-    totalCount = 0
+    totalCount = 0,
   } = useRoles();
 
   const rolesImportConfig = useRolesImport();
@@ -49,7 +49,7 @@ export default function RolesPage() {
     setModalOpen(true);
   };
 
-  const handleEdit = role => {
+  const handleEdit = (role) => {
     setEditing(role);
     setModalOpen(true);
   };
@@ -58,14 +58,11 @@ export default function RolesPage() {
     setImportModalOpen(true);
   };
 
-  const filtered = rolesList.filter(r =>
+  const filtered = rolesList.filter((r) =>
     r.name.toLowerCase().includes(searchName.toLowerCase())
   );
   const pageCount = Math.ceil(filtered.length / ITEMS_PER_PAGE);
-  const pageItems = filtered.slice(
-    page * ITEMS_PER_PAGE,
-    (page + 1) * ITEMS_PER_PAGE
-  );
+  const pageItems = filtered.slice(page * ITEMS_PER_PAGE, (page + 1) * ITEMS_PER_PAGE);
 
   return (
     <BaseLayout title="Roles">
@@ -90,14 +87,14 @@ export default function RolesPage() {
         <>
           {pageItems.length === 0 && searchName === '' ? (
             <EmptyState
-              icon="🛡️"
+              icon="shield"
               title="Nenhuma role encontrada"
               message="Crie uma nova role para começar"
               action={
                 <Button
                   backgroundColor="var(--maroon)"
                   textColor="var(--light)"
-                  hoverColor="var(--gold)"
+                  hoverColor="rgba(212, 175, 55, 0.18)"
                   icon={<FaPlus />}
                   onClick={handleNew}
                 >
@@ -107,13 +104,13 @@ export default function RolesPage() {
             />
           ) : pageItems.length === 0 ? (
             <EmptyState
-              icon="🔍"
+              icon="search"
               title="Nenhuma role encontrada"
               message="Tente ajustar sua busca"
             />
           ) : (
             <Card.Grid minWidth="300px">
-              {pageItems.map(role => (
+              {pageItems.map((role) => (
                 <RoleCard
                   key={role._id}
                   role={role}

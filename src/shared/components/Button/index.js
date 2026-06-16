@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { renderIcon } from '../IconRenderer';
 import styles from './Button.module.css';
 
 export default function Button({
@@ -14,7 +15,7 @@ export default function Button({
 }) {
   const style = {
     backgroundColor,
-    color: textColor,           // <-- aqui é onde aplicamos textColor
+    color: textColor,
     '--hover-bg': hoverColor || backgroundColor,
   };
 
@@ -25,7 +26,7 @@ export default function Button({
       onClick={onClick}
       {...rest}
     >
-      {icon && <span className={styles.icon}>{icon}</span>}
+      {icon && <span className={styles.icon}>{renderIcon(icon, { className: styles.iconGlyph })}</span>}
       <span className={styles.text}>{children}</span>
     </button>
   );
@@ -33,19 +34,19 @@ export default function Button({
 
 Button.propTypes = {
   backgroundColor: PropTypes.string,
-  textColor:       PropTypes.string,   // <-- declarada aqui
-  hoverColor:      PropTypes.string,
-  icon:            PropTypes.element,
-  children:        PropTypes.node.isRequired,
-  onClick:         PropTypes.func,
-  className:       PropTypes.string,
+  textColor: PropTypes.string,
+  hoverColor: PropTypes.string,
+  icon: PropTypes.oneOfType([PropTypes.element, PropTypes.string]),
+  children: PropTypes.node.isRequired,
+  onClick: PropTypes.func,
+  className: PropTypes.string,
 };
 
 Button.defaultProps = {
   backgroundColor: 'var(--blue-2)',
-  textColor:       '#fff',            // <-- valor padrão
-  hoverColor:      null,
-  icon:            null,
-  onClick:         () => {},
-  className:       '',
+  textColor: '#fff',
+  hoverColor: null,
+  icon: null,
+  onClick: () => {},
+  className: '',
 };
