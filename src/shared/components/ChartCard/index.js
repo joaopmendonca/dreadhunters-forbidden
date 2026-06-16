@@ -6,7 +6,7 @@ import {
   TitleComponent,
   TooltipComponent,
   GridComponent,
-  LegendComponent
+  GraphicComponent
 } from 'echarts/components';
 
 import {
@@ -21,19 +21,17 @@ import {
 
 import styles from './ChartCard.module.css';
 
-// registra apenas os componentes que vamos usar
 echarts.use([
   TitleComponent,
   TooltipComponent,
   GridComponent,
-  LegendComponent,
+  GraphicComponent,
   PieChart,
   BarChart,
   LineChart,
   CanvasRenderer
 ]);
 
-// Funções auxiliares para manipular cores
 function adjustColor(hex, percent) {
   const num = parseInt(hex.replace('#', ''), 16);
   const amt = Math.round(2.55 * percent);
@@ -58,106 +56,126 @@ export default function ChartCard({
   dataKey,
   colors = [],
   compactMode = false,
+  centerLabel,
   additionalProps = {}
 }) {
-  // Gera a série e configurações comuns conforme o tipo
+  const isPie = type === 'pie';
+  const total = isPie
+    ? data.reduce((sum, item) => sum + (Number(item[dataKey]) || 0), 0)
+    : 0;
+
   const getOption = () => {
     const base = {
       title: {
         text: title,
         left: 'center',
-        top: 5,
+        top: 6,
         textStyle: {
           color: '#d4af37',
           fontFamily: 'Georgia, serif',
-          fontSize: compactMode ? 14 : 16,
+          fontSize: compactMode ? 13 : 15,
           fontWeight: 600,
           textShadowColor: 'rgba(0,0,0,0.5)',
           textShadowBlur: 4
         }
       },
       tooltip: {
-        trigger: type === 'pie' ? 'item' : 'axis',
+        trigger: isPie ? 'item' : 'axis',
         backgroundColor: 'rgba(20,20,20,0.95)',
         borderColor: '#d4af37',
         borderWidth: 1,
         textStyle: { color: '#f5f5f5', fontSize: 13 },
         padding: [10, 14],
-        extraCssText: 'box-shadow: 0 4px 20px rgba(0,0,0,0.4); border-radius: 8px;'
+        extraCssText: 'box-shadow: 0 4px 20px rgba(0,0,0,0.4); border-radius: 8px;',
+        formatter: isPie ? '{b}: <b>{c}</b>' : undefined
       },
-      legend: type === 'pie' ? {
-        orient: 'horizontal',
-        bottom: 10,
-        textStyle: { color: '#b0b0b0', fontSize: 11 },
-        itemWidth: 12,
-        itemHeight: 12,
-        itemGap: 15
-      } : {
-        show: false
-      },
-      grid: type === 'pie' ? undefined : {
+      legend: { show: false },
+      grid: !isPie ? {
         left: '8%',
         right: '5%',
         bottom: '12%',
         top: compactMode ? 45 : 55,
         containLabel: true,
         ...additionalProps.grid
-      },
-      xAxis: type === 'pie' ? undefined : {
+      } : undefined,
+      xAxis: !isPie ? {
         type: 'category',
         data: data.map(item => item.name || item.day || item.month),
         axisLine: { lineStyle: { color: '#4a4a4a' } },
         axisLabel: { color: '#909090', fontSize: 10 },
         axisTick: { show: false }
-      },
-      yAxis: type === 'pie' ? undefined : {
+      } : undefined,
+      yAxis: !isPie ? {
         type: 'value',
         axisLine: { show: false },
         splitLine: { lineStyle: { color: 'rgba(255,255,255,0.06)' } },
         axisLabel: { color: '#909090', fontSize: 10 }
-      },
+      } : undefined,
+      graphic: [],
       series: []
     };
 
     switch (type) {
-      case 'pie':
+      case 'pie': {
+        if (centerLabel) {
+          base.graphic = [
+            {
+              type: 'text',
+              left: 'center',
+              top: '37%',
+              style: {
+                text: centerLabel.toUpperCase(),
+                textAlign: 'center',
+                fill: '#8a8a8a',
+                fontSize: 10,
+                letterSpacing: 3
+              }
+            },
+            {
+              type: 'text',
+              left: 'center',
+              top: '45%',
+              style: {
+                text: String(total),
+                textAlign: 'center',
+                fill: '#f5f5f5',
+                fontSize: 24,
+                fontWeight: 'bold',
+                fontFamily: 'Georgia, serif'
+              }
+            }
+          ];
+        }
+
         base.series = [{
           name: title,
           type: 'pie',
-          radius: compactMode ? ['35%', '55%'] : ['40%', '65%'],
-          center: ['50%', '45%'],
-          avoidLabelOverlap: true,
+          radius: ['42%', '64%'],
+          center: ['50%', '50%'],
+          avoidLabelOverlap: false,
           itemStyle: {
-            borderRadius: 6,
-            borderColor: '#1a1a1a',
-            borderWidth: 2
+            borderRadius: 4,
+            borderColor: '#111',
+            borderWidth: 3
           },
-          label: {
-            show: !compactMode,
-            color: '#d0d0d0',
-            fontSize: 11,
-            formatter: '{b}: {c}'
-          },
+          label: { show: false },
+          labelLine: { show: false },
           emphasis: {
-            label: { show: true, fontWeight: 'bold', fontSize: 13 },
+            scale: true,
+            scaleSize: 5,
             itemStyle: {
               shadowBlur: 20,
-              shadowOffsetX: 0,
-              shadowColor: 'rgba(0, 0, 0, 0.5)'
+              shadowColor: 'rgba(0,0,0,0.5)'
             }
           },
           data: data.map((item, i) => ({
             name: item.name,
             value: item[dataKey],
-            itemStyle: { 
-              color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-                { offset: 0, color: colors[i % colors.length] },
-                { offset: 1, color: adjustColor(colors[i % colors.length], -30) }
-              ])
-            }
+            itemStyle: { color: colors[i % colors.length] }
           }))
         }];
         break;
+      }
 
       case 'bar':
         base.series = [{
@@ -165,7 +183,7 @@ export default function ChartCard({
           type: 'bar',
           data: data.map(item => item[dataKey]),
           barWidth: '60%',
-          itemStyle: { 
+          itemStyle: {
             color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
               { offset: 0, color: colors[0] },
               { offset: 1, color: adjustColor(colors[0], -40) }
@@ -191,14 +209,14 @@ export default function ChartCard({
           smooth: 0.4,
           symbol: 'circle',
           symbolSize: 6,
-          lineStyle: { 
-            color: colors[0], 
+          lineStyle: {
+            color: colors[0],
             width: 3,
             shadowColor: colors[0],
             shadowBlur: 10,
             shadowOffsetY: 5
           },
-          itemStyle: { 
+          itemStyle: {
             color: colors[0],
             borderColor: '#1a1a1a',
             borderWidth: 2
@@ -219,21 +237,33 @@ export default function ChartCard({
     return base;
   };
 
+  const chartHeight = isPie ? 190 : (compactMode ? 220 : 300);
+
   return (
     <div className={`${styles.card} ${compactMode ? styles.compact : ''}`}>
-      <ResponsiveChart option={getOption()} height={compactMode ? 220 : 300} />
+      <ReactECharts
+        option={getOption()}
+        style={{ width: '100%', height: `${chartHeight}px` }}
+        notMerge
+        lazyUpdate
+      />
+      {isPie && (
+        <ul className={styles.customLegend}>
+          {data.map((item, i) => (
+            <li
+              key={item.name}
+              className={`${styles.customLegendItem} ${!item[dataKey] ? styles.dimmed : ''}`}
+            >
+              <span
+                className={styles.legendDot}
+                style={{ background: colors[i % colors.length] }}
+              />
+              <span className={styles.legendName}>{item.name}</span>
+              <span className={styles.legendValue}>{item[dataKey]}</span>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
-  );
-}
-
-// componente auxiliar para o responsivo
-function ResponsiveChart({ option, height }) {
-  return (
-    <ReactECharts
-      option={option}
-      style={{ width: '100%', height: `${height}px` }}
-      notMerge
-      lazyUpdate
-    />
   );
 }
