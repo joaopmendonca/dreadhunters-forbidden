@@ -12,26 +12,27 @@ export default function ConfirmationModal({
   cancelText = 'Cancelar',
   confirmText = 'Confirmar',
   onConfirm,
+  buttons,
   isLoading = false,
   confirmDanger = true,
 }) {
   if (!isOpen) return null;
 
-  const buttons = [
+  const actionButtons = buttons || [
     {
       text: cancelText,
       onClick: onClose,
       buttonColor: 'var(--dark-4)',
       textColor: 'var(--light)',
-      disabled: isLoading
+      disabled: isLoading,
     },
     {
       text: confirmText,
       onClick: onConfirm,
       buttonColor: confirmDanger ? 'var(--accent-red)' : 'var(--blue-2)',
       textColor: 'var(--light)',
-      disabled: isLoading
-    }
+      disabled: isLoading,
+    },
   ];
 
   return (
@@ -58,7 +59,7 @@ export default function ConfirmationModal({
 
       <Modal.Footer>
         <div className={styles.buttons}>
-          {buttons.map((btn, idx) => (
+          {actionButtons.map((btn, idx) => (
             <button
               key={idx}
               onClick={btn.onClick}
