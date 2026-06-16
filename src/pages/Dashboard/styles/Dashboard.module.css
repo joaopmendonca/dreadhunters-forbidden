@@ -444,10 +444,10 @@
 }
 
 .ringVisual {
-  width: 118px;
+  width: 148px;
   aspect-ratio: 1;
-  margin: 2px auto 0;
-  padding: 11px;
+  margin: 4px auto 4px;
+  padding: 22px;
   border-radius: 50%;
   box-shadow:
     inset 0 0 0 1px rgba(255, 255, 255, 0.05),
@@ -475,9 +475,9 @@
 }
 
 .ringInner strong {
-  margin-top: 6px;
+  margin-top: 2px;
   font-family: var(--font-serif);
-  font-size: 1.45rem;
+  font-size: 1.7rem;
   color: var(--light);
 }
 
@@ -498,6 +498,18 @@
 
 .legendItem strong {
   color: var(--gold);
+}
+
+.legendItemDimmed {
+  color: rgba(250, 245, 229, 0.25);
+}
+
+.legendItemDimmed .legendDot {
+  opacity: 0.22;
+}
+
+.legendItemDimmed strong {
+  color: rgba(212, 167, 69, 0.28);
 }
 
 .rightRail {
