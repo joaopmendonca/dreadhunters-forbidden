@@ -2,67 +2,37 @@ import { useState, useEffect, useCallback } from 'react';
 import api from '../../../config/api';
 import { CONFIG_DEFAULTS } from '../constants';
 
+// Config agora é ÚNICA e GLOBAL — não há mais seleção de servidor.
+// Ver docs/prd-migracao-equipes.md [R12].
 export const useSettings = ({ onLogout }) => {
-  const [servers, setServers] = useState([]);
   const [config, setConfig] = useState(CONFIG_DEFAULTS);
-  const [loadingServers, setLoadingServers] = useState(true);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [selectedSlug, setSelectedSlug] = useState('');
 
-  // Carrega lista de servidores
-  useEffect(() => {
-    let mounted = true;
-
-    const loadServers = async () => {
-      setLoadingServers(true);
-      try {
-        const res = await api.get('/admin/servers');
-        if (mounted) {
-          setServers(res.data || []);
-        }
-      } catch (err) {
-        if (err.response?.status === 401) onLogout();
-      } finally {
-        if (mounted) setLoadingServers(false);
-      }
-    };
-
-    loadServers();
-    return () => {
-      mounted = false;
-    };
+  const loadConfig = useCallback(async () => {
+    setLoading(true);
+    try {
+      const res = await api.get('/game-config');
+      setConfig({ ...CONFIG_DEFAULTS, ...res.data });
+    } catch (err) {
+      if (err.response?.status === 401) onLogout();
+      throw err;
+    } finally {
+      setLoading(false);
+    }
   }, [onLogout]);
 
-  const loadConfig = useCallback(
-    async (slug) => {
-      if (!slug) return;
-      setLoading(true);
-      try {
-        const res = await api.get(`/server-config/${slug}`);
-        // Mescla com defaults para garantir que todos os campos existam
-        setConfig({ ...CONFIG_DEFAULTS, ...res.data });
-        localStorage.setItem('selectedServerSlug', slug);
-      } catch (err) {
-        if (err.response?.status === 401) onLogout();
-        throw err;
-      } finally {
-        setLoading(false);
-      }
-    },
-    [onLogout]
-  );
+  useEffect(() => {
+    loadConfig().catch(() => {});
+  }, [loadConfig]);
 
   const saveConfig = useCallback(
-    async (slug, data) => {
-      if (!slug) throw new Error('Slug é obrigatório');
+    async (data) => {
       setSaving(true);
       try {
-        // Remove campos que não devem ser enviados
-        const { _id, kind, server, __v, createdAt, updatedAt, stats, ...cleanData } = data;
-        
-        await api.put(`/admin/server-config/${slug}`, cleanData);
-        await loadConfig(slug);
+        const { _id, kind, key, server, __v, createdAt, updatedAt, stats, ...cleanData } = data;
+        await api.put('/admin/game-config', cleanData);
+        await loadConfig();
       } catch (err) {
         if (err.response?.status === 401) onLogout();
         throw err;
@@ -75,19 +45,14 @@ export const useSettings = ({ onLogout }) => {
 
   return {
     state: {
-      servers,
       config,
-      loadingServers,
       loading,
       saving,
-      selectedSlug,
     },
     functions: {
       loadConfig,
       saveConfig,
       setConfig,
-      setSelectedSlug,
     },
   };
 };
-

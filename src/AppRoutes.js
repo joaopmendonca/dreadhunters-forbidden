@@ -26,6 +26,7 @@ import Items from './pages/Items';
 import Locations from './pages/Locations';
 import Login from './pages/Login';
 import Logs from './pages/Logs';
+import PlayableCharacters from './pages/PlayableCharacters';
 import QuestActionTypes from './pages/QuestActionTypes';
 import Quests from './pages/Quests';
 import Roles from './pages/Roles';
@@ -105,6 +106,7 @@ export default function AppRoutes() {
             <Route path="/dashboard"   element={<Dashboard />} />
             <Route path="/users"       element={<Users />} />
             <Route path="/characters"  element={<Characters />} />
+            <Route path="/playable-characters" element={<PlayableCharacters />} />
             <Route path="/classes"     element={<Classes />} />
             <Route path="/skills"      element={<Skills />} />
             <Route path="/attributes"  element={<Attributes />} />
