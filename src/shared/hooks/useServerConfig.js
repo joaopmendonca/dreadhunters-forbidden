@@ -1,10 +1,11 @@
-// src/hooks/useServerConfig.js
+// src/shared/hooks/useServerConfig.js
 import { useEffect, useState } from 'react';
 import api from '../../config/api';
 
 /**
- * Hook para carregar as configurações do servidor selecionado
- * Retorna as regras de gameplay (pontos, limites, etc.)
+ * Carrega a configuração GLOBAL do jogo (regras de gameplay: pontos, limites, etc.).
+ * Config deixou de ser por servidor — ver docs/prd-migracao-equipes.md [R12].
+ * Nome mantido por compatibilidade com as páginas que já importam este hook.
  */
 export default function useServerConfig() {
   const [config, setConfig] = useState({
@@ -25,41 +26,22 @@ export default function useServerConfig() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    let mounted = true;
     const loadConfig = async () => {
       setLoading(true);
       setError(null);
       try {
-        // TODO: Determinar qual servidor usar (pode vir de localStorage, context, etc)
-        // Por enquanto, tentamos carregar de um servidor padrão ou usar valores default
-        const serverSlug = localStorage.getItem('selectedServerSlug');
-        
-        if (serverSlug) {
-          const res = await api.get(`/server-config/${serverSlug}`);
-          setConfig({
-            initialStatPoints: res.data.initialStatPoints ?? 6,
-            baselinePerStat: res.data.baselinePerStat ?? 1,
-            statPointsPerLevel: res.data.statPointsPerLevel ?? 1,
-            maxStatValue: res.data.maxStatValue ?? 24,
-            minStatValue: res.data.minStatValue ?? 1,
-            maxLevel: res.data.maxLevel ?? 99,
-            maxStatPointsPerClass: res.data.maxStatPointsPerClass ?? 20,
-            enemyInitialStatPoints: res.data.enemyInitialStatPoints ?? 6,
-            enemyStatPointsPerLevel: res.data.enemyStatPointsPerLevel ?? 1,
-            enemyTypeMultiplierNormal: res.data.enemyTypeMultiplierNormal ?? 1,
-            enemyTypeMultiplierElite: res.data.enemyTypeMultiplierElite ?? 1.67,
-            enemyTypeMultiplierBoss: res.data.enemyTypeMultiplierBoss ?? 3.33
-          });
-        }
+        const res = await api.get('/game-config');
+        if (mounted) setConfig((prev) => ({ ...prev, ...res.data }));
       } catch (err) {
-        console.error('Erro ao carregar config do servidor:', err);
-        setError(err);
-        // Manter valores padrão em caso de erro
+        console.error('Erro ao carregar config global:', err);
+        if (mounted) setError(err);
       } finally {
-        setLoading(false);
+        if (mounted) setLoading(false);
       }
     };
-
     loadConfig();
+    return () => { mounted = false; };
   }, []);
 
   return { config, loading, error };

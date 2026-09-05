@@ -1,17 +1,17 @@
 export const MESSAGES = {
-  LOADING_SERVERS: 'Carregando servidores…',
   LOADING_CONFIG: 'Carregando configuração…',
   SAVING: 'Salvando…',
-  SELECT_SERVER: 'Selecione um servidor para visualizar e editar suas configurações.',
-  SELECT_PROMPT: 'Informe o slug do servidor',
   SAVE_SUCCESS: 'Configuração salva.',
   ERROR_LOAD: 'Falha ao carregar configuração.',
   ERROR_SAVE: 'Erro ao salvar configuração.',
 };
 
 export const CONFIG_DEFAULTS = {
-  maxCharactersPerUser: 3,
-  allowDuplicateNames: false,
+  // === EQUIPES / SAVES (config global — ver PRD sistema de equipes) ===
+  teamMemberSlots: 3,
+  maxTeamsPerUser: 2,
+  saveTrashRetentionDays: 7,
+  reviveHpPercent: 0.3,
   initialStatPoints: 6,
   baselinePerStat: 1,
   statPointsPerLevel: 1,
@@ -32,20 +32,38 @@ export const CONFIG_DEFAULTS = {
 
 export const SETTINGS_SECTIONS = [
   {
-    id: 'characters',
+    id: 'teams',
     icon: 'FaUsers',
-    title: 'Configurações de Personagens',
+    title: 'Equipes / Saves',
     fields: [
       {
-        key: 'maxCharactersPerUser',
-        label: 'Máx. Personagens por Usuário',
+        key: 'teamMemberSlots',
+        label: 'Personagens por Equipe',
         type: 'number',
         min: 1,
+        helpText: 'Tamanho da formação (hoje = tamanho do roster). Padrão: 3.',
       },
       {
-        key: 'allowDuplicateNames',
-        label: 'Permitir Nomes Duplicados',
-        type: 'checkbox',
+        key: 'maxTeamsPerUser',
+        label: 'Máx. de Equipes (saves) por Conta',
+        type: 'number',
+        min: 1,
+        helpText: 'Cada equipe é um slot de save independente. Padrão: 2.',
+      },
+      {
+        key: 'saveTrashRetentionDays',
+        label: 'Dias na Lixeira antes do Purge',
+        type: 'number',
+        min: 1,
+        helpText: 'Prazo para restaurar um save apagado antes da remoção definitiva.',
+      },
+      {
+        key: 'reviveHpPercent',
+        label: 'HP ao sair do estado Incapacitado (0–1)',
+        type: 'number',
+        min: 0,
+        step: 0.05,
+        helpText: 'Fração do HP máximo com que o personagem volta após ser curado.',
       },
     ],
   },

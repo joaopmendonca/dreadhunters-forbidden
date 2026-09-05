@@ -21,6 +21,7 @@ import {
     FaThLarge,
     FaTimes,
     FaUser,
+    FaUserAstronaut,
     FaUsers,
     FaUserShield
 } from 'react-icons/fa';
@@ -56,6 +57,7 @@ const GROUPS = [
     id: 'jogo',
     label: 'Jogo',
     links: [
+      { to: '/playable-characters', label: 'Personagens Jogáveis', icon: <FaUserAstronaut /> },
       { to: '/characters',     label: 'NPCs',         icon: <FaUser /> },
       { to: '/enemies',        label: 'Inimigos',     icon: <FaSkull /> },
       { to: '/items',          label: 'Itens',        icon: <FaBoxOpen /> },
