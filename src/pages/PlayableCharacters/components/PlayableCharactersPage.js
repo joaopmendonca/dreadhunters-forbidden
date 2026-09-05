@@ -22,7 +22,7 @@ export default function PlayableCharactersPage() {
   const [showImport, setShowImport] = useState(false);
 
   const {
-    templates, classes, loading,
+    templates, classes, items, loading,
     search, setSearch, rarityFilter, setRarityFilter,
     page, setPage, pageCount, pageItems, filtered, totalCount,
     modalOpen, setModalOpen, editing,
@@ -119,6 +119,7 @@ export default function PlayableCharactersPage() {
             onSave={handleSave}
             initialData={editing}
             classes={classes}
+            items={items}
           />
         </>
       )}

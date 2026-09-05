@@ -13,6 +13,7 @@ export function usePlayableCharacters() {
 
   const [templates, setTemplates] = useState([]);
   const [classes, setClasses] = useState([]);
+  const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const [search, setSearch] = useState('');
@@ -31,6 +32,12 @@ export function usePlayableCharacters() {
       setClasses(classesData);
     } catch {
       enqueueSnackbar('Falha ao carregar classes.', { variant: 'error' });
+    }
+    try {
+      const res = await api.get('/items');
+      setItems(res.data || []);
+    } catch {
+      enqueueSnackbar('Falha ao carregar itens.', { variant: 'error' });
     }
     try {
       const res = await api.get('/character-templates');
@@ -130,6 +137,7 @@ export function usePlayableCharacters() {
   return {
     templates,
     classes,
+    items,
     loading,
     search,
     setSearch: (v) => { setSearch(v); setPage(0); },

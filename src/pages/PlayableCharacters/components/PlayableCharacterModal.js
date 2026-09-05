@@ -22,10 +22,24 @@ const emptyForm = {
   baseLevel: 1,
   isActive: true,
   baseStats: {},
+  meleeWeapon: '',
+  firearm: '',
+  healingItem: '',
+  healingItemQty: 1,
 };
 
-export default function PlayableCharacterModal({ isOpen, onClose, onSave, initialData = null, classes = [] }) {
+const idOf = (v) => (v && typeof v === 'object' ? v._id : v) || '';
+
+export default function PlayableCharacterModal({ isOpen, onClose, onSave, initialData = null, classes = [], items = [] }) {
   const { baseStatus } = useStatus();
+
+  const equipmentOptions = (items || [])
+    .filter((i) => i.type === 'equipment')
+    .map((i) => ({ value: i._id, label: i.name }));
+  const consumableOptions = (items || [])
+    .filter((i) => i.type === 'consumable')
+    .map((i) => ({ value: i._id, label: i.name }));
+
   const [form, setForm] = useState(emptyForm);
   const [portraitFile, setPortraitFile] = useState(null);
   const [portraitPreview, setPortraitPreview] = useState('');
@@ -46,6 +60,7 @@ export default function PlayableCharacterModal({ isOpen, onClose, onSave, initia
     const statsObj = statsToObject(initialData.baseStats);
     const stats = {};
     (baseStatus || []).forEach((s) => { stats[s.nome] = statsObj[s.nome] || 0; });
+    const kit = initialData.startingKit || {};
     setForm({
       _id: initialData._id || '',
       name: initialData.name || '',
@@ -57,6 +72,10 @@ export default function PlayableCharacterModal({ isOpen, onClose, onSave, initia
       baseLevel: initialData.baseLevel || 1,
       isActive: initialData.isActive !== false,
       baseStats: stats,
+      meleeWeapon: idOf(kit.meleeWeapon),
+      firearm: idOf(kit.firearm),
+      healingItem: idOf(kit.healingItem),
+      healingItemQty: kit.healingItemQty || 1,
     });
     setPortraitFile(null);
     setPortraitPreview(initialData.portraitUrl ? buildImgSrc(initialData.portraitUrl) : '');
@@ -94,6 +113,12 @@ export default function PlayableCharacterModal({ isOpen, onClose, onSave, initia
     setSaving(true);
     try {
       const unlockRule = { type: form.unlockType };
+      const startingKit = {
+        meleeWeapon: form.meleeWeapon || null,
+        firearm: form.firearm || null,
+        healingItem: form.healingItem || null,
+        healingItemQty: Math.max(1, Number(form.healingItemQty) || 1),
+      };
       let payload;
       if (portraitFile || artworkFile) {
         payload = new FormData();
@@ -106,6 +131,7 @@ export default function PlayableCharacterModal({ isOpen, onClose, onSave, initia
         payload.append('isActive', String(form.isActive));
         payload.append('baseStats', JSON.stringify(form.baseStats));
         payload.append('unlockRule', JSON.stringify(unlockRule));
+        payload.append('startingKit', JSON.stringify(startingKit));
         if (portraitFile) payload.append('portrait', portraitFile);
         if (artworkFile) payload.append('artwork', artworkFile);
       } else {
@@ -118,6 +144,7 @@ export default function PlayableCharacterModal({ isOpen, onClose, onSave, initia
           isActive: form.isActive,
           baseStats: form.baseStats,
           unlockRule,
+          startingKit,
           ...(form.classId ? { class: form.classId } : {}),
         };
       }
@@ -225,6 +252,52 @@ export default function PlayableCharacterModal({ isOpen, onClose, onSave, initia
                     />
                   </div>
                 ))}
+              </div>
+            </div>
+
+            <div className={styles.section}>
+              <h3 className={styles.sectionTitle}>Kit Inicial</h3>
+              <p style={{ fontSize: '0.78rem', opacity: 0.75, margin: 0 }}>
+                Vai para o inventário da equipe ao confirmar o time.
+              </p>
+              <div className={styles.field}>
+                <label>Arma branca</label>
+                <Select
+                  value={form.meleeWeapon}
+                  onChange={(val) => setForm({ ...form, meleeWeapon: val })}
+                  options={[{ value: '', label: '— nenhum —' }, ...equipmentOptions]}
+                  disabled={saving}
+                />
+              </div>
+              <div className={styles.field}>
+                <label>Arma de fogo</label>
+                <Select
+                  value={form.firearm}
+                  onChange={(val) => setForm({ ...form, firearm: val })}
+                  options={[{ value: '', label: '— nenhum —' }, ...equipmentOptions]}
+                  disabled={saving}
+                />
+              </div>
+              <div className={styles.row}>
+                <div className={styles.field}>
+                  <label>Item de cura</label>
+                  <Select
+                    value={form.healingItem}
+                    onChange={(val) => setForm({ ...form, healingItem: val })}
+                    options={[{ value: '', label: '— nenhum —' }, ...consumableOptions]}
+                    disabled={saving}
+                  />
+                </div>
+                <div className={styles.field}>
+                  <label>Qtd.</label>
+                  <TextInput
+                    type="number"
+                    min={1}
+                    value={form.healingItemQty}
+                    onChange={(e) => setForm({ ...form, healingItemQty: Math.max(1, +e.target.value) })}
+                    disabled={saving}
+                  />
+                </div>
               </div>
             </div>
           </div>
