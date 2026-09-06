@@ -145,7 +145,7 @@ export default function PlayableCharacterModal({ isOpen, onClose, onSave, initia
       onClose={onClose}
       title={form._id ? 'Editar Personagem Jogável' : 'Novo Personagem Jogável'}
       icon={<FaUserAstronaut />}
-      size={MODAL_SIZES.LARGE}
+      size={MODAL_SIZES.XLARGE}
       closeOnOverlayClick={!saving}
     >
       <form onSubmit={handleSubmit}>
