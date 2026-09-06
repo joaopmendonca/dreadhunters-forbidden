@@ -288,6 +288,40 @@
 .itemPicker { min-width: 0; max-width: 100%; }
 .itemMeta { flex: 1 1 auto; }
 
+/* ── Recorte manual do retrato ─────────────────────────── */
+.cropViewport {
+  position: relative;
+  width: 300px;
+  height: 300px;
+  margin: 10px auto;
+  overflow: hidden;
+  border-radius: 8px;
+  border: 2px solid var(--gold, #d4af37);
+  background: #000;
+  cursor: grab;
+  touch-action: none;
+}
+.cropViewport:active { cursor: grabbing; }
+
+.cropImage {
+  position: absolute;
+  top: 0;
+  left: 0;
+  max-width: none;
+  user-select: none;
+  pointer-events: none;
+}
+
+.cropZoomRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+  font-size: 0.8rem;
+  color: var(--light-1, #cbb);
+}
+.cropZoomRow input[type="range"] { flex: 1; }
+
 /* ── Card da listagem ──────────────────────────────────── */
 .badgeGroup { display: flex; align-items: center; gap: 6px; }
 

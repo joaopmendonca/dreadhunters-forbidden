@@ -9,6 +9,7 @@ import PhotoInput from '../../../shared/components/PhotoInput';
 import StatsRadarChart from '../../../shared/components/StatsRadarChart';
 import useStatus from '../../../shared/hooks/useStatus';
 import ItemPicker from './ItemPicker';
+import ImageCropModal from './ImageCropModal';
 import { UNLOCK_TYPES, GENDERS } from '../constants';
 import { buildImgSrc } from '../utils';
 import styles from '../styles/PlayableCharacters.module.css';
@@ -75,6 +76,7 @@ export default function PlayableCharacterModal({ isOpen, onClose, onSave, initia
   const [artworkFile, setArtworkFile] = useState(null);
   const [artworkPreview, setArtworkPreview] = useState('');
   const [saving, setSaving] = useState(false);
+  const [cropSourceFile, setCropSourceFile] = useState(null); // arquivo bruto aguardando recorte manual
 
   const selectedClass = useMemo(
     () => classes.find((c) => String(c._id) === String(form.classId)) || null,
@@ -120,12 +122,28 @@ export default function PlayableCharacterModal({ isOpen, onClose, onSave, initia
     return null;
   };
 
+  // Retrato passa pelo recorte manual antes de virar o arquivo de verdade —
+  // o usuário escolhe qual parte da imagem fica no quadrado, em vez do
+  // back-end cortar sempre o centro sem avisar.
   const onPortrait = (input) => {
     const f = pickFile(input);
-    if (portraitPreview.startsWith('blob:')) URL.revokeObjectURL(portraitPreview);
-    if (!f) { setPortraitFile(null); setPortraitPreview(''); return; }
-    setPortraitFile(f); setPortraitPreview(URL.createObjectURL(f));
+    if (!f) {
+      if (portraitPreview.startsWith('blob:')) URL.revokeObjectURL(portraitPreview);
+      setPortraitFile(null);
+      setPortraitPreview('');
+      return;
+    }
+    setCropSourceFile(f); // abre o modal de recorte (ver <ImageCropModal> abaixo)
   };
+
+  const handleCropConfirm = (croppedFile) => {
+    if (portraitPreview.startsWith('blob:')) URL.revokeObjectURL(portraitPreview);
+    setPortraitFile(croppedFile);
+    setPortraitPreview(URL.createObjectURL(croppedFile));
+    setCropSourceFile(null);
+  };
+
+  const handleCropCancel = () => setCropSourceFile(null);
   const onArtwork = (input) => {
     const f = pickFile(input);
     if (artworkPreview.startsWith('blob:')) URL.revokeObjectURL(artworkPreview);
@@ -183,6 +201,7 @@ export default function PlayableCharacterModal({ isOpen, onClose, onSave, initia
   };
 
   return (
+    <>
     <Modal
       isOpen={isOpen}
       onClose={onClose}
@@ -307,5 +326,13 @@ export default function PlayableCharacterModal({ isOpen, onClose, onSave, initia
         </Modal.Footer>
       </form>
     </Modal>
+
+    <ImageCropModal
+      file={cropSourceFile}
+      isOpen={!!cropSourceFile}
+      onCancel={handleCropCancel}
+      onConfirm={handleCropConfirm}
+    />
+    </>
   );
 }
