@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { FaUserAstronaut } from 'react-icons/fa';
 import Modal, { MODAL_SIZES, COLUMN_LAYOUTS } from '../../../shared/components/Modal';
 import Button from '../../../shared/components/Button';
@@ -29,6 +29,54 @@ const emptyForm = {
 };
 
 const idOf = (v) => (v && typeof v === 'object' ? v._id : v) || '';
+const mapToObj = (m) => (m instanceof Map ? Object.fromEntries(m) : m || {});
+
+// Alguns derivados úteis pra prévia (só os que existirem no cálculo da classe).
+const DERIVED_PREVIEW = [
+  ['max_hp', 'HP'], ['max_sp', 'SP'], ['p_atk', 'Atq. Físico'], ['m_atk', 'Atq. Mágico'],
+  ['p_def', 'Def. Física'], ['m_def', 'Def. Mágica'], ['evasion', 'Evasão'], ['crit_rate', 'Crítico'],
+];
+
+function ClassStatsPreview({ cls }) {
+  if (!cls) {
+    return <p className={styles.hint}>Selecione uma classe para ver os atributos iniciais.</p>;
+  }
+  const base = mapToObj(cls.baseStats);
+  const calc = mapToObj(cls.calculatedStats);
+  const baseEntries = Object.entries(base).filter(([, v]) => v !== undefined && v !== null);
+  const derived = DERIVED_PREVIEW
+    .filter(([k]) => calc[k] !== undefined && calc[k] !== null)
+    .map(([k, label]) => [label, Math.round(Number(calc[k]) * 100) / 100]);
+
+  return (
+    <div className={styles.statPreview}>
+      <div className={styles.statPreviewHead}>
+        Atributos iniciais — <strong>{cls.name}</strong>
+        <span className={styles.statPreviewNote}>somente leitura · vêm da classe</span>
+      </div>
+      {baseEntries.length > 0 && (
+        <div className={styles.statChips}>
+          {baseEntries.map(([k, v]) => (
+            <span key={k} className={styles.statChip}>
+              <span className={styles.statChipLabel}>{k}</span>
+              <span className={styles.statChipValue}>{v}</span>
+            </span>
+          ))}
+        </div>
+      )}
+      {derived.length > 0 && (
+        <div className={styles.derivedLine}>
+          {derived.map(([label, v]) => (
+            <span key={label}><b>{label}</b> {v}</span>
+          ))}
+        </div>
+      )}
+      {baseEntries.length === 0 && derived.length === 0 && (
+        <p className={styles.hint}>Esta classe ainda não tem atributos base configurados.</p>
+      )}
+    </div>
+  );
+}
 
 export default function PlayableCharacterModal({ isOpen, onClose, onSave, initialData = null, classes = [], items = [] }) {
   const equipmentItems = (items || []).filter((i) => i.type === 'equipment');
@@ -40,6 +88,11 @@ export default function PlayableCharacterModal({ isOpen, onClose, onSave, initia
   const [artworkFile, setArtworkFile] = useState(null);
   const [artworkPreview, setArtworkPreview] = useState('');
   const [saving, setSaving] = useState(false);
+
+  const selectedClass = useMemo(
+    () => classes.find((c) => String(c._id) === String(form.classId)) || null,
+    [classes, form.classId]
+  );
 
   useEffect(() => {
     if (!isOpen) return;
@@ -179,6 +232,7 @@ export default function PlayableCharacterModal({ isOpen, onClose, onSave, initia
                 <p className={styles.hint}>
                   Os atributos base vêm da classe. O jogador distribui os pontos iniciais ao adicionar o personagem à equipe.
                 </p>
+                <ClassStatsPreview cls={selectedClass} />
               </div>
               <div className={styles.row}>
                 <div className={styles.field}>
