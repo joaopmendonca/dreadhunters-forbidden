@@ -4,6 +4,7 @@ import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import { SnackbarProvider } from 'notistack';
 import { AuthProvider } from './shared/contexts/AuthContext';
+import { ImageLightboxProvider } from './shared/components/ImageLightbox';
 import AppRoutes from './AppRoutes';
 
 export default function App() {
@@ -14,9 +15,11 @@ export default function App() {
       style={{ zIndex: 99999 }}
     >
       <AuthProvider>
-        <BrowserRouter basename="/forbidden">
-          <AppRoutes />
-        </BrowserRouter>
+        <ImageLightboxProvider>
+          <BrowserRouter basename="/forbidden">
+            <AppRoutes />
+          </BrowserRouter>
+        </ImageLightboxProvider>
       </AuthProvider>
     </SnackbarProvider>
   );

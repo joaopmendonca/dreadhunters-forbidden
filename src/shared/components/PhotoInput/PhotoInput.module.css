@@ -18,6 +18,12 @@
   object-fit: cover;
   border-radius: 3px;               /* levemente arredondado */
   border: 1px solid var(--dark-4);
+  cursor: zoom-in;
+  transition: border-color 0.15s ease;
+}
+
+.preview:hover {
+  border-color: var(--gold);
 }
 
 .removeBtn {

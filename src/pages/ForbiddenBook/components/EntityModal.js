@@ -3,6 +3,7 @@
 import { useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import { CHAPTERS, RARITY_COLORS } from '../constants';
+import { useImageLightbox } from '../../../shared/components/ImageLightbox';
 import styles from '../styles/EntityModal.module.css';
 import TechnicalDetails, {
     buildAfflictionTechnicalDetails,
@@ -16,6 +17,21 @@ import TechnicalDetails, {
     buildRoleTechnicalDetails,
     buildSkillTechnicalDetails
 } from './TechnicalDetails';
+
+// Imagem de cabeçalho clicável: abre em tela cheia com overlay
+function HeaderImage({ src, alt, className }) {
+  const { open } = useImageLightbox();
+  return (
+    <img
+      src={src}
+      alt={alt}
+      className={className}
+      onClick={() => open(src, alt)}
+      title="Ver em tela cheia"
+      style={{ cursor: 'zoom-in' }}
+    />
+  );
+}
 
 export default function EntityModal({ item, chapter, config, onClose }) {
   // Fechar com ESC
@@ -46,7 +62,7 @@ export default function EntityModal({ item, chapter, config, onClose }) {
     <>
       <div className={styles.modalHeader}>
         {item.iconUrl ? (
-          <img src={item.iconUrl} alt={item.name} className={styles.headerImage} />
+          <HeaderImage src={item.iconUrl} alt={item.name} className={styles.headerImage} />
         ) : (
           <span className={styles.headerIcon}>⚔️</span>
         )}
@@ -81,7 +97,7 @@ export default function EntityModal({ item, chapter, config, onClose }) {
     <>
       <div className={styles.modalHeader}>
         {item.imagemUrl ? (
-          <img src={item.imagemUrl} alt={item.nome} className={styles.headerImage} />
+          <HeaderImage src={item.imagemUrl} alt={item.nome} className={styles.headerImage} />
         ) : (
           <span className={styles.headerIcon}>☠️</span>
         )}
@@ -133,7 +149,7 @@ export default function EntityModal({ item, chapter, config, onClose }) {
           style={{ backgroundColor: item.cor || 'var(--maroon)' }}
         >
           {item.iconeUrl ? (
-            <img src={item.iconeUrl} alt={item.label} className={styles.headerIconImg} />
+            <HeaderImage src={item.iconeUrl} alt={item.label} className={styles.headerIconImg} />
           ) : (
             '🔥'
           )}
@@ -166,7 +182,7 @@ export default function EntityModal({ item, chapter, config, onClose }) {
     <>
       <div className={styles.modalHeader}>
         {item.iconUrl ? (
-          <img src={item.iconUrl} alt={item.name} className={styles.headerImage} />
+          <HeaderImage src={item.iconUrl} alt={item.name} className={styles.headerImage} />
         ) : (
           <span className={styles.headerIcon} data-type={item.type}>
             {item.type === 'active' ? '⚡' : item.type === 'passive' ? '🔮' : '💀'}
@@ -213,7 +229,7 @@ export default function EntityModal({ item, chapter, config, onClose }) {
     <>
       <div className={styles.modalHeader}>
         {item.iconUrl ? (
-          <img src={item.iconUrl} alt={item.name} className={styles.headerImage} />
+          <HeaderImage src={item.iconUrl} alt={item.name} className={styles.headerImage} />
         ) : (
           <span className={styles.headerIcon}>🎒</span>
         )}
@@ -260,7 +276,7 @@ export default function EntityModal({ item, chapter, config, onClose }) {
     <>
       <div className={styles.modalHeader}>
         {item.iconUrl ? (
-          <img src={item.iconUrl} alt={item.name} className={styles.headerImage} />
+          <HeaderImage src={item.iconUrl} alt={item.name} className={styles.headerImage} />
         ) : (
           <span className={styles.headerIcon}>👹</span>
         )}
@@ -293,7 +309,7 @@ export default function EntityModal({ item, chapter, config, onClose }) {
     <>
       <div className={styles.modalHeader}>
         {item.iconUrl ? (
-          <img src={item.iconUrl} alt={item.title || item.name} className={styles.headerImage} />
+          <HeaderImage src={item.iconUrl} alt={item.title || item.name} className={styles.headerImage} />
         ) : (
           <span className={styles.headerIcon}>📋</span>
         )}
@@ -326,7 +342,7 @@ export default function EntityModal({ item, chapter, config, onClose }) {
     <>
       <div className={styles.modalHeader}>
         {item.iconUrl ? (
-          <img src={item.iconUrl} alt={item.name} className={styles.headerImage} />
+          <HeaderImage src={item.iconUrl} alt={item.name} className={styles.headerImage} />
         ) : (
           <span className={styles.headerIcon}>🗺️</span>
         )}
@@ -349,7 +365,7 @@ export default function EntityModal({ item, chapter, config, onClose }) {
     <>
       <div className={styles.modalHeader}>
         {item.iconeUrl ? (
-          <img src={item.iconeUrl} alt={item.label} className={styles.headerImage} />
+          <HeaderImage src={item.iconeUrl} alt={item.label} className={styles.headerImage} />
         ) : (
           <span className={styles.headerIcon}>📊</span>
         )}
