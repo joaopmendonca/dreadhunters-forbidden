@@ -218,6 +218,7 @@
 }
 
 .req { color: var(--gold, #d4af37); font-weight: 700; }
+.optional { opacity: 0.55; font-weight: 400; }
 
 .emphasisBox {
   display: flex;
@@ -286,6 +287,26 @@
 
 .itemPicker { min-width: 0; max-width: 100%; }
 .itemMeta { flex: 1 1 auto; }
+
+/* ── Card da listagem ──────────────────────────────────── */
+.badgeGroup { display: flex; align-items: center; gap: 6px; }
+
+.cardClamp {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.cardHistory {
+  font-style: italic;
+  opacity: 0.9;
+}
+
+.cardRadarBlock {
+  margin-bottom: 0.9rem;
+}
+.cardRadarBlock:last-child { margin-bottom: 0; }
 
 /* ── Prévia de atributos da classe (somente leitura) ──── */
 .statPreview {

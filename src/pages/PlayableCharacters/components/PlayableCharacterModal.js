@@ -19,6 +19,7 @@ const emptyForm = {
   _id: '',
   name: '',
   description: '',
+  history: '',
   classId: '',
   unlockType: 'starter',
   gender: 'male',
@@ -94,6 +95,7 @@ export default function PlayableCharacterModal({ isOpen, onClose, onSave, initia
       _id: initialData._id || '',
       name: initialData.name || '',
       description: initialData.description || '',
+      history: initialData.history || '',
       classId: classVal || '',
       unlockType: initialData.unlockRule?.type || 'starter',
       gender: initialData.gender || 'male',
@@ -148,6 +150,7 @@ export default function PlayableCharacterModal({ isOpen, onClose, onSave, initia
         payload = new FormData();
         payload.append('name', form.name);
         payload.append('description', form.description || '');
+        payload.append('history', form.history || '');
         payload.append('class', form.classId);
         payload.append('gender', form.gender);
         payload.append('baseLevel', String(form.baseLevel));
@@ -160,6 +163,7 @@ export default function PlayableCharacterModal({ isOpen, onClose, onSave, initia
         payload = {
           name: form.name,
           description: form.description || '',
+          history: form.history || '',
           class: form.classId,
           gender: form.gender,
           baseLevel: Number(form.baseLevel) || 1,
@@ -200,6 +204,10 @@ export default function PlayableCharacterModal({ isOpen, onClose, onSave, initia
               <div className={styles.field}>
                 <label>Descrição</label>
                 <TextArea value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} rows={3} placeholder="Como este personagem é apresentado ao jogador." disabled={saving} />
+              </div>
+              <div className={styles.field}>
+                <label>História <span className={styles.optional}>(opcional)</span></label>
+                <TextArea value={form.history} onChange={(e) => setForm({ ...form, history: e.target.value })} rows={4} placeholder="Lore / background do personagem." disabled={saving} />
               </div>
             </section>
 

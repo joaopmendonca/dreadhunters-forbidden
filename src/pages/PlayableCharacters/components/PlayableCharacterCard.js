@@ -2,6 +2,7 @@ import React from 'react';
 import Card from '../../../shared/components/Card';
 import StatsRadarChart from '../../../shared/components/StatsRadarChart';
 import { buildImgSrc } from '../utils';
+import styles from '../styles/PlayableCharacters.module.css';
 
 const UNLOCK_LABEL = { starter: 'Inicial', quest: 'Quest', shop: 'Loja', event: 'Evento' };
 const mapToObj = (m) => (m instanceof Map ? Object.fromEntries(m) : m || {});
@@ -9,11 +10,17 @@ const mapToObj = (m) => (m instanceof Map ? Object.fromEntries(m) : m || {});
 export default function PlayableCharacterCard({ template, baseStatus = [], onEdit, onDelete }) {
   const distribution = mapToObj(template.classBaseStats);
   const hasStats = (baseStatus || []).some((s) => Number(distribution[s.nome]) > 0);
+  const unlockLabel = UNLOCK_LABEL[template.unlockRule?.type] || 'Inicial';
 
   return (
     <Card variant="gold">
       <Card.TopBar
-        badge={<Card.Badge variant="gold">⚔️ {template.className}</Card.Badge>}
+        badge={
+          <span className={styles.badgeGroup}>
+            <Card.Badge variant="gold">⚔️ {template.className}</Card.Badge>
+            {template.isActive === false && <Card.Badge variant="maroon">Inativo</Card.Badge>}
+          </span>
+        }
       >
         <Card.Actions
           onEdit={() => onEdit(template)}
@@ -25,6 +32,7 @@ export default function PlayableCharacterCard({ template, baseStatus = [], onEdi
         image={template.portraitUrl ? buildImgSrc(template.portraitUrl) : null}
         type="Jogável"
         title={template.name}
+        subtitle={`Nível base ${template.baseLevel ?? 1} · ${unlockLabel}`}
       >
         {!template.portraitUrl && <span style={{ fontSize: '2rem' }}>🧝</span>}
       </Card.Header>
@@ -32,33 +40,27 @@ export default function PlayableCharacterCard({ template, baseStatus = [], onEdi
       <Card.Body>
         {template.description && (
           <Card.Section title="Descrição">
-            <p>{template.description}</p>
+            <p className={styles.cardClamp}>{template.description}</p>
           </Card.Section>
         )}
-        <Card.Section title="Classe">
-          <span>{template.className}</span>
-        </Card.Section>
+
+        {template.history && (
+          <Card.Section title="História">
+            <p className={`${styles.cardClamp} ${styles.cardHistory}`}>{template.history}</p>
+          </Card.Section>
+        )}
+
         {hasStats && (
-          <Card.Section title="Atributos (da classe)">
+          <div className={styles.cardRadarBlock}>
+            <Card.SectionLabel>atributos da classe</Card.SectionLabel>
             <StatsRadarChart
               statsDistribution={distribution}
               baseStatus={baseStatus}
               isPercentage={false}
-              height={180}
+              height={160}
               color="#d4af37"
             />
-          </Card.Section>
-        )}
-        <Card.Section title="Nível base">
-          <span>{template.baseLevel ?? 1}</span>
-        </Card.Section>
-        <Card.Section title="Desbloqueio">
-          <span>{UNLOCK_LABEL[template.unlockRule?.type] || template.unlockRule?.type || 'Inicial'}</span>
-        </Card.Section>
-        {template.isActive === false && (
-          <Card.Section title="Status">
-            <span style={{ color: 'var(--maroon, #a33)' }}>Inativo</span>
-          </Card.Section>
+          </div>
         )}
       </Card.Body>
     </Card>
