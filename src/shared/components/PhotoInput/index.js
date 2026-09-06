@@ -12,7 +12,8 @@ export default function PhotoInput({
   onRemove,
   accept,
   disabled,
-  placeholderLabel
+  placeholderLabel,
+  contain
 }) {
   const [broken, setBroken] = React.useState(false);
   const { open: openLightbox } = useImageLightbox();
@@ -31,12 +32,12 @@ export default function PhotoInput({
           buttonLabel={placeholderLabel}
         />
       ) : (
-        <div className={styles.previewWrapper}>
+        <div className={`${styles.previewWrapper} ${contain ? styles.containPreview : ''}`}>
           {!broken ? (
             <img
               src={previewUrl}
               alt="Preview"
-              className={styles.preview}
+              className={`${styles.preview} ${contain ? styles.contain : ''}`}
               onError={() => setBroken(true)}
               onClick={() => openLightbox(previewUrl, placeholderLabel || 'Preview')}
               title="Ver em tela cheia"
@@ -65,7 +66,8 @@ PhotoInput.propTypes = {
   onRemove:         PropTypes.func.isRequired,
   accept:           PropTypes.string,
   disabled:         PropTypes.bool,
-  placeholderLabel: PropTypes.string
+  placeholderLabel: PropTypes.string,
+  contain:          PropTypes.bool
 };
 
 PhotoInput.defaultProps = {
@@ -73,5 +75,6 @@ PhotoInput.defaultProps = {
   previewUrl:       '',
   accept:           'image/*',
   disabled:         false,
-  placeholderLabel: 'Escolher foto'
+  placeholderLabel: 'Escolher foto',
+  contain: false
 };

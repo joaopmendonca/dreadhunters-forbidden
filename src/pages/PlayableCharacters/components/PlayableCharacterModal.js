@@ -287,7 +287,7 @@ export default function PlayableCharacterModal({ isOpen, onClose, onSave, initia
                 </div>
                 <div className={styles.field}>
                   <label>Ilustração</label>
-                  <PhotoInput file={artworkFile} previewUrl={artworkPreview} onFileChange={onArtwork} onRemove={() => onArtwork(null)} accept="image/*" disabled={saving} />
+                  <PhotoInput file={artworkFile} previewUrl={artworkPreview} onFileChange={onArtwork} onRemove={() => onArtwork(null)} accept="image/*" disabled={saving} contain />
                   <span className={styles.hint}>Tela de detalhe do personagem.</span>
                 </div>
               </div>
