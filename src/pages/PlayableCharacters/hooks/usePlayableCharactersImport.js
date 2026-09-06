@@ -12,6 +12,7 @@ export function usePlayableCharactersImport() {
     createField('gender', 'Gênero', 'string', { required: false, example: 'male' }),
     createField('unlockType', 'Desbloqueio', 'string', { required: false, example: 'starter' }),
     createField('description', 'Descrição', 'string', { required: false, example: 'Investigador veterano.' }),
+    createField('history', 'História', 'string', { required: false, example: 'Ex-policial que abandonou o distintivo.' }),
   ];
 
   const autoMapping = {
@@ -21,6 +22,7 @@ export function usePlayableCharactersImport() {
     gender: 'gender', genero: 'gender', 'gênero': 'gender',
     unlocktype: 'unlockType', desbloqueio: 'unlockType', unlock: 'unlockType',
     description: 'description', descricao: 'description', 'descrição': 'description',
+    history: 'history', historia: 'history', 'história': 'history', lore: 'history',
   };
 
   const transformDataForAPI = (row) => ({
@@ -30,6 +32,7 @@ export function usePlayableCharactersImport() {
     gender: row.gender?.trim() || 'male',
     unlockType: row.unlockType?.trim() || 'starter',
     description: row.description?.trim() || '',
+    history: row.history?.trim() || '',
   });
 
   const isDuplicate = (row, existing) =>

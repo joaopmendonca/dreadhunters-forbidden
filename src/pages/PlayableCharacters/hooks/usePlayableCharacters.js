@@ -113,6 +113,7 @@ export function usePlayableCharacters() {
         const payload = {
           name: row.name?.trim(),
           description: row.description?.trim() || '',
+          history: row.history?.trim() || '',
           class: classId,
           baseLevel: parseInt(row.baseLevel, 10) || 1,
           gender: row.gender?.trim() || 'male',

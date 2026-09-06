@@ -16,7 +16,7 @@ import { usePlayableCharacters } from '../hooks/usePlayableCharacters';
 import { usePlayableCharactersImport } from '../hooks/usePlayableCharactersImport';
 import useStatus from '../../../shared/hooks/useStatus';
 
-const CSV_FIELDS = ['name', 'class', 'baseLevel', 'gender', 'unlockType', 'description'];
+const CSV_FIELDS = ['name', 'class', 'baseLevel', 'gender', 'unlockType', 'description', 'history'];
 
 export default function PlayableCharactersPage() {
   const { enqueueSnackbar } = useSnackbar();
@@ -46,6 +46,7 @@ export default function PlayableCharactersPage() {
       gender: t.gender || 'male',
       unlockType: t.unlockRule?.type || 'starter',
       description: (t.description || '').replace(/\n/g, ' '),
+      history: (t.history || '').replace(/\n/g, ' '),
     }));
     const csv = Papa.unparse({ fields: CSV_FIELDS, data: rows });
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
@@ -60,6 +61,7 @@ export default function PlayableCharactersPage() {
       name: 'Bermond', class: 'Vigilante',
       baseLevel: 1, gender: 'male', unlockType: 'starter',
       description: 'Investigador veterano.',
+      history: 'Ex-policial que abandonou o distintivo após o caso do Farol Negro.',
     };
     const csv = Papa.unparse({ fields: CSV_FIELDS, data: [example] });
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
