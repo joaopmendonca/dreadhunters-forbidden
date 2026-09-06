@@ -297,25 +297,3 @@
 }
 .statPreviewHead strong { color: var(--gold, #d4af37); }
 .statPreviewNote { font-size: 0.68rem; opacity: 0.65; }
-
-.statChips { display: flex; flex-wrap: wrap; gap: 6px; }
-.statChip {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  padding: 2px 7px;
-  border-radius: 999px;
-  background: var(--dark-3, #26201c);
-  border: 1px solid var(--dark-4, #3a322c);
-}
-.statChipLabel { font-size: 0.66rem; text-transform: uppercase; color: var(--light-1, #9c8f80); }
-.statChipValue { font-size: 0.82rem; font-weight: 600; color: var(--light, #f3ece0); }
-
-.derivedLine {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px 12px;
-  font-size: 0.72rem;
-  color: var(--light-1, #9c8f80);
-}
-.derivedLine b { color: var(--light-1, #cbb); font-weight: 600; }

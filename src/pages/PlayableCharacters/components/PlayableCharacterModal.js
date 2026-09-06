@@ -6,6 +6,8 @@ import Select from '../../../shared/components/Select';
 import TextArea from '../../../shared/components/TextArea';
 import TextInput from '../../../shared/components/TextInput';
 import PhotoInput from '../../../shared/components/PhotoInput';
+import StatsRadarChart from '../../../shared/components/StatsRadarChart';
+import useStatus from '../../../shared/hooks/useStatus';
 import ItemPicker from './ItemPicker';
 import { UNLOCK_TYPES, GENDERS } from '../constants';
 import { buildImgSrc } from '../utils';
@@ -31,22 +33,14 @@ const emptyForm = {
 const idOf = (v) => (v && typeof v === 'object' ? v._id : v) || '';
 const mapToObj = (m) => (m instanceof Map ? Object.fromEntries(m) : m || {});
 
-// Alguns derivados úteis pra prévia (só os que existirem no cálculo da classe).
-const DERIVED_PREVIEW = [
-  ['max_hp', 'HP'], ['max_sp', 'SP'], ['p_atk', 'Atq. Físico'], ['m_atk', 'Atq. Mágico'],
-  ['p_def', 'Def. Física'], ['m_def', 'Def. Mágica'], ['evasion', 'Evasão'], ['crit_rate', 'Crítico'],
-];
-
-function ClassStatsPreview({ cls }) {
+// Radar dos atributos base da classe — mesma construção da tela de Classes
+// (StatsRadarChart + useStatus), só que somente leitura aqui.
+function ClassStatsPreview({ cls, baseStatus }) {
   if (!cls) {
     return <p className={styles.hint}>Selecione uma classe para ver os atributos iniciais.</p>;
   }
-  const base = mapToObj(cls.baseStats);
-  const calc = mapToObj(cls.calculatedStats);
-  const baseEntries = Object.entries(base).filter(([, v]) => v !== undefined && v !== null);
-  const derived = DERIVED_PREVIEW
-    .filter(([k]) => calc[k] !== undefined && calc[k] !== null)
-    .map(([k, label]) => [label, Math.round(Number(calc[k]) * 100) / 100]);
+  const distribution = mapToObj(cls.baseStats);
+  const hasAnyStat = baseStatus.some((s) => Number(distribution[s.nome]) > 0);
 
   return (
     <div className={styles.statPreview}>
@@ -54,24 +48,15 @@ function ClassStatsPreview({ cls }) {
         Atributos iniciais — <strong>{cls.name}</strong>
         <span className={styles.statPreviewNote}>somente leitura · vêm da classe</span>
       </div>
-      {baseEntries.length > 0 && (
-        <div className={styles.statChips}>
-          {baseEntries.map(([k, v]) => (
-            <span key={k} className={styles.statChip}>
-              <span className={styles.statChipLabel}>{k}</span>
-              <span className={styles.statChipValue}>{v}</span>
-            </span>
-          ))}
-        </div>
-      )}
-      {derived.length > 0 && (
-        <div className={styles.derivedLine}>
-          {derived.map(([label, v]) => (
-            <span key={label}><b>{label}</b> {v}</span>
-          ))}
-        </div>
-      )}
-      {baseEntries.length === 0 && derived.length === 0 && (
+      {hasAnyStat ? (
+        <StatsRadarChart
+          statsDistribution={distribution}
+          baseStatus={baseStatus}
+          isPercentage={false}
+          height={200}
+          color="#d4af37"
+        />
+      ) : (
         <p className={styles.hint}>Esta classe ainda não tem atributos base configurados.</p>
       )}
     </div>
@@ -81,6 +66,7 @@ function ClassStatsPreview({ cls }) {
 export default function PlayableCharacterModal({ isOpen, onClose, onSave, initialData = null, classes = [], items = [] }) {
   const equipmentItems = (items || []).filter((i) => i.type === 'equipment');
   const consumableItems = (items || []).filter((i) => i.type === 'consumable');
+  const { baseStatus } = useStatus();
 
   const [form, setForm] = useState(emptyForm);
   const [portraitFile, setPortraitFile] = useState(null);
@@ -232,7 +218,7 @@ export default function PlayableCharacterModal({ isOpen, onClose, onSave, initia
                 <p className={styles.hint}>
                   Os atributos base vêm da classe. O jogador distribui os pontos iniciais ao adicionar o personagem à equipe.
                 </p>
-                <ClassStatsPreview cls={selectedClass} />
+                <ClassStatsPreview cls={selectedClass} baseStatus={baseStatus || []} />
               </div>
               <div className={styles.row}>
                 <div className={styles.field}>
