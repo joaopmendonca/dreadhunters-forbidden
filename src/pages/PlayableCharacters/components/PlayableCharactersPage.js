@@ -15,7 +15,7 @@ import LoadingState from './LoadingState';
 import { usePlayableCharacters } from '../hooks/usePlayableCharacters';
 import { usePlayableCharactersImport } from '../hooks/usePlayableCharactersImport';
 
-const CSV_FIELDS = ['name', 'class', 'rarity', 'baseLevel', 'gender', 'unlockType', 'description'];
+const CSV_FIELDS = ['name', 'class', 'baseLevel', 'gender', 'unlockType', 'description'];
 
 export default function PlayableCharactersPage() {
   const { enqueueSnackbar } = useSnackbar();
@@ -23,7 +23,7 @@ export default function PlayableCharactersPage() {
 
   const {
     templates, classes, items, loading,
-    search, setSearch, rarityFilter, setRarityFilter,
+    search, setSearch, classFilter, setClassFilter,
     page, setPage, pageCount, pageItems, filtered, totalCount,
     modalOpen, setModalOpen, editing,
     handleNew, handleEdit, handleDelete, handleSave, handleImport, fetchData,
@@ -40,7 +40,6 @@ export default function PlayableCharactersPage() {
     const rows = templates.map((t) => ({
       name: t.name || '',
       class: t.className && t.className !== '—' ? t.className : '',
-      rarity: t.rarity || 'common',
       baseLevel: t.baseLevel ?? 1,
       gender: t.gender || 'male',
       unlockType: t.unlockRule?.type || 'starter',
@@ -56,7 +55,7 @@ export default function PlayableCharactersPage() {
 
   const handleDownloadTemplate = () => {
     const example = {
-      name: 'Bermond', class: 'Vigilante', rarity: 'common',
+      name: 'Bermond', class: 'Vigilante',
       baseLevel: 1, gender: 'male', unlockType: 'starter',
       description: 'Investigador veterano.',
     };
@@ -73,11 +72,12 @@ export default function PlayableCharactersPage() {
       <PlayableCharactersHeader
         totalCount={totalCount}
         templates={templates}
+        classes={classes}
         search={search}
-        rarityFilter={rarityFilter}
+        classFilter={classFilter}
         onNew={handleNew}
         onSearch={setSearch}
-        onRarityChange={setRarityFilter}
+        onClassChange={setClassFilter}
         onOpenImport={() => setShowImport(true)}
         onExportCSV={handleExportCSV}
         onDownloadTemplate={handleDownloadTemplate}

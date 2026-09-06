@@ -17,12 +17,11 @@ export const mapWithClass = (list, classes) =>
       )?.name || (typeof tpl.class === 'object' ? tpl.class?.name : null) || '—',
   }));
 
-export const filterTemplates = (list, search, rarity) =>
+export const filterTemplates = (list, search, classId) =>
   list.filter(
-    (t) =>
-      (!rarity || t.rarity === rarity) &&
-      (t.name || '').toLowerCase().includes((search || '').toLowerCase())
+    (t) => {
+      const tClass = typeof t.class === 'object' ? t.class?._id : t.class;
+      return (!classId || String(tClass) === String(classId)) &&
+        (t.name || '').toLowerCase().includes((search || '').toLowerCase());
+    }
   );
-
-export const statsToObject = (stats) =>
-  stats instanceof Map ? Object.fromEntries(stats) : stats || {};

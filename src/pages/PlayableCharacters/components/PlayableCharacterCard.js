@@ -1,15 +1,14 @@
 import React from 'react';
 import Card from '../../../shared/components/Card';
 import { buildImgSrc } from '../utils';
-import { RARITIES } from '../constants';
 
-const rarityLabel = (v) => RARITIES.find((r) => r.value === v)?.label || v || '—';
+const UNLOCK_LABEL = { starter: 'Inicial', quest: 'Quest', shop: 'Loja', event: 'Evento' };
 
 export default function PlayableCharacterCard({ template, onEdit, onDelete }) {
   return (
     <Card variant="gold">
       <Card.TopBar
-        badge={<Card.Badge variant="gold">★ {rarityLabel(template.rarity)}</Card.Badge>}
+        badge={<Card.Badge variant="gold">⚔️ {template.className}</Card.Badge>}
       >
         <Card.Actions
           onEdit={() => onEdit(template)}
@@ -38,7 +37,7 @@ export default function PlayableCharacterCard({ template, onEdit, onDelete }) {
           <span>{template.baseLevel ?? 1}</span>
         </Card.Section>
         <Card.Section title="Desbloqueio">
-          <span>{template.unlockRule?.type || 'starter'}</span>
+          <span>{UNLOCK_LABEL[template.unlockRule?.type] || template.unlockRule?.type || 'Inicial'}</span>
         </Card.Section>
         {template.isActive === false && (
           <Card.Section title="Status">

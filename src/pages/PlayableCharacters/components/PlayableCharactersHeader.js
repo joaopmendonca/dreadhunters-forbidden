@@ -4,21 +4,22 @@ import PageHeader from '../../../shared/components/PageHeader';
 import Button from '../../../shared/components/Button';
 import TextInput from '../../../shared/components/TextInput';
 import styles from '../styles/PlayableCharacters.module.css';
-import { RARITIES } from '../constants';
 
 export default function PlayableCharactersHeader({
   totalCount,
   templates,
+  classes,
   search,
-  rarityFilter,
+  classFilter,
   onNew,
   onSearch,
-  onRarityChange,
+  onClassChange,
   onOpenImport,
   onExportCSV,
   onDownloadTemplate,
 }) {
-  const countByRarity = (r) => templates.filter((t) => t.rarity === r).length;
+  const countByClass = (id) =>
+    templates.filter((t) => String(typeof t.class === 'object' ? t.class?._id : t.class) === String(id)).length;
 
   const filterTabs = [
     {
@@ -26,16 +27,16 @@ export default function PlayableCharactersHeader({
       icon: <FaUserAstronaut />,
       label: 'Todos',
       count: totalCount,
-      active: rarityFilter === '',
-      onClick: () => onRarityChange(''),
+      active: classFilter === '',
+      onClick: () => onClassChange(''),
     },
-    ...RARITIES.map((r) => ({
-      id: r.value,
-      icon: '★',
-      label: r.label,
-      count: countByRarity(r.value),
-      active: rarityFilter === r.value,
-      onClick: () => onRarityChange(r.value),
+    ...(classes || []).map((c) => ({
+      id: c._id,
+      icon: '⚔️',
+      label: c.name,
+      count: countByClass(c._id),
+      active: classFilter === c._id,
+      onClick: () => onClassChange(c._id),
     })),
   ];
 
@@ -43,7 +44,7 @@ export default function PlayableCharactersHeader({
     <PageHeader
       statsCounters={[
         { icon: <FaUserAstronaut />, value: totalCount, label: 'Total' },
-        ...RARITIES.map((r) => ({ icon: '★', value: countByRarity(r.value), label: r.label })),
+        ...(classes || []).slice(0, 4).map((c) => ({ icon: '⚔️', value: countByClass(c._id), label: c.name })),
       ]}
       controls={
         <>

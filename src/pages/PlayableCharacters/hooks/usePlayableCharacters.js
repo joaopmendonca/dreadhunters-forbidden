@@ -17,7 +17,7 @@ export function usePlayableCharacters() {
   const [loading, setLoading] = useState(true);
 
   const [search, setSearch] = useState('');
-  const [rarityFilter, setRarityFilter] = useState('');
+  const [classFilter, setClassFilter] = useState('');
   const [page, setPage] = useState(0);
 
   const [modalOpen, setModalOpen] = useState(false);
@@ -109,15 +109,15 @@ export function usePlayableCharacters() {
           const cls = classes.find((c) => c.name.toLowerCase() === row.class.toLowerCase());
           if (cls) classId = cls._id;
         }
+        if (!classId) { errors++; console.error('Import: classe obrigatória e não encontrada', row); continue; }
         const payload = {
           name: row.name?.trim(),
           description: row.description?.trim() || '',
-          rarity: row.rarity?.trim() || 'common',
+          class: classId,
           baseLevel: parseInt(row.baseLevel, 10) || 1,
           gender: row.gender?.trim() || 'male',
           unlockRule: { type: row.unlockType?.trim() || 'starter' },
         };
-        if (classId) payload.class = classId;
         await api.post('/character-templates', payload);
         created++;
       } catch (e) {
@@ -130,7 +130,7 @@ export function usePlayableCharacters() {
     fetchData();
   };
 
-  const filtered = filterTemplates(templates, search, rarityFilter);
+  const filtered = filterTemplates(templates, search, classFilter);
   const pageCount = Math.ceil(filtered.length / ITEMS_PER_PAGE);
   const pageItems = filtered.slice(page * ITEMS_PER_PAGE, (page + 1) * ITEMS_PER_PAGE);
 
@@ -141,8 +141,8 @@ export function usePlayableCharacters() {
     loading,
     search,
     setSearch: (v) => { setSearch(v); setPage(0); },
-    rarityFilter,
-    setRarityFilter: (v) => { setRarityFilter(v); setPage(0); },
+    classFilter,
+    setClassFilter: (v) => { setClassFilter(v); setPage(0); },
     page,
     setPage,
     pageCount,
