@@ -44,10 +44,13 @@
   padding-bottom: 4px;
 }
 
+.column { min-width: 0; }
+
 .field {
   display: flex;
   flex-direction: column;
   gap: 4px;
+  min-width: 0;
 }
 
 .field label {
@@ -58,10 +61,12 @@
 .row {
   display: flex;
   gap: 12px;
+  min-width: 0;
 }
 
 .row .field {
-  flex: 1;
+  flex: 1 1 0;
+  min-width: 0;
 }
 
 .statsGrid {
@@ -210,6 +215,7 @@
   flex-direction: column;
   gap: 6px;
   padding: 10px;
+  min-width: 0;
   border: 1px solid rgba(212, 175, 55, 0.35);
   border-radius: 6px;
   background: rgba(212, 175, 55, 0.06);
@@ -224,8 +230,9 @@
   border-top: 1px solid var(--dark-4, #3a322c);
   cursor: pointer;
   font-size: 0.85rem;
+  color: var(--light, #f3ece0);
 }
-.toggleRow > span { display: flex; flex-direction: column; gap: 2px; }
+.toggleRow > span { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
 .toggleHint { font-size: 0.72rem; color: var(--light-1, #9c8f80); }
 
 /* checkbox estilizado como switch */
@@ -256,10 +263,17 @@
 .switch:checked::after { transform: translateX(18px); }
 .switch:disabled { opacity: 0.5; cursor: not-allowed; }
 
-.artRow { display: flex; gap: 14px; }
-.artRow .field { flex: 1; }
+/* retrato + ilustração empilhados — não cabem lado a lado numa meia-coluna */
+.artRow { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.artRow .field { min-width: 0; }
+/* PhotoInput.wrapper e FileInput.wrapper aninhados: força encolher em vez de estourar */
+.artRow .field > div { min-width: 0; max-width: 100%; }
+.artRow .field > div > div { min-width: 0; overflow: hidden; }
 
-.kitHealRow { display: flex; align-items: flex-start; gap: 10px; }
-.kitHealRow > :first-child { flex: 1; min-width: 0; }
-.qtyField { display: flex; flex-direction: column; gap: 4px; width: 68px; flex: 0 0 68px; }
+.kitHealRow { display: flex; align-items: flex-start; gap: 10px; flex-wrap: wrap; min-width: 0; }
+.kitHealRow > :first-child { flex: 1 1 150px; min-width: 0; }
+.qtyField { display: flex; flex-direction: column; gap: 4px; width: 64px; flex: 0 0 64px; }
 .qtyField > span { font-size: 0.8rem; color: var(--light-1, #cbb); }
+
+.itemPicker { min-width: 0; max-width: 100%; }
+.itemMeta { flex: 1 1 auto; }
