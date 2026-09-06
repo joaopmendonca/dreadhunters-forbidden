@@ -4,9 +4,8 @@ import styles from '../styles/PlayableCharacters.module.css';
 
 const mapToObj = (m) => (m instanceof Map ? Object.fromEntries(m) : m || {});
 
-// Linha de detalhe curta por tipo de item.
-function describeItem(item) {
-  if (!item) return '';
+// Resumo curto de stats/efeitos — usado só quando o item não tem descrição cadastrada.
+function summarizeItem(item) {
   if (item.type === 'equipment') {
     const eq = item.equipment || {};
     const stats = mapToObj(eq.combatStats);
@@ -34,6 +33,14 @@ function describeItem(item) {
     return parts.join('  ·  ');
   }
   return item.rarity || '';
+}
+
+// Linha de detalhe: sempre a descrição cadastrada do item/arma (a fonte mais completa);
+// só cai pro resumo de stats quando o item não tem descrição.
+function describeItem(item) {
+  if (!item) return '';
+  const description = String(item.description || '').trim();
+  return description || summarizeItem(item);
 }
 
 export default function ItemPicker({ value, items = [], onChange, placeholder = '— nenhum —', disabled = false }) {
@@ -116,7 +123,7 @@ export default function ItemPicker({ value, items = [], onChange, placeholder = 
                 </span>
                 <span className={styles.itemMeta}>
                   <span className={styles.itemName}>{it.name}</span>
-                  <span className={styles.itemDetail}>{describeItem(it)}</span>
+                  <span className={`${styles.itemDetail} ${styles.itemDetailClamp}`}>{describeItem(it) || 'Sem descrição cadastrada.'}</span>
                 </span>
               </button>
             ))}
