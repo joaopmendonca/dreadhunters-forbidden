@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import FileInput from '../FileInput';
 import IconButton from '../IconButton';
+import { useImageLightbox } from '../ImageLightbox';
 import styles from './PhotoInput.module.css';
 
 export default function PhotoInput({
@@ -14,6 +15,7 @@ export default function PhotoInput({
   placeholderLabel
 }) {
   const [broken, setBroken] = React.useState(false);
+  const { open: openLightbox } = useImageLightbox();
 
   React.useEffect(() => {
     setBroken(false);
@@ -36,6 +38,8 @@ export default function PhotoInput({
               alt="Preview"
               className={styles.preview}
               onError={() => setBroken(true)}
+              onClick={() => openLightbox(previewUrl, placeholderLabel || 'Preview')}
+              title="Ver em tela cheia"
             />
           ) : (
             <div className={styles.brokenPlaceholder} />
