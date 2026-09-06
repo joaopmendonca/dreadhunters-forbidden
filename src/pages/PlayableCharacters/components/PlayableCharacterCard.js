@@ -1,10 +1,15 @@
 import React from 'react';
 import Card from '../../../shared/components/Card';
+import StatsRadarChart from '../../../shared/components/StatsRadarChart';
 import { buildImgSrc } from '../utils';
 
 const UNLOCK_LABEL = { starter: 'Inicial', quest: 'Quest', shop: 'Loja', event: 'Evento' };
+const mapToObj = (m) => (m instanceof Map ? Object.fromEntries(m) : m || {});
 
-export default function PlayableCharacterCard({ template, onEdit, onDelete }) {
+export default function PlayableCharacterCard({ template, baseStatus = [], onEdit, onDelete }) {
+  const distribution = mapToObj(template.classBaseStats);
+  const hasStats = (baseStatus || []).some((s) => Number(distribution[s.nome]) > 0);
+
   return (
     <Card variant="gold">
       <Card.TopBar
@@ -33,6 +38,17 @@ export default function PlayableCharacterCard({ template, onEdit, onDelete }) {
         <Card.Section title="Classe">
           <span>{template.className}</span>
         </Card.Section>
+        {hasStats && (
+          <Card.Section title="Atributos (da classe)">
+            <StatsRadarChart
+              statsDistribution={distribution}
+              baseStatus={baseStatus}
+              isPercentage={false}
+              height={180}
+              color="#d4af37"
+            />
+          </Card.Section>
+        )}
         <Card.Section title="Nível base">
           <span>{template.baseLevel ?? 1}</span>
         </Card.Section>

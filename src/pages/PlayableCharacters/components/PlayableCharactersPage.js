@@ -14,6 +14,7 @@ import PlayableCharacterModal from './PlayableCharacterModal';
 import LoadingState from './LoadingState';
 import { usePlayableCharacters } from '../hooks/usePlayableCharacters';
 import { usePlayableCharactersImport } from '../hooks/usePlayableCharactersImport';
+import useStatus from '../../../shared/hooks/useStatus';
 
 const CSV_FIELDS = ['name', 'class', 'baseLevel', 'gender', 'unlockType', 'description'];
 
@@ -31,6 +32,7 @@ export default function PlayableCharactersPage() {
 
   const { fieldDefinitions, autoMapping, transformDataForAPI, isDuplicate, entityNamePlural } =
     usePlayableCharactersImport();
+  const { baseStatus } = useStatus();
 
   const handleExportCSV = () => {
     if (!templates.length) {
@@ -89,7 +91,7 @@ export default function PlayableCharactersPage() {
         <>
           <Card.Grid minWidth="320px">
             {pageItems.map((tpl) => (
-              <PlayableCharacterCard key={tpl._id} template={tpl} onEdit={handleEdit} onDelete={handleDelete} />
+              <PlayableCharacterCard key={tpl._id} template={tpl} baseStatus={baseStatus} onEdit={handleEdit} onDelete={handleDelete} />
             ))}
           </Card.Grid>
 
