@@ -150,39 +150,35 @@ export default function PlayableCharacterModal({ isOpen, onClose, onSave, initia
     >
       <form onSubmit={handleSubmit}>
         <Modal.Body columns={COLUMN_LAYOUTS.DOUBLE}>
+          {/* ───────── Coluna 1 — Ficha ───────── */}
           <div className={styles.column}>
-            <div className={styles.section}>
+            <section className={styles.section}>
               <h3 className={styles.sectionTitle}>Identidade</h3>
               <div className={styles.field}>
                 <label>Nome</label>
-                <TextInput value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} required disabled={saving} />
+                <TextInput value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} placeholder="Ex.: Bermond" required disabled={saving} />
               </div>
               <div className={styles.field}>
                 <label>Descrição</label>
-                <TextArea value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} rows={3} disabled={saving} />
+                <TextArea value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} rows={3} placeholder="Como este personagem é apresentado ao jogador." disabled={saving} />
               </div>
-            </div>
+            </section>
 
-            <div className={styles.section}>
-              <h3 className={styles.sectionTitle}>Características</h3>
-              <div className={styles.field}>
-                <label>Classe * <span style={{ opacity: 0.6, fontWeight: 400 }}>(fonte dos atributos base)</span></label>
-                <Select
-                  value={form.classId}
-                  onChange={(val) => setForm({ ...form, classId: val })}
-                  options={[{ value: '', label: 'Selecione a classe' }, ...classes.map((c) => ({ value: c._id, label: c.name }))]}
-                  disabled={saving}
-                />
-              </div>
-              <div className={styles.row}>
+            <section className={styles.section}>
+              <h3 className={styles.sectionTitle}>Classe &amp; atributos</h3>
+              <div className={styles.emphasisBox}>
                 <div className={styles.field}>
-                  <label>Gênero</label>
-                  <Select value={form.gender} onChange={(val) => setForm({ ...form, gender: val })} options={GENDERS} disabled={saving} />
+                  <label>Classe <span className={styles.req}>*</span></label>
+                  <Select
+                    value={form.classId}
+                    onChange={(val) => setForm({ ...form, classId: val })}
+                    options={[{ value: '', label: 'Selecione a classe' }, ...classes.map((c) => ({ value: c._id, label: c.name }))]}
+                    disabled={saving}
+                  />
                 </div>
-                <div className={styles.field}>
-                  <label>Desbloqueio</label>
-                  <Select value={form.unlockType} onChange={(val) => setForm({ ...form, unlockType: val })} options={UNLOCK_TYPES} disabled={saving} />
-                </div>
+                <p className={styles.hint}>
+                  Os atributos base vêm da classe. O jogador distribui os pontos iniciais ao adicionar o personagem à equipe.
+                </p>
               </div>
               <div className={styles.row}>
                 <div className={styles.field}>
@@ -190,73 +186,68 @@ export default function PlayableCharacterModal({ isOpen, onClose, onSave, initia
                   <TextInput type="number" min={1} value={form.baseLevel} onChange={(e) => setForm({ ...form, baseLevel: Math.max(1, +e.target.value) })} disabled={saving} />
                 </div>
                 <div className={styles.field}>
-                  <label>Ativo</label>
-                  <input type="checkbox" checked={form.isActive} onChange={(e) => setForm({ ...form, isActive: e.target.checked })} disabled={saving} />
+                  <label>Gênero</label>
+                  <Select value={form.gender} onChange={(val) => setForm({ ...form, gender: val })} options={GENDERS} disabled={saving} />
                 </div>
               </div>
-            </div>
+            </section>
 
-            <div className={styles.section}>
-              <h3 className={styles.sectionTitle}>Arte</h3>
-              <div className={styles.row}>
-                <div className={styles.field}>
-                  <label>Retrato (thumbnail)</label>
-                  <PhotoInput file={portraitFile} previewUrl={portraitPreview} onFileChange={onPortrait} onRemove={() => onPortrait(null)} accept="image/*" disabled={saving} />
-                </div>
-                <div className={styles.field}>
-                  <label>Ilustração (detalhe)</label>
-                  <PhotoInput file={artworkFile} previewUrl={artworkPreview} onFileChange={onArtwork} onRemove={() => onArtwork(null)} accept="image/*" disabled={saving} />
-                </div>
+            <section className={styles.section}>
+              <h3 className={styles.sectionTitle}>Disponibilidade</h3>
+              <div className={styles.field}>
+                <label>Desbloqueio</label>
+                <Select value={form.unlockType} onChange={(val) => setForm({ ...form, unlockType: val })} options={UNLOCK_TYPES} disabled={saving} />
               </div>
-            </div>
+              <label className={styles.toggleRow}>
+                <span>
+                  Ativo
+                  <span className={styles.toggleHint}>{form.isActive ? 'recrutável no jogo' : 'oculto para os jogadores'}</span>
+                </span>
+                <input type="checkbox" className={styles.switch} checked={form.isActive} onChange={(e) => setForm({ ...form, isActive: e.target.checked })} disabled={saving} />
+              </label>
+            </section>
           </div>
 
+          {/* ───────── Coluna 2 — Apresentação &amp; kit ───────── */}
           <div className={styles.column}>
-            <div className={styles.section}>
-              <h3 className={styles.sectionTitle}>Kit Inicial</h3>
-              <p style={{ fontSize: '0.78rem', opacity: 0.75, margin: 0 }}>
-                Vai para o inventário da equipe ao confirmar o time.
-              </p>
+            <section className={styles.section}>
+              <h3 className={styles.sectionTitle}>Arte</h3>
+              <div className={styles.artRow}>
+                <div className={styles.field}>
+                  <label>Retrato</label>
+                  <PhotoInput file={portraitFile} previewUrl={portraitPreview} onFileChange={onPortrait} onRemove={() => onPortrait(null)} accept="image/*" disabled={saving} />
+                  <span className={styles.hint}>Miniatura em listas e formação.</span>
+                </div>
+                <div className={styles.field}>
+                  <label>Ilustração</label>
+                  <PhotoInput file={artworkFile} previewUrl={artworkPreview} onFileChange={onArtwork} onRemove={() => onArtwork(null)} accept="image/*" disabled={saving} />
+                  <span className={styles.hint}>Tela de detalhe do personagem.</span>
+                </div>
+              </div>
+            </section>
+
+            <section className={styles.section}>
+              <h3 className={styles.sectionTitle}>Kit inicial</h3>
+              <p className={styles.hint}>Somado ao inventário da equipe quando o time é criado.</p>
               <div className={styles.field}>
                 <label>Arma branca</label>
-                <ItemPicker
-                  value={form.meleeWeapon}
-                  items={equipmentItems}
-                  onChange={(val) => setForm({ ...form, meleeWeapon: val })}
-                  disabled={saving}
-                />
+                <ItemPicker value={form.meleeWeapon} items={equipmentItems} onChange={(val) => setForm({ ...form, meleeWeapon: val })} disabled={saving} />
               </div>
               <div className={styles.field}>
                 <label>Arma de fogo</label>
-                <ItemPicker
-                  value={form.firearm}
-                  items={equipmentItems}
-                  onChange={(val) => setForm({ ...form, firearm: val })}
-                  disabled={saving}
-                />
+                <ItemPicker value={form.firearm} items={equipmentItems} onChange={(val) => setForm({ ...form, firearm: val })} disabled={saving} />
               </div>
-              <div className={styles.row}>
-                <div className={styles.field} style={{ flex: 3 }}>
-                  <label>Item de cura</label>
-                  <ItemPicker
-                    value={form.healingItem}
-                    items={consumableItems}
-                    onChange={(val) => setForm({ ...form, healingItem: val })}
-                    disabled={saving}
-                  />
-                </div>
-                <div className={styles.field} style={{ flex: 1 }}>
-                  <label>Qtd.</label>
-                  <TextInput
-                    type="number"
-                    min={1}
-                    value={form.healingItemQty}
-                    onChange={(e) => setForm({ ...form, healingItemQty: Math.max(1, +e.target.value) })}
-                    disabled={saving}
-                  />
+              <div className={styles.field}>
+                <label>Item de cura</label>
+                <div className={styles.kitHealRow}>
+                  <ItemPicker value={form.healingItem} items={consumableItems} onChange={(val) => setForm({ ...form, healingItem: val })} disabled={saving} />
+                  <div className={styles.qtyField}>
+                    <span>Qtd.</span>
+                    <TextInput type="number" min={1} value={form.healingItemQty} onChange={(e) => setForm({ ...form, healingItemQty: Math.max(1, +e.target.value) })} disabled={saving} />
+                  </div>
                 </div>
               </div>
-            </div>
+            </section>
           </div>
         </Modal.Body>
 
