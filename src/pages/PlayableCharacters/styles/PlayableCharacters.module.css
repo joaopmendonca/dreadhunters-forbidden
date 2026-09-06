@@ -191,3 +191,75 @@
   font-size: 0.8rem;
   color: var(--light-1, #8a7f72);
 }
+
+/* ── Modal layout polish ───────────────────────────────── */
+.section + .section { margin-top: 20px; }
+.sectionTitle { letter-spacing: 0.02em; }
+
+.hint {
+  margin: 0;
+  font-size: 0.74rem;
+  line-height: 1.35;
+  color: var(--light-1, #9c8f80);
+}
+
+.req { color: var(--gold, #d4af37); font-weight: 700; }
+
+.emphasisBox {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px;
+  border: 1px solid rgba(212, 175, 55, 0.35);
+  border-radius: 6px;
+  background: rgba(212, 175, 55, 0.06);
+}
+
+.toggleRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 0 2px;
+  border-top: 1px solid var(--dark-4, #3a322c);
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+.toggleRow > span { display: flex; flex-direction: column; gap: 2px; }
+.toggleHint { font-size: 0.72rem; color: var(--light-1, #9c8f80); }
+
+/* checkbox estilizado como switch */
+.switch {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 40px;
+  height: 22px;
+  border-radius: 999px;
+  background: var(--dark-4, #3a322c);
+  position: relative;
+  cursor: pointer;
+  transition: background 0.15s;
+  flex: 0 0 auto;
+}
+.switch::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--light, #f3ece0);
+  transition: transform 0.15s;
+}
+.switch:checked { background: var(--gold, #d4af37); }
+.switch:checked::after { transform: translateX(18px); }
+.switch:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.artRow { display: flex; gap: 14px; }
+.artRow .field { flex: 1; }
+
+.kitHealRow { display: flex; align-items: flex-start; gap: 10px; }
+.kitHealRow > :first-child { flex: 1; min-width: 0; }
+.qtyField { display: flex; flex-direction: column; gap: 4px; width: 68px; flex: 0 0 68px; }
+.qtyField > span { font-size: 0.8rem; color: var(--light-1, #cbb); }
