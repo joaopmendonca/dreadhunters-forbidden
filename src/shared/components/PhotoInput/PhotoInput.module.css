@@ -22,6 +22,16 @@
   transition: border-color 0.15s ease;
 }
 
+.containPreview {
+  height: 120px;
+  aspect-ratio: 2 / 3;
+  background: #000;
+}
+
+.contain {
+  object-fit: contain;
+}
+
 .preview:hover {
   border-color: var(--gold);
 }
