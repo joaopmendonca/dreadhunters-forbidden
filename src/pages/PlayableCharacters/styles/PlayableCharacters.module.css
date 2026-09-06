@@ -135,6 +135,15 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+/* Nas linhas do painel há mais espaço vertical — deixa a descrição quebrar em até 2 linhas. */
+.itemDetailClamp {
+  white-space: normal;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  line-height: 1.3;
+}
 .itemPlaceholder { color: var(--light-1, #8a7f72); font-size: 0.9rem; }
 
 .itemArrow {
