@@ -6,6 +6,7 @@ import Select from '../../../shared/components/Select';
 import TextArea from '../../../shared/components/TextArea';
 import TextInput from '../../../shared/components/TextInput';
 import PhotoInput from '../../../shared/components/PhotoInput';
+import ItemPicker from './ItemPicker';
 import { UNLOCK_TYPES, GENDERS } from '../constants';
 import { buildImgSrc } from '../utils';
 import styles from '../styles/PlayableCharacters.module.css';
@@ -30,12 +31,8 @@ const emptyForm = {
 const idOf = (v) => (v && typeof v === 'object' ? v._id : v) || '';
 
 export default function PlayableCharacterModal({ isOpen, onClose, onSave, initialData = null, classes = [], items = [] }) {
-  const equipmentOptions = (items || [])
-    .filter((i) => i.type === 'equipment')
-    .map((i) => ({ value: i._id, label: i.name }));
-  const consumableOptions = (items || [])
-    .filter((i) => i.type === 'consumable')
-    .map((i) => ({ value: i._id, label: i.name }));
+  const equipmentItems = (items || []).filter((i) => i.type === 'equipment');
+  const consumableItems = (items || []).filter((i) => i.type === 'consumable');
 
   const [form, setForm] = useState(emptyForm);
   const [portraitFile, setPortraitFile] = useState(null);
@@ -222,33 +219,33 @@ export default function PlayableCharacterModal({ isOpen, onClose, onSave, initia
               </p>
               <div className={styles.field}>
                 <label>Arma branca</label>
-                <Select
+                <ItemPicker
                   value={form.meleeWeapon}
+                  items={equipmentItems}
                   onChange={(val) => setForm({ ...form, meleeWeapon: val })}
-                  options={[{ value: '', label: '— nenhum —' }, ...equipmentOptions]}
                   disabled={saving}
                 />
               </div>
               <div className={styles.field}>
                 <label>Arma de fogo</label>
-                <Select
+                <ItemPicker
                   value={form.firearm}
+                  items={equipmentItems}
                   onChange={(val) => setForm({ ...form, firearm: val })}
-                  options={[{ value: '', label: '— nenhum —' }, ...equipmentOptions]}
                   disabled={saving}
                 />
               </div>
               <div className={styles.row}>
-                <div className={styles.field}>
+                <div className={styles.field} style={{ flex: 3 }}>
                   <label>Item de cura</label>
-                  <Select
+                  <ItemPicker
                     value={form.healingItem}
+                    items={consumableItems}
                     onChange={(val) => setForm({ ...form, healingItem: val })}
-                    options={[{ value: '', label: '— nenhum —' }, ...consumableOptions]}
                     disabled={saving}
                   />
                 </div>
-                <div className={styles.field}>
+                <div className={styles.field} style={{ flex: 1 }}>
                   <label>Qtd.</label>
                   <TextInput
                     type="number"
