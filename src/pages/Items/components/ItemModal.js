@@ -32,7 +32,7 @@ export default function ItemModal({ isOpen, onClose, onSave, onIconDeleted, init
     stackable: false,
     maxStack: 1,
     requirements: { level: 1, classes: [] },
-    consumable: { hpRestore: 0, mpRestore: 0, buff: '', buffDuration: 0 },
+    consumable: { hpRestore: 0, mpRestore: 0, buff: '', buffDuration: 0, revivesIncapacitated: false },
     equipment: {
       slot: '',
       durability: { current: 0, max: 0 },
@@ -103,7 +103,8 @@ export default function ItemModal({ isOpen, onClose, onSave, onIconDeleted, init
         hpRestore: initialData.consumable?.hpRestore ?? 0,
         mpRestore: initialData.consumable?.mpRestore ?? 0,
         buff: initialData.consumable?.buff || '',
-        buffDuration: initialData.consumable?.buffDuration ?? 0
+        buffDuration: initialData.consumable?.buffDuration ?? 0,
+        revivesIncapacitated: initialData.consumable?.revivesIncapacitated ?? false
       },
       equipment: {
         slot: initialData.equipment?.slot || '',
@@ -454,6 +455,21 @@ export default function ItemModal({ isOpen, onClose, onSave, onIconDeleted, init
               {/* Consumível */}
               {form.type === 'consumable' && (
                 <>
+                  <div className={styles.section}>
+                    <label>
+                      <input
+                        type="checkbox"
+                        checked={form.consumable.revivesIncapacitated}
+                        onChange={e => setForm(f => ({
+                          ...f,
+                          consumable: { ...f.consumable, revivesIncapacitated: e.target.checked }
+                        }))}
+                        disabled={saving}
+                      />{' '}
+                      Remove incapacitação (item de cura da equipe)
+                    </label>
+                  </div>
+
                   <div className={styles.section}>
                     <ConsumableStatsEditor
                       statsModifiers={consumableStats}

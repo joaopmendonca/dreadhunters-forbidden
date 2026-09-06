@@ -55,8 +55,11 @@ export default function ItemCard({ item, onEdit, onDelete }) {
             <Card.StatList
               stats={[
                 { label: 'Restaura', value: `+${item.consumable.hpRestore} HP, +${item.consumable.mpRestore} MP` },
-                ...(item.consumable.buff 
-                  ? [{ label: 'Buff', value: `${item.consumable.buff} (${item.consumable.buffDuration}s)` }] 
+                ...(item.consumable.buff
+                  ? [{ label: 'Buff', value: `${item.consumable.buff} (${item.consumable.buffDuration}s)` }]
+                  : []),
+                ...(item.consumable.revivesIncapacitated
+                  ? [{ label: 'Cura', value: 'Remove incapacitação' }]
                   : []),
               ]}
             />
