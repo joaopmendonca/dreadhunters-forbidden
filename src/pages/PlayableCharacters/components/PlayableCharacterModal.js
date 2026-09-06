@@ -6,22 +6,21 @@ import Select from '../../../shared/components/Select';
 import TextArea from '../../../shared/components/TextArea';
 import TextInput from '../../../shared/components/TextInput';
 import PhotoInput from '../../../shared/components/PhotoInput';
-import useStatus from '../../../shared/hooks/useStatus';
-import { RARITIES, UNLOCK_TYPES, GENDERS } from '../constants';
-import { statsToObject, buildImgSrc } from '../utils';
+import { UNLOCK_TYPES, GENDERS } from '../constants';
+import { buildImgSrc } from '../utils';
 import styles from '../styles/PlayableCharacters.module.css';
 
+// Raridade sempre 'common' (back-end força) e atributos base vêm da CLASSE — por isso
+// nem raridade nem stats aparecem aqui. Ver docs/prd-migracao-equipes.md [R14].
 const emptyForm = {
   _id: '',
   name: '',
   description: '',
   classId: '',
-  rarity: 'common',
   unlockType: 'starter',
   gender: 'male',
   baseLevel: 1,
   isActive: true,
-  baseStats: {},
   meleeWeapon: '',
   firearm: '',
   healingItem: '',
@@ -31,8 +30,6 @@ const emptyForm = {
 const idOf = (v) => (v && typeof v === 'object' ? v._id : v) || '';
 
 export default function PlayableCharacterModal({ isOpen, onClose, onSave, initialData = null, classes = [], items = [] }) {
-  const { baseStatus } = useStatus();
-
   const equipmentOptions = (items || [])
     .filter((i) => i.type === 'equipment')
     .map((i) => ({ value: i._id, label: i.name }));
@@ -55,23 +52,17 @@ export default function PlayableCharacterModal({ isOpen, onClose, onSave, initia
       setArtworkFile(null); setArtworkPreview('');
       return;
     }
-    const classVal =
-      typeof initialData.class === 'object' ? initialData.class?._id : initialData.class;
-    const statsObj = statsToObject(initialData.baseStats);
-    const stats = {};
-    (baseStatus || []).forEach((s) => { stats[s.nome] = statsObj[s.nome] || 0; });
+    const classVal = typeof initialData.class === 'object' ? initialData.class?._id : initialData.class;
     const kit = initialData.startingKit || {};
     setForm({
       _id: initialData._id || '',
       name: initialData.name || '',
       description: initialData.description || '',
       classId: classVal || '',
-      rarity: initialData.rarity || 'common',
       unlockType: initialData.unlockRule?.type || 'starter',
       gender: initialData.gender || 'male',
       baseLevel: initialData.baseLevel || 1,
       isActive: initialData.isActive !== false,
-      baseStats: stats,
       meleeWeapon: idOf(kit.meleeWeapon),
       firearm: idOf(kit.firearm),
       healingItem: idOf(kit.healingItem),
@@ -81,7 +72,7 @@ export default function PlayableCharacterModal({ isOpen, onClose, onSave, initia
     setPortraitPreview(initialData.portraitUrl ? buildImgSrc(initialData.portraitUrl) : '');
     setArtworkFile(null);
     setArtworkPreview(initialData.artworkUrl ? buildImgSrc(initialData.artworkUrl) : '');
-  }, [isOpen, initialData, baseStatus]);
+  }, [isOpen, initialData]);
 
   const pickFile = (input) => {
     if (!input) return null;
@@ -104,12 +95,9 @@ export default function PlayableCharacterModal({ isOpen, onClose, onSave, initia
     setArtworkFile(f); setArtworkPreview(URL.createObjectURL(f));
   };
 
-  const handleStat = (name, value) => {
-    setForm((prev) => ({ ...prev, baseStats: { ...prev.baseStats, [name]: Math.max(0, Number(value) || 0) } }));
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!form.classId) return; // classe é obrigatória (fonte dos atributos)
     setSaving(true);
     try {
       const unlockRule = { type: form.unlockType };
@@ -124,12 +112,10 @@ export default function PlayableCharacterModal({ isOpen, onClose, onSave, initia
         payload = new FormData();
         payload.append('name', form.name);
         payload.append('description', form.description || '');
-        if (form.classId) payload.append('class', form.classId);
-        payload.append('rarity', form.rarity);
+        payload.append('class', form.classId);
         payload.append('gender', form.gender);
         payload.append('baseLevel', String(form.baseLevel));
         payload.append('isActive', String(form.isActive));
-        payload.append('baseStats', JSON.stringify(form.baseStats));
         payload.append('unlockRule', JSON.stringify(unlockRule));
         payload.append('startingKit', JSON.stringify(startingKit));
         if (portraitFile) payload.append('portrait', portraitFile);
@@ -138,14 +124,12 @@ export default function PlayableCharacterModal({ isOpen, onClose, onSave, initia
         payload = {
           name: form.name,
           description: form.description || '',
-          rarity: form.rarity,
+          class: form.classId,
           gender: form.gender,
           baseLevel: Number(form.baseLevel) || 1,
           isActive: form.isActive,
-          baseStats: form.baseStats,
           unlockRule,
           startingKit,
-          ...(form.classId ? { class: form.classId } : {}),
         };
       }
       await onSave(payload, form._id || undefined);
@@ -164,7 +148,7 @@ export default function PlayableCharacterModal({ isOpen, onClose, onSave, initia
       onClose={onClose}
       title={form._id ? 'Editar Personagem Jogável' : 'Novo Personagem Jogável'}
       icon={<FaUserAstronaut />}
-      size={MODAL_SIZES.XLARGE}
+      size={MODAL_SIZES.LARGE}
       closeOnOverlayClick={!saving}
     >
       <form onSubmit={handleSubmit}>
@@ -184,25 +168,19 @@ export default function PlayableCharacterModal({ isOpen, onClose, onSave, initia
 
             <div className={styles.section}>
               <h3 className={styles.sectionTitle}>Características</h3>
-              <div className={styles.row}>
-                <div className={styles.field}>
-                  <label>Classe</label>
-                  <Select
-                    value={form.classId}
-                    onChange={(val) => setForm({ ...form, classId: val })}
-                    options={[{ value: '', label: 'Sem classe' }, ...classes.map((c) => ({ value: c._id, label: c.name }))]}
-                    disabled={saving}
-                  />
-                </div>
-                <div className={styles.field}>
-                  <label>Gênero</label>
-                  <Select value={form.gender} onChange={(val) => setForm({ ...form, gender: val })} options={GENDERS} disabled={saving} />
-                </div>
+              <div className={styles.field}>
+                <label>Classe * <span style={{ opacity: 0.6, fontWeight: 400 }}>(fonte dos atributos base)</span></label>
+                <Select
+                  value={form.classId}
+                  onChange={(val) => setForm({ ...form, classId: val })}
+                  options={[{ value: '', label: 'Selecione a classe' }, ...classes.map((c) => ({ value: c._id, label: c.name }))]}
+                  disabled={saving}
+                />
               </div>
               <div className={styles.row}>
                 <div className={styles.field}>
-                  <label>Raridade</label>
-                  <Select value={form.rarity} onChange={(val) => setForm({ ...form, rarity: val })} options={RARITIES} disabled={saving} />
+                  <label>Gênero</label>
+                  <Select value={form.gender} onChange={(val) => setForm({ ...form, gender: val })} options={GENDERS} disabled={saving} />
                 </div>
                 <div className={styles.field}>
                   <label>Desbloqueio</label>
@@ -237,24 +215,6 @@ export default function PlayableCharacterModal({ isOpen, onClose, onSave, initia
           </div>
 
           <div className={styles.column}>
-            <div className={styles.section}>
-              <h3 className={styles.sectionTitle}>Atributos Base (nível 1)</h3>
-              <div className={styles.statsGrid}>
-                {(baseStatus || []).map((s) => (
-                  <div key={s.nome} className={styles.statControl}>
-                    <label>{s.label || s.nome}</label>
-                    <TextInput
-                      type="number"
-                      min={0}
-                      value={form.baseStats[s.nome] ?? 0}
-                      onChange={(e) => handleStat(s.nome, e.target.value)}
-                      disabled={saving}
-                    />
-                  </div>
-                ))}
-              </div>
-            </div>
-
             <div className={styles.section}>
               <h3 className={styles.sectionTitle}>Kit Inicial</h3>
               <p style={{ fontSize: '0.78rem', opacity: 0.75, margin: 0 }}>
@@ -305,7 +265,7 @@ export default function PlayableCharacterModal({ isOpen, onClose, onSave, initia
 
         <Modal.Footer alignment="between">
           <Button type="button" onClick={onClose} variant="secondary" disabled={saving}>Cancelar</Button>
-          <Button type="submit" backgroundColor="var(--maroon)" textColor="var(--light)" hoverColor="var(--gold)" disabled={saving}>
+          <Button type="submit" backgroundColor="var(--maroon)" textColor="var(--light)" hoverColor="var(--gold)" disabled={saving || !form.classId}>
             {saving ? 'Salvando…' : 'Salvar'}
           </Button>
         </Modal.Footer>

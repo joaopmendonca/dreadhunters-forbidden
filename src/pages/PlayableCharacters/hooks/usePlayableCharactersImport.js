@@ -7,8 +7,7 @@ export function usePlayableCharactersImport() {
 
   const fieldDefinitions = [
     createField('name', 'Nome', 'string', { required: true, unique: true, example: 'Bermond' }),
-    createField('class', 'Classe', 'string', { required: false, example: 'Vigilante' }),
-    createField('rarity', 'Raridade', 'string', { required: false, example: 'common' }),
+    createField('class', 'Classe', 'string', { required: true, example: 'Vigilante' }),
     createField('baseLevel', 'Nível Base', 'number', { required: false, example: '1' }),
     createField('gender', 'Gênero', 'string', { required: false, example: 'male' }),
     createField('unlockType', 'Desbloqueio', 'string', { required: false, example: 'starter' }),
@@ -18,7 +17,6 @@ export function usePlayableCharactersImport() {
   const autoMapping = {
     name: 'name', nome: 'name',
     class: 'class', classe: 'class',
-    rarity: 'rarity', raridade: 'rarity',
     baselevel: 'baseLevel', 'nível base': 'baseLevel', nivel: 'baseLevel',
     gender: 'gender', genero: 'gender', 'gênero': 'gender',
     unlocktype: 'unlockType', desbloqueio: 'unlockType', unlock: 'unlockType',
@@ -28,7 +26,6 @@ export function usePlayableCharactersImport() {
   const transformDataForAPI = (row) => ({
     name: row.name?.trim(),
     class: row.class?.trim(),
-    rarity: row.rarity?.trim() || 'common',
     baseLevel: parseInt(row.baseLevel, 10) || 1,
     gender: row.gender?.trim() || 'male',
     unlockType: row.unlockType?.trim() || 'starter',
